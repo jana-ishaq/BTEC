@@ -1289,9 +1289,6 @@
         </div>
 
         <div class="flex items-center gap-1.5 shrink-0">
-          <button onclick="toggleApiSettings()" title="إعدادات ربط Gemini API للتشغيل المحلي" aria-label="إعدادات الذكاء الاصطناعي" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white text-sm font-bold border border-white/20 transition flex items-center justify-center">
-            ⚙️
-          </button>
           <button onclick="resetChat()" title="بدء محادثة جديدة" class="px-2.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1">
             <span>↺</span>
             <span>جديدة</span>
@@ -1301,35 +1298,6 @@
           </button>
         </div>
       </div>
-
-      <div id="apiSettingsPanel" class="hidden p-3.5 bg-indigo-50/95 border-b border-indigo-200 text-slate-800 space-y-2.5 shrink-0">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xs font-extrabold text-indigo-950 flex items-center gap-1.5">
-            <span>🔑</span>
-            <span>ربط مفتاح Gemini API (للتشغيل بعد تنزيل الملف)</span>
-          </h3>
-          <button onclick="toggleApiSettings()" class="text-xs font-bold text-slate-500 hover:text-slate-800 px-1.5">✕</button>
-        </div>
-        <p class="text-[11px] text-slate-600 leading-relaxed">
-          عند تنزيل الموقع وتشغيله على جهازكِ في المؤتمر، أدخلي مفتاح <strong>Gemini API Key</strong> المجاني هنا ليحفظه المتصفح بأمان في <code class="bg-white px-1 rounded">localStorage</code>:
-        </p>
-        <div class="flex items-center gap-1.5">
-          <input
-            id="customApiKeyInput"
-            type="password"
-            placeholder="ألصقي مفتاح AIzaSy... هنا"
-            class="flex-1 px-3 py-1.5 rounded-xl border border-indigo-300 bg-white text-slate-900 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          <button onclick="saveCustomApiKey()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
-            حفظ
-          </button>
-          <button onclick="clearCustomApiKey()" class="px-2.5 py-1.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold transition">
-            مسح
-          </button>
-        </div>
-        <div id="apiKeySaveStatus" class="text-[11px] font-bold text-emerald-700 hidden"></div>
-      </div>
-
       <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-200/70 shrink-0">
         <p class="text-[11px] font-bold text-slate-400 mb-1.5">أسئلة مقترحة للزائرات:</p>
         <div class="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
