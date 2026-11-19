@@ -1821,7 +1821,7 @@
       closeAssistantChat();
 
       document.querySelectorAll(".spec-node").forEach(el => el.classList.remove("active-node"));
-      document.title = "مؤتمر BTEC التفاعلي | مدرسة البلقاء الثانوية الشاملة للبنات";
+      document.title = "برنامج BTEC التفاعلي | مدرسة البلقاء الثانوية الشاملة للبنات";
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1850,71 +1850,6 @@
      * 3. طبقة المساعد الذكي المتكاملة (Gemini API + التوجيه السياقي الذكي)
      * ============================================================================
      */
-    const STORAGE_KEY_NAME = "btec_balqa_gemini_api_key";
-
-    function getActiveApiKey() {
-      const savedKey = (localStorage.getItem(STORAGE_KEY_NAME) || "").trim();
-      return savedKey || "";
-    }
-
-    function toggleApiSettings() {
-      const panel = document.getElementById("apiSettingsPanel");
-      panel.classList.toggle("hidden");
-      if (!panel.classList.contains("hidden")) {
-        const input = document.getElementById("customApiKeyInput");
-        input.value = getActiveApiKey();
-        input.focus();
-      }
-    }
-
-    function saveCustomApiKey() {
-      const input = document.getElementById("customApiKeyInput");
-      const status = document.getElementById("apiKeySaveStatus");
-      const val = input.value.trim();
-      if (!val) {
-        status.textContent = "يرجى لصق مفتاح Gemini API أولاً.";
-        status.className = "text-[11px] font-bold text-rose-600 block";
-        return;
-      }
-      localStorage.setItem(STORAGE_KEY_NAME, val);
-      status.textContent = "✓ تم حفظ المفتاح بنجاح! المساعد الذكي متصل الآن بنموذج Gemini.";
-      status.className = "text-[11px] font-bold text-emerald-700 block";
-      document.getElementById("aiStatusBadge").textContent = "Gemini متصل";
-    }
-
-    function clearCustomApiKey() {
-      localStorage.removeItem(STORAGE_KEY_NAME);
-      document.getElementById("customApiKeyInput").value = "";
-      const status = document.getElementById("apiKeySaveStatus");
-      status.textContent = "تم مسح المفتاح المحفوظ.";
-      status.className = "text-[11px] font-bold text-slate-600 block";
-      document.getElementById("aiStatusBadge").textContent = "جاهز";
-    }
-
-    function buildSystemInstruction() {
-      const specsSummary = Object.values(BTEC_DATA.specializations)
-        .map((s, idx) => {
-          const facs = s.facilities.map(f => `  - ${f}`).join("\n");
-          return `${idx + 1}. ${s.title}${s.isFeatured ? " (التخصص الرئيسي في الواجهة)" : ""}:\n  الوصف: ${s.description}\n  المرافق المتوفرة في المدرسة:\n${facs}`;
-        })
-        .join("\n\n");
-
-      return `أنتِ المساعد الذكي الرسمي لبرنامج BTEC في "${BTEC_DATA.schoolName}" خلال "${BTEC_DATA.eventName}".
-تتحدثين باللغة العربية الفصحى الودودة والواضحة والمناسبة للطالبات والزائرات وأولياء الأمور.
-
-قاعدة المعرفة المعتمدة والموثوقة عن المدرسة وتخصصاتها الأربعة:
-${specsSummary}
-
-معلومات عامة عن برنامج BTEC:
-- برنامج BTEC هو نظام تعليمي تطبيقي ومهني معتمد دولياً يركز على التعلم العملي والمشاريع والتقييم المستمر بدلاً من الاعتماد فقط على الامتحانات التقليدية، ويؤهل الطالبات لسوق العمل أو التعليم الجامعي.
-
-قواعد صارمة يجب الالتزام بها في كل إجابة:
-1. عندما ترحب بكِ الزائرة (مثل: "مرحبا" أو "أهلاً" أو "السلام عليكم"), رحّبي بها بحرارة باسم مدرسة البلقاء الثانوية الشاملة للبنات ومؤتمر BTEC، وقدّمي لها نبذة سريعة عن التخصصات الأربعة التي يمكنكِ مساعدتها في استكشافها.
-2. اعتمدي فقط على المعلومات المذكورة أعلاه بخصوص مرافق وأعداد مختبرات مدرسة البلقاء الثانوية الشاملة للبنات.
-3. لا تخترعي أبداً أي أعداد إضافية أو أسماء مرافق أو قاعات غير مذكورة في قاعدة المعرفة أعلاه.
-4. إذا سألت الزائرة عن معلومة تفصيلية غير متوفرة في قاعدة المعرفة، اعتذري بلطف ووضّحي أن هذه المعلومة غير متوفرة حالياً في قاعدة بيانات المؤتمر، وانصحيها بمراجعة إدارة المدرسة أو المرشدة التربوية للحصول على التفاصيل الدقيقة.
-5. حافظي على سياق المحادثة السابقة وأجيبي باختصار وتنظيم جميل.`;
-    }
 
     let conversationHistory = [];
     let lastDiscussedTopic = null;
