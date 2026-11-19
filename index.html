@@ -1509,9 +1509,9 @@
           icon: "💻",
           theme: { border: "#4f46e5", softBg: "#eef2ff", badgeText: "#3730a3" },
           description: "التخصص الرئيسي في الواجهة التعليمية؛ يؤهل الطالبات بمهارات الحوسبة، البرمجة، الشبكات، والتقنيات الرقمية الحديثة وفق معايير BTEC التطبيقية.",
-          facilities: ["مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي."],
+          facilities: ["مختبر حاسوب"],
           facilityDetails: [
-            { name: "مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.", role: "بيئة تقنية متكاملة مخصصة لكل مرحلة صفية، تُطبّق فيها الطالبات البرمجة، تصميم المواقع، وإدارة الشبكات عملياً." }
+            { name: "مختبر حاسوب", role: "بيئة تقنية متكاملة مخصصة لكل مرحلة صفية، تُطبّق فيها الطالبات البرمجة، تصميم المواقع، وإدارة الشبكات عملياً." }
           ],
           journeyStages: [
             { step: "1", label: "الأساس الرقمي", title: "استكشاف الأنظمة والبرمجة", summary: "تتعرف الطالبة على مكونات الحاسوب، أنظمة التشغيل، وأساسيات التفكير المنطقي وكتابة الأكواد البرمجية.", outcome: "بناء أول موقع إلكتروني تفاعلي وفهم بنية البيانات." },
@@ -1535,9 +1535,9 @@
           icon: "📊",
           theme: { border: "#059669", softBg: "#ecfdf5", badgeText: "#065f46" },
           description: "يركز على تنمية مهارات الإدارة، التخطيط، ريادة الأعمال، والتطبيقات المكتبية والتقنية في بيئة تعليمية عملية.",
-          facilities: ["مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي."],
+          facilities: ["مختبر حاسوب"],
           facilityDetails: [
-            { name: "مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.", role: "يُستخدم لمحاكاة بيئة الشركات الحديثة، وإعداد الجداول المالية، العروض التقديمية، والتسويق الرقمي." }
+            { name: "مختبر حاسوب", role: "يُستخدم لمحاكاة بيئة الشركات الحديثة، وإعداد الجداول المالية، العروض التقديمية، والتسويق الرقمي." }
           ],
           journeyStages: [
             { step: "1", label: "مبادئ الإدارة", title: "فهم بيئة الأعمال والمؤسسات", summary: "تتعلم الطالبة كيفية عمل الشركات، الهيكل التنظيمي، ومهارات التواصل الإداري الفعّال.", outcome: "إعداد خطط عمل مبسطة وفهم دور كل قسم في المؤسسة." },
@@ -1561,7 +1561,7 @@
           icon: "🎨",
           theme: { border: "#d97706", softBg: "#fffbeb", badgeText: "#92400e" },
           description: "يجمع بين الإبداع الفني، الرسم، التصوير الفوتوغرافي، وتصميم الأزياء ضمن بيئة تطبيقية متكاملة.",
-          facilities: ["حاسوب واحد.", "غرفة تصوير.", "مرسم.", "مخيطة."],
+          facilities: ["مشغل الحاسوب .", "غرفة التصوير.", "مرسم.", "غرفة ازياء.", "غرفة حرف."],
           facilityDetails: [
             { name: "مرسم.", role: "مساحة إبداعية مجهزة للرسم الحر، التلوين، التشكيل الفني، وتطوير الأفكار البصرية الأولية." },
             { name: "غرفة تصوير.", role: "استوديو مخصص لتعلم أساسيات الإضاءة، التكوين الفني، والتصوير الفوتوغرافي الاحترافي." },
@@ -1850,9 +1850,7 @@
      * 3. طبقة المساعد الذكي المتكاملة (Gemini API + التوجيه السياقي الذكي)
      * ============================================================================
      */
-
-    let conversationHistory = [];
-    let lastDiscussedTopic = null;
+   let lastDiscussedTopic = null;
 
     const chatMessagesEl = document.getElementById("chatMessages");
     const chatInputEl = document.getElementById("chatInput");
@@ -1904,56 +1902,11 @@
         .join("");
     }
 
-    async function fetchGeminiWithRetry(payload, maxRetries = 2) {
-      const apiKey = getActiveApiKey();
-      const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash"];
-      let lastError = null;
-
-      for (const modelName of modelsToTry) {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-        let delay = 700;
-
-        for (let attempt = 0; attempt <= maxRetries; attempt++) {
-          try {
-            const response = await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-              if ((response.status === 429 || response.status >= 500) && attempt < maxRetries) {
-                await new Promise(res => setTimeout(res, delay));
-                delay *= 2;
-                continue;
-              }
-              throw new Error(`HTTP_${response.status}`);
-            }
-
-            const data = await response.json();
-            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (text) {
-              return text;
-            }
-            throw new Error("INVALID_STRUCTURE");
-          } catch (err) {
-            lastError = err;
-            if (attempt < maxRetries) {
-              await new Promise(res => setTimeout(res, delay));
-              delay *= 2;
-            }
-          }
-        }
-      }
-
-      throw lastError || new Error("ALL_MODELS_FAILED");
-    }
-
     function generateKnowledgeGroundedReply(userQuery) {
       const q = userQuery.trim().toLowerCase();
 
       if (/^(مرحبا|مرحبًا|اهلا|أاهلا|أهلاً|السلام عليكم|سلام|هاي|هلا|صباح الخير|مساء الخير|كيفك|كيف حالك)/.test(q) && q.length < 35) {
-        return `أهلاً وسهلاً بكِ في **مؤتمر BTEC** بـ **مدرسة البلقاء الثانوية الشاملة للبنات**! 🌸\nيسعدني جداً مرافقتكِ اليوم. يتوفر في مدرستنا أربعة تخصصات BTEC رئيسية:\n• **تكنولوجيا المعلومات** (التخصص الرئيسي)\n• **إدارة الأعمال**\n• **فن وتصميم**\n• **التجميل**\n\nأي تخصص ترغبين في التعرف على تفاصيله ومرافقه؟`;
+        return `أهلاً وسهلاً بكِ في **برنامج BTEC** بـ **مدرسة البلقاء الثانوية الشاملة للبنات**! 🌸\nيسعدني جداً مرافقتكِ اليوم. يتوفر في مدرستنا أربعة تخصصات BTEC رئيسية:\n• **تكنولوجيا المعلومات** (التخصص الرئيسي)\n• **إدارة الأعمال**\n• **فن وتصميم**\n• **التجميل**\n\nأي تخصص ترغبين في التعرف على تفاصيله ومرافقه؟`;
       }
 
       if ((q.includes("فرق") || q.includes("مقارنة") || q.includes("الاختلاف")) && (q.includes("تكنولوجيا") || q.includes("حاسوب")) && (q.includes("اعمال") || q.includes("أعمال"))) {
@@ -1971,7 +1924,7 @@
         return `**تخصص إدارة الأعمال (Business Administration)** يركز على تنمية مهارات الإدارة والتخطيط وريادة الأعمال والتطبيقات التقنية.\n\n**المرافق التعليمية المتوفرة في المدرسة:**\n• مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.`;
       }
 
-      if (q.includes("فن") || q.includes("تصميم") || q.includes("مرسم") || q.includes("تصوير") || q.includes("مخيطة") || q.includes("art")) {
+      if (q.includes("فن") || q.includes("تصميم") || q.includes("مرسم") || q.includes("غرفة تصوير") || q.includes("غرفة ازياء") || q.includes("غرفة حرف")) {
         lastDiscussedTopic = "art";
         return `**تخصص فن وتصميم (Art and Design)** يجمع بين الإبداع الفني والرسم والتصوير وتصميم الأزياء.\n\n**المرافق التعليمية المتوفرة في المدرسة:**\n• حاسوب واحد.\n• غرفة تصوير.\n• مرسم.\n• مخيطة.`;
       }
@@ -1997,7 +1950,7 @@
         }
       }
 
-      return `عذراً، هذه المعلومة التفصيلية غير متوفرة حالياً في قاعدة بيانات مؤتمر BTEC لمدرسة البلقاء الثانوية الشاملة للبنات.\n\nيمكنني إجابتكِ بدقة حول **برنامج BTEC** أو تفاصيل ومرافق التخصصات الأربعة (**تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**). كما يمكنكِ تفعيل الربط المباشر مع Gemini عبر زر الإعدادات (⚙️) في الأعلى للأسئلة العامة الموسعة.`;
+      return `عذراً، هذه المعلومة غير متوفرة حالياً في قاعدة بيانات برنامج BTEC لمدرسة البلقاء الثانوية الشاملة للبنات.\n\nيمكنني إجابتكِ بدقة حول **برنامج BTEC** أو تفاصيل ومرافق التخصصات الأربعة (**تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**).`;
     }
 
     async function sendMessageToAI(userText) {
@@ -2011,45 +1964,15 @@
       typingIndicatorEl.classList.remove("hidden");
       chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
 
-      conversationHistory.push({
-        role: "user",
-        parts: [{ text: trimmed }]
-      });
-
-      const payload = {
-        contents: conversationHistory,
-        system_instruction: {
-          parts: [{ text: buildSystemInstruction() }]
-        },
-        generationConfig: {
-          temperature: 0.35,
-          maxOutputTokens: 700
-        }
-      };
-
-      try {
-        const replyText = await fetchGeminiWithRetry(payload);
-
-        conversationHistory.push({
-          role: "model",
-          parts: [{ text: replyText }]
-        });
-
-        document.getElementById("aiStatusBadge").textContent = "Gemini متصل";
-        appendMessageBubble("model", replyText);
-      } catch (error) {
+      setTimeout(() => {
         const groundedReply = generateKnowledgeGroundedReply(trimmed);
-        conversationHistory.push({
-          role: "model",
-          parts: [{ text: groundedReply }]
-        });
         appendMessageBubble("model", groundedReply);
-      } finally {
+        
         typingIndicatorEl.classList.add("hidden");
-        chatInputEl.disabled= false;
+        chatInputEl.disabled = false;
         sendBtnEl.disabled = false;
         chatInputEl.focus();
-      }
+      }, 400);
     }
 
     function handleChatSubmit(event) {
@@ -2063,7 +1986,6 @@
     }
 
     function resetChat() {
-      conversationHistory = [];
       chatMessagesEl.innerHTML = `
         <div class="chat-msg flex items-start gap-2.5">
           <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs">
