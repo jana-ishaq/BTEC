@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> BTEC مدرسة البلقاء الثانوية الشاملة للبنات</title>
+
+  <!-- خطوط عربية حديثة وواضحة -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- مكتبة Tailwind CSS للتصميم المتجاوب -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    (function configureTailwind() {
+      const config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              cairo: ['Cairo', 'sans-serif'],
+              tajawal: ['Tajawal', 'sans-serif'],
+            },
+            colors: {
+              campus: {
+                bg: '#eef6f3',
+                mint: '#d9ede6',
+                teal: '#2f7a78',
+                indigo: '#5b5ce6',
+                emerald: '#109675',
+                amber: '#e67e22',
+                rose: '#db3e79',
+              }
+            }
+          }
+        }
+      };
+
+      if (typeof window.tailwind !== 'undefined') {
+        window.tailwind.config = config;
+      } else {
+        window.tailwind = { config: config };
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --font-main: 'Cairo', 'Tajawal', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: var(--font-main);
+    }
+
+    body {
+      background: radial-gradient(circle at 15% 15%, #e3f3ee 0%, #f4f9f7 48%, #e8f1f5 100%);
+      color: #1e293b;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* خلفية موجية ناعمة مستوحاة من الهوية البصرية */
+    .bg-waves {
+      background-image:
+        radial-gradient(at 85% 10%, rgba(91, 92, 230, 0.08) 0px, transparent 50%),
+        radial-gradient(at 10% 85%, rgba(47, 122, 120, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.7) 0px, transparent 80%);
+    }
+
+    /* حاوية الخريطة ثلاثية الأبعاد والتفاعل مع فتح الشات */
+    .map-stage {
+      perspective: 1400px;
+      position: relative;
+      transition: padding 0.35s ease, min-height 0.35s ease;
+    }
+
+    .island-wrapper {
+      transform-style: preserve-3d;
+      animation: islandEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes islandEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* حركات عائمة ناعمة ومتزنة للعناصر */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes floatCenter {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); opacity: 0.75; }
+      70% { transform: scale(1.13); opacity: 0; }
+      100% { transform: scale(1.13); opacity: 0; }
+    }
+
+    @keyframes swayTree {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(1.8deg); }
+    }
+
+    @keyframes cloudDrift {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(18px); }
+    }
+
+    .animate-float-it {
+      animation: floatSlow 4.2s ease-in-out infinite;
+    }
+
+    .animate-float-delayed-1 {
+      animation: floatSlow 4.8s ease-in-out 0.8s infinite;
+    }
+
+    .animate-float-delayed-2 {
+      animation: floatSlow 4.6s ease-in-out 1.5s infinite;
+    }
+
+    .animate-float-delayed-3 {
+      animation: floatSlow 5.0s ease-in-out 2.1s infinite;
+    }
+
+    .animate-center-hub {
+      animation: floatCenter 5.5s ease-in-out infinite;
+    }
+
+    .pulse-ring-it {
+      transform-origin: 575px 158px;
+      animation: pulseRing 2.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    }
+
+    .tree-sway {
+      transform-box: fill-box;
+      transform-origin: bottom center;
+      animation: swayTree 5s ease-in-out infinite;
+    }
+
+    .cloud-drift {
+      animation: cloudDrift 9s ease-in-out infinite;
+    }
+
+    /* التفاعل مع منصات التخصصات داخل SVG */
+    .spec-node {
+      cursor: pointer;
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.38s ease;
+      transform-box: fill-box;
+      transform-origin: center bottom;
+    }
+
+    .spec-node:focus,
+    .spec-node:focus-visible,
+    .spec-node:active,
+    svg:focus,
+    svg *:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    .spec-node .hover-glow-ring {
+      opacity: 0;
+      transform: scale(0.92);
+      transform-box: fill-box;
+      transform-origin: center center;
+      transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    .spec-node:hover .hover-glow-ring,
+    .spec-node.active-node .hover-glow-ring {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    .spec-node:hover {
+      transform: translateY(-10px) scale(1.065);
+    }
+
+    #node-it:hover,
+    #node-it.active-node {
+      filter: drop-shadow(0 18px 26px rgba(79, 70, 229, 0.45)) drop-shadow(0 0 18px rgba(129, 140, 248, 0.55));
+    }
+
+    #node-business:hover,
+    #node-business.active-node {
+      filter: drop-shadow(0 18px 26px rgba(5, 150, 105, 0.45)) drop-shadow(0 0 18px rgba(52, 211, 153, 0.55));
+    }
+
+    #node-art:hover,
+    #node-art.active-node {
+      filter: drop-shadow(0 18px 26px rgba(217, 119, 6, 0.45)) drop-shadow(0 0 18px rgba(251, 191, 36, 0.55));
+    }
+
+    #node-beauty:hover,
+    #node-beauty.active-node {
+      filter: drop-shadow(0 18px 26px rgba(225, 29, 72, 0.45)) drop-shadow(0 0 18px rgba(251, 113, 133, 0.55));
+    }
+
+    .spec-node.active-node {
+      transform: translateY(-12px) scale(1.075);
+    }
+
+    .spec-tooltip {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    .spec-node:hover .spec-tooltip {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* شريط تمرير أنيق للمحادثة */
+    .chat-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chat-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+    .chat-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* حركة ظهور رسائل المحادثة */
+    @keyframes msgPop {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .chat-msg {
+      animation: msgPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* نقاط انتظار الذكاء الاصطناعي */
+    .typing-dot {
+      animation: typingBounce 1.3s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.32s; }
+
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: scale(0.65); opacity: 0.45; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ضمان وضوح النص المكتوب داخل مربع الإدخال باللون الداكن */
+    #chatInput {
+      color: #0f172a !important;
+      background-color: #ffffff !important;
+      caret-color: #2f7a78 !important;
+    }
+    #chatInput::placeholder {
+      color: #64748b !important;
+      opacity: 1;
+    }
+
+    /* ============================================================
+       RESPONSIVE LAYOUT & LARGE PROFESSIONAL SIDEBAR CHAT (زيحة الخريطة ونافذة احترافية واسعة)
+       ============================================================ */
+    html {
+      width: 100%;
+      min-width: 320px;
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      width: 100%;
+      min-width: 320px;
+      overflow-x: clip;
+      min-height: 100vh;
+    }
+
+    img, svg, video, canvas {
+      max-width: 100%;
+    }
+
+    button, input, textarea {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    header {
+      position: relative !important;
+    }
+
+    header > div {
+      width: 100%;
+    }
+
+    main {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .main-layout {
+      display: block !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+    }
+
+    .main-layout > .assistant-panel {
+      display: none !important;
+    }
+
+    /* حاوية الخريطة التي ستنزاح بسلاسة عند فتح الشات */
+    .map-panel {
+      width: 100% !important;
+      min-height: calc(100vh - 86px);
+      margin: 0 !important;
+      padding: 12px 18px !important;
+      border-radius: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      overflow: visible;
+      transition: padding-left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* عند فتح الشات، نزحزح محتوى الخريطة يساراً لتعطي مساحة واسعة ومحترفة للشات على اليمين */
+    body.chat-opened .map-panel {
+      padding-left: 540px !important;
+    }
+
+    #mapSection > div:first-child {
+      max-width: 1500px;
+      margin-inline: auto;
+      transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #mapContainer {
+      width: 100%;
+      min-height: calc(100vh - 145px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        radial-gradient(ellipse at 50% 48%, rgba(255,255,255,.78) 0%, rgba(255,255,255,.34) 48%, transparent 76%),
+        radial-gradient(circle at 12% 18%, rgba(45,212,191,.20), transparent 26%),
+        radial-gradient(circle at 88% 82%, rgba(99,102,241,.16), transparent 28%),
+        linear-gradient(145deg, rgba(218,247,244,.55), rgba(226,235,255,.48));
+      box-shadow: inset 0 0 55px rgba(72, 122, 153, .08);
+    }
+
+    .island-wrapper {
+      width: 100%;
+      max-width: 1700px;
+      margin-inline: auto;
+    }
+
+    #campusSvg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: calc(100vh - 150px);
+      object-fit: contain;
+      touch-action: manipulation;
+    }
+
+    /* نافذة المساعد الذكي الاحترافية الواسعة */
+    #sidebarChatContainer {
+      position: fixed;
+      z-index: 110;
+      top: 80px;
+      right: 20px;
+      bottom: 20px;
+      width: 500px;
+      max-width: calc(100vw - 32px);
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 32px;
+      box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.32), 0 0 0 1px rgba(15, 23, 42, 0.05);
+      transform: translateX(calc(100% + 40px));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      overflow: hidden;
+    }
+
+    #sidebarChatContainer.open {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #sidebarChatContainer .assistant-panel {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: none !important;
+      min-height: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+
+    /* أيقونة فتح وإغلاق الشات العائمة */
+    #chatLauncher {
+      position: fixed;
+      z-index: 120;
+      right: 24px;
+      bottom: 22px;
+      width: 68px;
+      height: 68px;
+      border: 2px solid rgba(255,255,255,.85);
+      border-radius: 24px;
+      background: linear-gradient(145deg, #0f9f9a 0%, #2878c7 52%, #6256d9 100%);
+      box-shadow: 0 14px 34px rgba(42, 99, 160, .32), 0 0 0 7px rgba(255,255,255,.38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .3s ease;
+    }
+
+    #chatLauncher:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 18px 38px rgba(15, 118, 110, .42);
+    }
+
+    #chatLauncher svg {
+      width: 42px;
+      height: 42px;
+      filter: drop-shadow(0 2px 2px rgba(15,23,42,.16));
+      transition: transform 0.3s ease;
+    }
+
+    #chatLauncher.active-launcher {
+      background: linear-gradient(145deg, #e11d48 0%, #be123c 100%);
+      box-shadow: 0 14px 34px rgba(225, 29, 72, .38), 0 0 0 7px rgba(255,255,255,.38);
+    }
+
+    #chatLauncher::after {
+      content: "";
+      position: absolute;
+      inset: -7px;
+      border: 1px solid rgba(45, 150, 180, .30);
+      border-radius: 29px;
+      pointer-events: none;
+      animation: botHalo 2.8s ease-out infinite;
+    }
+
+    @keyframes botHalo {
+      0% { transform: scale(.92); opacity: .8; }
+      100% { transform: scale(1.28); opacity: 0; }
+    }
+
+    /* خلفية بصرية للخريطة */
+    body.bg-waves {
+      background-color: #eaf7f7 !important;
+      background-image:
+        radial-gradient(ellipse at 12% 22%, rgba(45, 212, 191, .24) 0, transparent 34%),
+        radial-gradient(ellipse at 88% 18%, rgba(129, 140, 248, .22) 0, transparent 32%),
+        radial-gradient(ellipse at 78% 88%, rgba(56, 189, 248, .20) 0, transparent 36%),
+        radial-gradient(ellipse at 20% 90%, rgba(167, 243, 208, .30) 0, transparent 35%),
+        linear-gradient(135deg, #f0fbfa 0%, #e8f3ff 48%, #f3efff 100%) !important;
+      background-attachment: fixed;
+    }
+
+    .map-panel {
+      position: relative;
+      isolation: isolate;
+      background: linear-gradient(135deg, rgba(255,255,255,.48), rgba(226,245,250,.34), rgba(238,235,255,.38)) !important;
+    }
+
+    .map-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .62;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(71, 116, 155, .20) 1.2px, transparent 0),
+        radial-gradient(ellipse at 50% 48%, rgba(255,255,255,.74), transparent 65%);
+      background-size: 28px 28px, 100% 100%;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.45), #000 28%, #000 80%, transparent);
+    }
+
+    @media (max-width: 1024px) {
+      body.chat-opened .map-panel {
+        padding-left: 12px !important;
+      }
+      #sidebarChatContainer {
+        top: 74px;
+        right: 12px;
+        left: 12px;
+        bottom: 16px;
+        width: auto;
+        max-width: none;
+        border-radius: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .map-panel {
+        min-height: calc(100vh - 110px);
+        padding: 6px !important;
+      }
+      #mapContainer {
+        min-height: calc(100vh - 165px);
+      }
+      #campusSvg {
+        max-height: none;
+      }
+      #chatLauncher {
+        right: 14px;
+        bottom: 14px;
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+      }
+      #chatLauncher svg {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* صفحات التخصصات التفاعلية */
+    #specializationPage {
+      animation: detailPageIn .45s cubic-bezier(.22,1,.36,1) both;
+    }
+    #specializationPage.hidden {
+      display: none !important;
+    }
+    @keyframes detailPageIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 640px) {
+      #detailHero {
+        border-radius: 22px;
+        padding: 22px 18px;
+      }
+      #specializationPage {
+        padding-top: 16px;
+        padding-bottom: 24px;
+      }
+    }
+
+    .journey-tab-btn.active {
+      background-color: var(--spec-accent, #0f766e);
+      color: #ffffff;
+      border-color: var(--spec-accent, #0f766e);
+      box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.2);
+    }
+
+    .facility-card {
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .facility-card:hover {
+      transform: translateY(-3px);
+    }
+    .facility-card.selected-facility {
+      border-color: var(--spec-accent, #0f766e);
+      background-color: #f8fafc;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+    }
+  
+    /* ===== Chat + map: true side-by-side layout, no overlap ===== */
+    @media (min-width: 1025px) {
+      body.chat-opened main {
+        width: calc(100% - 520px) !important;
+        max-width: calc(100% - 520px) !important;
+        margin-left: 520px !important;
+        margin-right: 0 !important;
+        transition: width .45s cubic-bezier(.16,1,.3,1),
+                    max-width .45s cubic-bezier(.16,1,.3,1),
+                    margin-left .45s cubic-bezier(.16,1,.3,1);
+      }
+
+      body:not(.chat-opened) main {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        transition: width .45s cubic-bezier(.16,1,.3,1),
+                    max-width .45s cubic-bezier(.16,1,.3,1),
+                    margin-left .45s cubic-bezier(.16,1,.3,1);
+      }
+
+      body.chat-opened .map-panel {
+        width: 100% !important;
+        min-height: calc(100vh - 86px);
+        padding: 10px 12px !important;
+      }
+
+      body.chat-opened #mapContainer {
+        min-height: calc(100vh - 150px);
+        border-radius: 24px;
+      }
+
+      body.chat-opened .island-wrapper {
+        max-width: 100% !important;
+      }
+
+      body.chat-opened #campusSvg {
+        max-height: calc(100vh - 175px);
+      }
+
+      #sidebarChatContainer {
+        left: 16px !important;
+        right: auto !important;
+        top: 78px !important;
+        bottom: 16px !important;
+        width: 480px !important;
+        max-width: calc(100vw - 32px) !important;
+        z-index: 110;
+        transform: translateX(calc(-100% - 32px));
+      }
+
+      #sidebarChatContainer.open {
+        transform: translateX(0);
+      }
+
+      body.chat-opened #chatLauncher {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: scale(.8) !important;
+      }
+    }
+
+    /* الأجهزة اللوحية والهواتف: تظهر المحادثة أسفل الخريطة بدلاً من تغطيتها */
+    @media (max-width: 1024px) {
+      body.chat-opened main {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+
+      body.chat-opened .map-panel {
+        padding: 6px !important;
+      }
+
+      #sidebarChatContainer {
+        position: relative !important;
+        inset: auto !important;
+        width: calc(100% - 24px) !important;
+        max-width: 720px !important;
+        height: 72vh !important;
+        min-height: 480px !important;
+        margin: 16px auto 24px !important;
+        border-radius: 24px !important;
+        transform: translateY(18px) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
+      #sidebarChatContainer.open {
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      body.chat-opened #chatLauncher {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+    }
+
+  </style>
+</head>
+<body class="bg-waves text-slate-800 antialiased selection:bg-teal-600 selection:text-white">
+
+  <!-- ==================== رأس الصفحة (Header) ==================== -->
+  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-teal-900/10 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- هوية المدرسة والشعار -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-teal-700 via-teal-600 to-indigo-600 p-2.5 shadow-md shadow-teal-900/15 flex items-center justify-center shrink-0">
+          <img src="logo.png" alt="شعار مدرسة البلقاء" class="w-full h-full object-contain">
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight">
+              مدرسة البلقاء الثانوية الشاملة للبنات
+            </h1>
+            <button type="button" onclick="returnToCampus()" title="العودة إلى الخريطة التفاعلية" aria-label="العودة إلى الخريطة التفاعلية عبر BTEC"
+              class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition cursor-pointer">
+              برنامج BTEC
+            </button>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+            الخريطة التفاعلية للتخصصات والمرافق التعليمية — مؤتمر BTEC المدرسي
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== المحتوى الرئيسي (الخريطة التفاعلية) ==================== -->
+  <main class="max-w-[1660px] mx-auto px-3 sm:px-5 lg:px-6 py-4 lg:py-5">
+    <div class="main-layout">
+
+      <!-- مساحة الخريطة التفاعلية الكبيرة بملء الشاشة -->
+      <section id="mapSection" aria-label="خريطة التخصصات التفاعلية" class="map-panel relative bg-white/85 backdrop-blur-sm rounded-3xl border border-white shadow-xl shadow-teal-950/5 p-2.5 sm:p-4">
+        
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-2 max-w-[1500px] mx-auto">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-800">
+              المدينة التعليمية التفاعلية لتخصصات BTEC
+            </h2>
+          </div>
+          <p class="text-xs font-semibold text-slate-500 bg-slate-100/90 px-3 py-1 rounded-full">
+            اضغط على أي منصة تخصص لاستكشاف مرافقه التعليمية
+          </p>
+        </div>
+
+        <div id="mapContainer" class="map-stage w-full relative flex items-center justify-center select-none rounded-2xl max-w-[1500px] mx-auto">
+          <div class="island-wrapper w-full mx-auto">
+            <svg id="campusSvg" viewBox="0 0 1240 820" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="islandTopGrad" x1="15%" y1="10%" x2="85%" y2="90%">
+                  <stop offset="0%" stop-color="#86df89"/>
+                  <stop offset="45%" stop-color="#5cc96e"/>
+                  <stop offset="100%" stop-color="#3eb259"/>
+                </linearGradient>
+
+                <linearGradient id="islandRimGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#349a4c"/>
+                  <stop offset="100%" stop-color="#227237"/>
+                </linearGradient>
+
+                <linearGradient id="islandSandGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#f7e3b5"/>
+                  <stop offset="100%" stop-color="#dec086"/>
+                </linearGradient>
+
+                <linearGradient id="islandRockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#a88e72"/>
+                  <stop offset="100%" stop-color="#78624c"/>
+                </linearGradient>
+
+                <radialGradient id="lagoonWaterGrad" cx="50%" cy="52%" r="52%">
+                  <stop offset="0%" stop-color="#bae6fd" stop-opacity="0.65"/>
+                  <stop offset="65%" stop-color="#7dd3fc" stop-opacity="0.32"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                </radialGradient>
+
+                <linearGradient id="pondGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7dd3fc"/>
+                  <stop offset="100%" stop-color="#0284c7"/>
+                </linearGradient>
+
+                <linearGradient id="pathGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fffef9"/>
+                  <stop offset="100%" stop-color="#f2e7d2"/>
+                </linearGradient>
+
+                <linearGradient id="centerBaseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#ebe3d5"/>
+                </linearGradient>
+                <linearGradient id="centerSideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#cbbda5"/>
+                  <stop offset="100%" stop-color="#9e9078"/>
+                </linearGradient>
+
+                <radialGradient id="itAuraGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.58"/>
+                  <stop offset="68%" stop-color="#818cf8" stop-opacity="0.22"/>
+                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="itTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#eef2ff"/>
+                  <stop offset="100%" stop-color="#c7d2fe"/>
+                </linearGradient>
+                <linearGradient id="itSideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#6366f1"/>
+                  <stop offset="100%" stop-color="#3730a3"/>
+                </linearGradient>
+
+                <linearGradient id="bizTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ecfdf5"/>
+                  <stop offset="100%" stop-color="#a7f3d0"/>
+                </linearGradient>
+                <linearGradient id="bizSideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#10b981"/>
+                  <stop offset="100%" stop-color="#047857"/>
+                </linearGradient>
+
+                <linearGradient id="artTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fffbeb"/>
+                  <stop offset="100%" stop-color="#fde68a"/>
+                </linearGradient>
+                <linearGradient id="artSideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#f59e0b"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+
+                <linearGradient id="beautyTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fff1f2"/>
+                  <stop offset="100%" stop-color="#fecdd3"/>
+                </linearGradient>
+                <linearGradient id="beautySideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#f43f5e"/>
+                  <stop offset="100%" stop-color="#be123c"/>
+                </linearGradient>
+
+                <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#1e293b" flood-opacity="0.18"/>
+                </filter>
+
+                <filter id="islandDropShadow" x="-15%" y="-15%" width="130%" height="135%">
+                  <feDropShadow dx="0" dy="28" stdDeviation="20" flood-color="#0f3d2e" flood-opacity="0.26"/>
+                </filter>
+              </defs>
+
+              <!-- هالة المياه المحيطة بالجزيرة -->
+              <ellipse cx="620" cy="435" rx="605" ry="370" fill="url(#lagoonWaterGrad)"/>
+              <g fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.65">
+                <path d="M 55 430 Q 45 360 72 295"/>
+                <path d="M 1185 430 Q 1195 355 1165 290"/>
+                <path d="M 210 735 Q 340 785 495 792"/>
+                <path d="M 745 792 Q 905 782 1035 730"/>
+                <path d="M 155 145 Q 245 88 355 68"/>
+                <path d="M 895 72 Q 1005 95 1090 155"/>
+              </g>
+
+              <!-- عناصر جوية -->
+              <g class="cloud-drift" opacity="0.82">
+                <g transform="translate(130, 72)">
+                  <ellipse cx="0" cy="0" rx="38" ry="14" fill="#ffffff"/>
+                  <circle cx="-15" cy="-6" r="15" fill="#ffffff"/>
+                  <circle cx="9" cy="-8" r="18" fill="#ffffff"/>
+                </g>
+                <g transform="translate(1095, 82)">
+                  <ellipse cx="0" cy="0" rx="42" ry="15" fill="#ffffff"/>
+                  <circle cx="-18" cy="-6" r="16" fill="#ffffff"/>
+                  <circle cx="11" cy="-7" r="19" fill="#ffffff"/>
+                </g>
+              </g>
+              <g stroke="#475569" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.55">
+                <path d="M 245 58 Q 252 50 259 58 Q 266 50 273 58"/>
+                <path d="M 965 54 Q 971 47 977 54 Q 983 47 989 54"/>
+                <path d="M 995 72 Q 1000 66 1005 72 Q 1010 66 1015 72"/>
+              </g>
+
+              <!-- قاعدة الجزيرة -->
+              <g id="islandBase" filter="url(#islandDropShadow)">
+                <path d="M 42 415 C 32 315, 92 225, 175 162 C 255 102, 355 62, 475 54 C 575 48, 675 48, 775 58 C 895 70, 995 112, 1072 175 C 1148 238, 1205 322, 1196 422 C 1188 518, 1132 595, 1052 652 C 965 715, 855 752, 725 766 C 620 776, 515 774, 412 758 C 288 738, 185 692, 112 622 C 58 568, 48 492, 42 415 Z" fill="url(#islandRockGrad)"/>
+                <path d="M 42 396 C 32 296, 92 206, 175 144 C 255 84, 355 44, 475 36 C 575 30, 675 30, 775 40 C 895 52, 995 94, 1072 156 C 1148 220, 1205 304, 1196 404 C 1188 500, 1132 576, 1052 634 C 965 696, 855 734, 725 748 C 620 758, 515 756, 412 740 C 288 720, 185 674, 112 604 C 58 550, 48 474, 42 396 Z" fill="url(#islandSandGrad)"/>
+                <path d="M 56 384 C 48 288, 105 202, 186 142 C 264 84, 362 46, 480 38 C 578 32, 674 32, 770 42 C 888 54, 985 94, 1060 154 C 1134 216, 1188 296, 1180 392 C 1172 486, 1118 560, 1040 616 C 955 676, 848 712, 722 726 C 620 736, 516 734, 416 702 C 295 682, 195 638, 124 570 C 72 518, 66 446, 60 370 Z" fill="url(#islandRimGrad)"/>
+                <path d="M 60 370 C 52 276, 108 190, 188 132 C 266 74, 362 36, 480 28 C 578 22, 674 22, 770 32 C 888 44, 985 84, 1060 144 C 1134 206, 1188 284, 1180 378 C 1172 470, 1118 544, 1040 600 C 955 660, 848 696, 722 710 C 620 720, 516 718, 416 702 C 295 682, 195 638, 124 570 C 72 518, 66 446, 60 370 Z" fill="url(#islandTopGrad)"/>
+
+                <path d="M 145 235 C 205 155, 365 130, 455 188 C 525 232, 465 318, 355 326 C 235 335, 105 298, 145 235 Z" fill="#7ce282" opacity="0.78"/>
+                <path d="M 765 175 C 865 132, 1025 168, 1062 256 C 1095 336, 975 392, 862 364 C 760 340, 690 208, 765 175 Z" fill="#7ce282" opacity="0.78"/>
+                <path d="M 275 515 C 385 458, 635 462, 755 524 C 855 574, 795 672, 615 686 C 435 700, 195 562, 275 515 Z" fill="#4cc063" opacity="0.65"/>
+                <path d="M 165 455 C 225 425, 315 445, 335 495 C 355 545, 265 595, 185 565 C 115 538, 115 480, 165 455 Z" fill="#89e88e" opacity="0.55"/>
+                <path d="M 915 445 C 985 420, 1075 448, 1088 502 C 1100 555, 1005 598, 925 565 C 855 536, 855 468, 915 445 Z" fill="#89e88e" opacity="0.55"/>
+
+                <g fill="#94a3b8" stroke="#64748b" stroke-width="1.2">
+                  <ellipse cx="95" cy="545" rx="14" ry="7"/>
+                  <ellipse cx="112" cy="554" rx="9" ry="5"/>
+                  <ellipse cx="1135" cy="525" rx="15" ry="7.5"/>
+                  <ellipse cx="1118" cy="536" rx="9" ry="4.5"/>
+                  <ellipse cx="345" cy="728" rx="13" ry="6"/>
+                  <ellipse cx="895" cy="722" rx="14" ry="6.5"/>
+                </g>
+
+                <g transform="translate(885, 575)">
+                  <ellipse cx="0" cy="0" rx="54" ry="28" fill="#fef3c7" opacity="0.85"/>
+                  <ellipse cx="0" cy="0" rx="46" ry="22" fill="url(#pondGrad)" stroke="#38bdf8" stroke-width="2"/>
+                  <path d="M -22 -4 Q -8 -10 8 -4" stroke="#e0f2fe" stroke-width="2" fill="none" stroke-linecap="round"/>
+                  <circle cx="16" cy="5" r="5" fill="#4ade80"/>
+                  <circle cx="16" cy="4" r="2.2" fill="#f472b6"/>
+                  <circle cx="-14" cy="7" r="4" fill="#4ade80"/>
+                </g>
+              </g>
+
+              <!-- شبكة الطرق والممرات -->
+              <g id="campusPathways" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path id="windingLoop" d="M 620 248 C 730 245, 830 218, 908 268 C 982 316, 960 412, 886 468 C 812 522, 730 504, 620 526 C 510 548, 412 538, 332 482 C 254 428, 244 326, 324 272 C 404 218, 510 250, 620 248 Z" stroke="#d5c7af" stroke-width="40"/>
+                <path d="M 620 248 C 730 245, 830 218, 908 268 C 982 316, 960 412, 886 468 C 812 522, 730 504, 620 526 C 510 548, 412 538, 332 482 C 254 428, 244 326, 324 272 C 404 218, 510 250, 620 248 Z" stroke="url(#pathGrad)" stroke-width="32"/>
+                <path d="M 620 355 C 592 295, 648 230, 620 162" stroke="#d5c7af" stroke-width="38"/>
+                <path d="M 620 355 C 592 295, 648 230, 620 162" stroke="url(#pathGrad)" stroke-width="30"/>
+                <path d="M 740 392 C 818 416, 895 335, 992 345" stroke="#d5c7af" stroke-width="36"/>
+                <path d="M 740 392 C 818 416, 895 335, 992 345" stroke="url(#pathGrad)" stroke-width="28"/>
+                <path d="M 500 392 C 422 364, 345 435, 248 355" stroke="#d5c7af" stroke-width="36"/>
+                <path d="M 500 392 C 422 364, 345 435, 248 355" stroke="url(#pathGrad)" stroke-width="28"/>
+                <path d="M 620 458 C 652 518, 588 568, 620 628" stroke="#d5c7af" stroke-width="36"/>
+                <path d="M 620 458 C 652 518, 588 568, 620 628" stroke="url(#pathGrad)" stroke-width="28"/>
+                <path d="M 775 510 C 815 532, 835 552, 855 568" stroke="#d5c7af" stroke-width="22"/>
+                <path d="M 775 510 C 815 532, 835 552, 855 568" stroke="url(#pathGrad)" stroke-width="16"/>
+                <path d="M 620 248 C 730 245, 830 218, 908 268 C 982 316, 960 412, 886 468 C 812 522, 730 504, 620 526 C 510 548, 412 538, 332 482 C 254 428, 244 326, 324 272 C 404 218, 510 250, 620 248 Z" stroke="#c5b69d" stroke-width="2.4" stroke-dasharray="9 11"/>
+                <path d="M 620 355 C 592 295, 648 230, 620 162" stroke="#c5b69d" stroke-width="2" stroke-dasharray="7 9"/>
+                <path d="M 740 392 C 818 416, 895 335, 992 345" stroke="#c5b69d" stroke-width="2" stroke-dasharray="7 9"/>
+                <path d="M 500 392 C 422 364, 345 435, 248 355" stroke="#c5b69d" stroke-width="2" stroke-dasharray="7 9"/>
+                <path d="M 620 458 C 652 518, 588 568, 620 628" stroke="#c5b69d" stroke-width="2" stroke-dasharray="7 9"/>
+              </g>
+
+              <!-- تفاصيل الحرم المدرسي -->
+              <g id="decorativeScenery">
+                <g class="tree-sway" transform="translate(380, 128)">
+                  <ellipse cx="0" cy="38" rx="22" ry="9" fill="#14532d" opacity="0.22"/>
+                  <rect x="-5" y="12" width="10" height="26" rx="3" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="24" fill="#1f8a4c"/>
+                  <circle cx="-13" cy="10" r="16" fill="#166d3b"/>
+                  <circle cx="13" cy="9" r="16" fill="#2ea861"/>
+                  <circle cx="-4" cy="-5" r="12" fill="#4cc97e" opacity="0.8"/>
+                </g>
+                <g class="tree-sway" transform="translate(322, 162)">
+                  <ellipse cx="0" cy="30" rx="16" ry="6.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4" y="10" width="8" height="20" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="19" fill="#279b57"/>
+                  <circle cx="10" cy="8" r="12" fill="#1b7a43"/>
+                </g>
+                <g class="tree-sway" transform="translate(265, 195)">
+                  <ellipse cx="0" cy="34" rx="19" ry="8" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4.5" y="11" width="9" height="23" rx="3" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="21" fill="#15803d"/>
+                  <circle cx="-10" cy="9" r="14" fill="#166534"/>
+                  <circle cx="10" cy="8" r="14" fill="#22c55e"/>
+                </g>
+                <g class="tree-sway" transform="translate(435, 175)">
+                  <ellipse cx="0" cy="32" rx="15" ry="6" fill="#14532d" opacity="0.2"/>
+                  <rect x="-3.5" y="12" width="7" height="20" rx="2" fill="#7c4a3a"/>
+                  <polygon points="0,-24 -18,4 18,4" fill="#15803d"/>
+                  <polygon points="0,-12 -21,15 21,15" fill="#166534"/>
+                </g>
+
+                <g class="tree-sway" transform="translate(860, 128)">
+                  <ellipse cx="0" cy="38" rx="22" ry="9" fill="#14532d" opacity="0.22"/>
+                  <rect x="-5" y="12" width="10" height="26" rx="3" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="24" fill="#1f8a4c"/>
+                  <circle cx="-13" cy="10" r="16" fill="#166d3b"/>
+                  <circle cx="13" cy="9" r="16" fill="#2ea861"/>
+                  <circle cx="-4" cy="-5" r="12" fill="#4cc97e" opacity="0.8"/>
+                </g>
+                <g class="tree-sway" transform="translate(918, 162)">
+                  <ellipse cx="0" cy="30" rx="16" ry="6.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4" y="10" width="8" height="20" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="19" fill="#279b57"/>
+                  <circle cx="-10" cy="8" r="12" fill="#1b7a43"/>
+                </g>
+                <g class="tree-sway" transform="translate(975, 195)">
+                  <ellipse cx="0" cy="34" rx="19" ry="8" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4.5" y="11" width="9" height="23" rx="3" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="21" fill="#15803d"/>
+                  <circle cx="-10" cy="9" r="14" fill="#166534"/>
+                  <circle cx="10" cy="8" r="14" fill="#22c55e"/>
+                </g>
+                <g class="tree-sway" transform="translate(805, 175)">
+                  <ellipse cx="0" cy="32" rx="15" ry="6" fill="#14532d" opacity="0.2"/>
+                  <rect x="-3.5" y="12" width="7" height="20" rx="2" fill="#7c4a3a"/>
+                  <polygon points="0,-24 -18,4 18,4" fill="#15803d"/>
+                  <polygon points="0,-12 -21,15 21,15" fill="#166534"/>
+                </g>
+
+                <g class="tree-sway" transform="translate(122, 275)">
+                  <ellipse cx="0" cy="32" rx="18" ry="7.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4" y="10" width="8" height="22" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="20" fill="#1f8a4c"/>
+                  <circle cx="10" cy="8" r="13" fill="#2ea861"/>
+                </g>
+                <g class="tree-sway" transform="translate(1118, 275)">
+                  <ellipse cx="0" cy="32" rx="18" ry="7.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4" y="10" width="8" height="22" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="20" fill="#1f8a4c"/>
+                  <circle cx="-10" cy="8" r="13" fill="#2ea861"/>
+                </g>
+
+                <g class="tree-sway" transform="translate(245, 520)">
+                  <ellipse cx="0" cy="40" rx="23" ry="9.5" fill="#14532d" opacity="0.22"/>
+                  <rect x="-5" y="12" width="10" height="28" rx="3" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="25" fill="#1e8249"/>
+                  <circle cx="-14" cy="11" r="17" fill="#156336"/>
+                  <circle cx="14" cy="10" r="17" fill="#2ca35e"/>
+                </g>
+                <g class="tree-sway" transform="translate(308, 568)">
+                  <ellipse cx="0" cy="30" rx="16" ry="6.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-3.5" y="9" width="7" height="21" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="19" fill="#229954"/>
+                </g>
+                <g class="tree-sway" transform="translate(185, 488)">
+                  <ellipse cx="0" cy="30" rx="15" ry="6" fill="#14532d" opacity="0.2"/>
+                  <rect x="-3.5" y="10" width="7" height="20" rx="2" fill="#7c4a3a"/>
+                  <polygon points="0,-22 -17,4 17,4" fill="#15803d"/>
+                  <polygon points="0,-10 -20,14 20,14" fill="#166534"/>
+                </g>
+                <g class="tree-sway" transform="translate(385, 615)">
+                  <ellipse cx="0" cy="34" rx="18" ry="7.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4" y="10" width="8" height="24" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="21" fill="#1f8a4c"/>
+                  <circle cx="11" cy="8" r="13" fill="#2ea861"/>
+                </g>
+
+                <g class="tree-sway" transform="translate(995, 515)">
+                  <ellipse cx="0" cy="40" rx="23" ry="9.5" fill="#14532d" opacity="0.22"/>
+                  <rect x="-5" y="12" width="10" height="28" rx="3" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="25" fill="#1e8249"/>
+                  <circle cx="-14" cy="11" r="17" fill="#156336"/>
+                  <circle cx="14" cy="10" r="17" fill="#2ca35e"/>
+                </g>
+                <g class="tree-sway" transform="translate(1055, 478)">
+                  <ellipse cx="0" cy="30" rx="16" ry="6.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-3.5" y="9" width="7" height="21" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="19" fill="#229954"/>
+                </g>
+                <g class="tree-sway" transform="translate(785, 628)">
+                  <ellipse cx="0" cy="34" rx="18" ry="7.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-4" y="10" width="8" height="24" rx="2.5" fill="#7c4a3a"/>
+                  <circle cx="0" cy="2" r="21" fill="#1f8a4c"/>
+                  <circle cx="-11" cy="8" r="13" fill="#2ea861"/>
+                </g>
+
+                <g transform="translate(445, 302)">
+                  <ellipse cx="0" cy="10" rx="19" ry="5.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-16" y="0" width="32" height="6" rx="2" fill="#b45309"/>
+                  <rect x="-16" y="-6" width="32" height="4" rx="1.5" fill="#d97706"/>
+                  <line x1="-12" y1="6" x2="-12" y2="11" stroke="#334155" stroke-width="2.5"/>
+                  <line x1="12" y1="6" x2="12" y2="11" stroke="#334155" stroke-width="2.5"/>
+                </g>
+
+                <g transform="translate(795, 302)">
+                  <ellipse cx="0" cy="10" rx="19" ry="5.5" fill="#14532d" opacity="0.2"/>
+                  <rect x="-16" y="0" width="32" height="6" rx="2" fill="#b45309"/>
+                  <rect x="-16" y="-6" width="32" height="4" rx="1.5" fill="#d97706"/>
+                  <line x1="-12" y1="6" x2="-12" y2="11" stroke="#334155" stroke-width="2.5"/>
+                  <line x1="12" y1="6" x2="12" y2="11" stroke="#334155" stroke-width="2.5"/>
+                </g>
+
+                <g transform="translate(525, 215)">
+                  <line x1="0" y1="0" x2="0" y2="20" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
+                  <rect x="-18" y="-12" width="36" height="14" rx="3" fill="#fef3c7" stroke="#b45309" stroke-width="1.8"/>
+                  <line x1="-11" y1="-6" x2="11" y2="-6" stroke="#92400e" stroke-width="2"/>
+                  <line x1="-8" y1="-2" x2="8" y2="-2" stroke="#b45309" stroke-width="1.5"/>
+                </g>
+
+                <g transform="translate(465, 488)">
+                  <ellipse cx="0" cy="18" rx="8" ry="3.5" fill="#14532d" opacity="0.22"/>
+                  <line x1="0" y1="-16" x2="0" y2="18" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="0" cy="-20" r="6.5" fill="#fef08a" stroke="#f59e0b" stroke-width="1.5"/>
+                </g>
+                <g transform="translate(775, 488)">
+                  <ellipse cx="0" cy="18" rx="8" ry="3.5" fill="#14532d" opacity="0.22"/>
+                  <line x1="0" y1="-16" x2="0" y2="18" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="0" cy="-20" r="6.5" fill="#fef08a" stroke="#f59e0b" stroke-width="1.5"/>
+                </g>
+
+                <g transform="translate(145, 435)">
+                  <circle cx="0" cy="0" r="16" fill="#229954"/>
+                  <circle cx="15" cy="4" r="12" fill="#196f3d"/>
+                  <circle cx="-13" cy="5" r="11" fill="#2ecc71"/>
+                  <circle cx="-3" cy="-3" r="3.5" fill="#fb7185"/>
+                  <circle cx="10" cy="1" r="3.5" fill="#facc15"/>
+                  <circle cx="-9" cy="2" r="3" fill="#c084fc"/>
+                </g>
+                <g transform="translate(1095, 435)">
+                  <circle cx="0" cy="0" r="16" fill="#229954"/>
+                  <circle cx="-15" cy="4" r="12" fill="#196f3d"/>
+                  <circle cx="13" cy="5" r="11" fill="#2ecc71"/>
+                  <circle cx="3" cy="-3" r="3.5" fill="#c084fc"/>
+                  <circle cx="-10" cy="2" r="3.5" fill="#facc15"/>
+                  <circle cx="8" cy="2" r="3" fill="#fb7185"/>
+                </g>
+                <g transform="translate(465, 655)">
+                  <circle cx="0" cy="0" r="15" fill="#229954"/>
+                  <circle cx="13" cy="3" r="11" fill="#196f3d"/>
+                  <circle cx="1" cy="-2" r="3.5" fill="#fb7185"/>
+                  <circle cx="10" cy="0" r="3" fill="#facc15"/>
+                  <circle cx="-7" cy="2" r="2.8" fill="#60a5fa"/>
+                </g>
+                <g transform="translate(835, 645)">
+                  <circle cx="0" cy="0" r="15" fill="#229954"/>
+                  <circle cx="-13" cy="3" r="11" fill="#196f3d"/>
+                  <circle cx="-1" cy="-2" r="3.5" fill="#60a5fa"/>
+                  <circle cx="-10" cy="0" r="3" fill="#facc15"/>
+                  <circle cx="7" cy="2" r="2.8" fill="#fb7185"/>
+                </g>
+              </g>
+
+              <!-- المنصة المركزية -->
+              <g id="centralHub" class="animate-center-hub" filter="url(#softShadow)">
+                <path d="M 488 392 L 488 424 A 132 78 0 0 0 752 424 L 752 392 Z" fill="url(#centerSideGrad)"/>
+                <ellipse cx="620" cy="392" rx="132" ry="78" fill="url(#centerBaseGrad)" stroke="#ffffff" stroke-width="4"/>
+                <ellipse cx="620" cy="392" rx="114" ry="66" fill="none" stroke="#2f7a78" stroke-width="2.2" stroke-opacity="0.28"/>
+                <g transform="translate(620, 358)">
+                  <path d="M -2 0 C -16 -19, -32 -14, -30 2 C -16 7, -5 5, -2 0 Z" fill="#2f7a78"/>
+                  <path d="M 2 0 C 16 -19, 32 -14, 30 2 C 16 7, 5 5, 2 0 Z" fill="#5b5ce6"/>
+                  <circle cx="0" cy="-14" r="5" fill="#f59e0b"/>
+                </g>
+                <text x="620" y="394" text-anchor="middle" fill="#1e293b" font-size="29" font-weight="900">BTEC</text>
+                <text x="620" y="420" text-anchor="middle" fill="#2f7a78" font-size="15" font-weight="800">في مدرسة البلقاء</text>
+              </g>
+
+              <!-- 1. تكنولوجيا المعلومات -->
+              <g id="node-it" class="spec-node animate-float-it" onclick="selectSpecialization('it')" role="button" tabindex="0" aria-label="تخصص تكنولوجيا المعلومات">
+                <ellipse class="hover-glow-ring" cx="620" cy="158" rx="154" ry="92" fill="none" stroke="#818cf8" stroke-width="6" opacity="0.8"/>
+                <ellipse class="hover-glow-ring" cx="620" cy="158" rx="140" ry="82" fill="#6366f1" fill-opacity="0.16"/>
+                <ellipse cx="620" cy="158" rx="158" ry="96" fill="url(#itAuraGrad)"/>
+                <ellipse cx="620" cy="158" rx="126" ry="74" fill="none" stroke="#6366f1" stroke-width="3" class="pulse-ring-it"/>
+                <path d="M 498 156 L 498 190 A 122 70 0 0 0 742 190 L 742 156 Z" fill="url(#itSideGrad)"/>
+                <ellipse cx="620" cy="156" rx="122" ry="70" fill="url(#itTopGrad)" stroke="#818cf8" stroke-width="3.5"/>
+                <ellipse cx="620" cy="156" rx="104" ry="58" fill="none" stroke="#4f46e5" stroke-width="1.6" stroke-dasharray="5 5" opacity="0.45"/>
+                <g transform="translate(620, 122)">
+                  <ellipse cx="0" cy="25" rx="48" ry="16" fill="#312e81" opacity="0.22"/>
+                  <polygon points="-44,14 44,14 55,25 -55,25" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+                  <polygon points="-35,16 35,16 41,22 -41,22" fill="#64748b"/>
+                  <rect x="-42" y="-36" width="84" height="50" rx="7" fill="#1e1b4b" stroke="#4f46e5" stroke-width="2.5"/>
+                  <rect x="-35" y="-30" width="70" height="38" rx="3.5" fill="#312e81"/>
+                  <text x="0" y="-6" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="900" font-family="monospace">&lt;/&gt;</text>
+                  <circle cx="-54" cy="-16" r="11" fill="#4f46e5"/>
+                  <text x="-54" y="-12" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">AI</text>
+                  <circle cx="54" cy="-18" r="11" fill="#0ea5e9"/>
+                  <text x="54" y="-14" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">01</text>
+                </g>
+               
+                <g transform="translate(620, 176)">
+                  <rect x="-82" y="-14" width="164" height="28" rx="14" fill="#312e81"/>
+                  <text x="0" y="4.5" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="800">تكنولوجيا المعلومات</text>
+                </g>
+                <g class="spec-tooltip" transform="translate(620, 36)">
+                  <rect x="-78" y="-14" width="156" height="24" rx="12" fill="#0f172a"/>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">اضغطي لاستكشاف المختبرات</text>
+                </g>
+              </g>
+
+              <!-- 2. إدارة الأعمال -->
+              <g id="node-business" class="spec-node animate-float-delayed-1" onclick="selectSpecialization('business')" role="button" tabindex="0" aria-label="تخصص إدارة الأعمال">
+                <ellipse class="hover-glow-ring" cx="998" cy="342" rx="126" ry="74" fill="none" stroke="#34d399" stroke-width="5.5"/>
+                <ellipse class="hover-glow-ring" cx="998" cy="342" rx="114" ry="66" fill="#10b981" fill-opacity="0.16"/>
+                <ellipse cx="998" cy="364" rx="108" ry="62" fill="#064e3b" opacity="0.22"/>
+                <path d="M 896 336 L 896 364 A 102 58 0 0 0 1100 364 L 1100 336 Z" fill="url(#bizSideGrad)"/>
+                <ellipse cx="998" cy="336" rx="102" ry="58" fill="url(#bizTopGrad)" stroke="#34d399" stroke-width="3"/>
+                <g transform="translate(998, 302)">
+                  <ellipse cx="0" cy="23" rx="38" ry="13" fill="#065f46" opacity="0.18"/>
+                  <rect x="-32" y="-30" width="64" height="44" rx="6" fill="#ffffff" stroke="#059669" stroke-width="2.5"/>
+                  <rect x="-22" y="-7" width="9" height="15" rx="2" fill="#6ee7b7"/>
+                  <rect x="-9" y="-14" width="9" height="22" rx="2" fill="#34d399"/>
+                  <rect x="4" y="-21" width="9" height="29" rx="2" fill="#059669"/>
+                  <path d="M 17 -9 L 23 -19 L 26 -13" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="-13" y1="14" x2="-19" y2="24" stroke="#047857" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="13" y1="14" x2="19" y2="24" stroke="#047857" stroke-width="3" stroke-linecap="round"/>
+                </g>
+                <g transform="translate(998, 352)">
+                  <rect x="-68" y="-13" width="136" height="26" rx="13" fill="#065f46"/>
+                  <text x="0" y="4.5" text-anchor="middle" fill="#ffffff" font-size="13.5" font-weight="800">إدارة الأعمال</text>
+                </g>
+                <g class="spec-tooltip" transform="translate(998, 246)">
+                  <rect x="-74" y="-14" width="148" height="24" rx="12" fill="#0f172a"/>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">عرض تفاصيل إدارة الأعمال</text>
+                </g>
+              </g>
+
+              <!-- 3. فن وتصميم -->
+              <g id="node-art" class="spec-node animate-float-delayed-2" onclick="selectSpecialization('art')" role="button" tabindex="0" aria-label="تخصص فن وتصميم">
+                <ellipse class="hover-glow-ring" cx="242" cy="342" rx="126" ry="74" fill="none" stroke="#fbbf24" stroke-width="5.5"/>
+                <ellipse class="hover-glow-ring" cx="242" cy="342" rx="114" ry="66" fill="#f59e0b" fill-opacity="0.16"/>
+                <ellipse cx="242" cy="364" rx="108" ry="62" fill="#78350f" opacity="0.22"/>
+                <path d="M 140 336 L 140 364 A 102 58 0 0 0 344 364 L 344 336 Z" fill="url(#artSideGrad)"/>
+                <ellipse cx="242" cy="336" rx="102" ry="58" fill="url(#artTopGrad)" stroke="#fbbf24" stroke-width="3"/>
+                <g transform="translate(242, 302)">
+                  <ellipse cx="0" cy="23" rx="38" ry="13" fill="#92400e" opacity="0.18"/>
+                  <line x1="-15" y1="12" x2="-21" y2="25" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="15" y1="12" x2="21" y2="25" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+                  <rect x="-26" y="-30" width="52" height="40" rx="5" fill="#ffffff" stroke="#d97706" stroke-width="2.5"/>
+                  <circle cx="-9" cy="-15" r="6.5" fill="#fbbf24"/>
+                  <path d="M -21 4 L -7 -11 L 4 0 L 15 -15 L 21 4 Z" fill="#f59e0b"/>
+                  <circle cx="30" cy="4" r="12" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+                  <circle cx="27" cy="1" r="2.3" fill="#ef4444"/>
+                  <circle cx="33" cy="2" r="2.3" fill="#3b82f6"/>
+                  <circle cx="30" cy="7" r="2.3" fill="#10b981"/>
+                </g>
+                <g transform="translate(242, 352)">
+                  <rect x="-64" y="-13" width="128" height="26" rx="13" fill="#92400e"/>
+                  <text x="0" y="4.5" text-anchor="middle" fill="#ffffff" font-size="13.5" font-weight="800">فن وتصميم</text>
+                </g>
+                <g class="spec-tooltip" transform="translate(242, 246)">
+                  <rect x="-72" y="-14" width="144" height="24" rx="12" fill="#0f172a"/>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">عرض مرافق فن وتصميم</text>
+                </g>
+              </g>
+
+              <!-- 4. التجميل -->
+              <g id="node-beauty" class="spec-node animate-float-delayed-3" onclick="selectSpecialization('beauty')" role="button" tabindex="0" aria-label="تخصص التجميل">
+                <ellipse class="hover-glow-ring" cx="620" cy="618" rx="128" ry="74" fill="none" stroke="#fb7185" stroke-width="5.5"/>
+                <ellipse class="hover-glow-ring" cx="620" cy="618" rx="116" ry="66" fill="#f43f5e" fill-opacity="0.16"/>
+                <ellipse cx="620" cy="638" rx="110" ry="62" fill="#881337" opacity="0.22"/>
+                <path d="M 516 610 L 516 638 A 104 58 0 0 0 724 638 L 724 610 Z" fill="url(#beautySideGrad)"/>
+                <ellipse cx="620" cy="610" rx="104" ry="58" fill="url(#beautyTopGrad)" stroke="#fb7185" stroke-width="3"/>
+                <g transform="translate(620, 576)">
+                  <ellipse cx="0" cy="23" rx="38" ry="13" fill="#9f1239" opacity="0.18"/>
+                  <ellipse cx="0" cy="-10" rx="23" ry="27" fill="#ffffff" stroke="#e11d48" stroke-width="3"/>
+                  <ellipse cx="0" cy="-10" rx="17" ry="21" fill="#ffe4e6"/>
+                  <line x1="-8" y1="-19" x2="2" y2="-8" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="-5" y1="-10" x2="4" y2="-1" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="-15" y="16" width="30" height="6" rx="3" fill="#be123c"/>
+                  <circle cx="-30" cy="-14" r="3.2" fill="#f43f5e"/>
+                  <circle cx="30" cy="-12" r="3.2" fill="#fb7185"/>
+                </g>
+                <g transform="translate(620, 626)">
+                  <rect x="-60" y="-13" width="120" height="26" rx="13" fill="#9f1239"/>
+                  <text x="0" y="4.5" text-anchor="middle" fill="#ffffff" font-size="13.5" font-weight="800">التجميل</text>
+                </g>
+                <g class="spec-tooltip" transform="translate(620, 522)">
+                  <rect x="-68" y="-14" width="136" height="24" rx="12" fill="#0f172a"/>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">عرض مرافق التجميل</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== نافذة الشات الجانبية الاحترافية الواسعة على الخريطة ==================== -->
+  <div id="sidebarChatContainer" aria-label="المساعد الذكي BTEC">
+    <aside aria-label="المساعد الذكي لبرنامج BTEC" class="assistant-panel bg-white flex flex-col h-full overflow-hidden relative">
+      <div class="p-4 bg-gradient-to-l from-teal-700 via-teal-600 to-indigo-700 text-white flex items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center shadow-inner shrink-0">
+            <svg viewBox="0 0 48 48" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="22" y="4" width="4" height="6" rx="2" fill="#FDE047"/>
+              <circle cx="24" cy="4" r="3" fill="#FDE047"/>
+              <rect x="10" y="10" width="28" height="22" rx="9" fill="#FFFFFF"/>
+              <rect x="14" y="15" width="20" height="12" rx="5" fill="#1E293B"/>
+              <circle cx="19.5" cy="21" r="2.2" fill="#38BDF8"/>
+              <circle cx="28.5" cy="21" r="2.2" fill="#38BDF8"/>
+              <path d="M 21 24 Q 24 26.5 27 24" stroke="#38BDF8" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M 16 35 C 16 32, 32 32, 32 35 L 34 42 L 14 42 Z" fill="#E2E8F0"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-black tracking-tight">المساعد الذكي BTEC</h2>
+              <span id="aiStatusBadge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-400/25 text-emerald-100 border border-emerald-300/30">
+                جاهز
+              </span>
+            </div>
+            <p class="text-xs text-teal-100 font-medium">
+              اسأليني عن التخصصات والمرافق في مدرسة البلقاء
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button onclick="toggleApiSettings()" title="إعدادات ربط Gemini API للتشغيل المحلي" aria-label="إعدادات الذكاء الاصطناعي" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white text-sm font-bold border border-white/20 transition flex items-center justify-center">
+            ⚙️
+          </button>
+          <button onclick="resetChat()" title="بدء محادثة جديدة" class="px-2.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1">
+            <span>↺</span>
+            <span>جديدة</span>
+          </button>
+          <button onclick="toggleAssistantChat()" title="إغلاق الشات" aria-label="إغلاق الشات" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white text-sm font-bold border border-white/20 transition flex items-center justify-center">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div id="apiSettingsPanel" class="hidden p-3.5 bg-indigo-50/95 border-b border-indigo-200 text-slate-800 space-y-2.5 shrink-0">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-extrabold text-indigo-950 flex items-center gap-1.5">
+            <span>🔑</span>
+            <span>ربط مفتاح Gemini API (للتشغيل بعد تنزيل الملف)</span>
+          </h3>
+          <button onclick="toggleApiSettings()" class="text-xs font-bold text-slate-500 hover:text-slate-800 px-1.5">✕</button>
+        </div>
+        <p class="text-[11px] text-slate-600 leading-relaxed">
+          عند تنزيل الموقع وتشغيله على جهازكِ في المؤتمر، أدخلي مفتاح <strong>Gemini API Key</strong> المجاني هنا ليحفظه المتصفح بأمان في <code class="bg-white px-1 rounded">localStorage</code>:
+        </p>
+        <div class="flex items-center gap-1.5">
+          <input
+            id="customApiKeyInput"
+            type="password"
+            placeholder="ألصقي مفتاح AIzaSy... هنا"
+            class="flex-1 px-3 py-1.5 rounded-xl border border-indigo-300 bg-white text-slate-900 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button onclick="saveCustomApiKey()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
+            حفظ
+          </button>
+          <button onclick="clearCustomApiKey()" class="px-2.5 py-1.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold transition">
+            مسح
+          </button>
+        </div>
+        <div id="apiKeySaveStatus" class="text-[11px] font-bold text-emerald-700 hidden"></div>
+      </div>
+
+      <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-200/70 shrink-0">
+        <p class="text-[11px] font-bold text-slate-400 mb-1.5">أسئلة مقترحة للزائرات:</p>
+        <div class="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+          <button onclick="sendSuggestedQuestion('ما هي التخصصات الموجودة في المدرسة؟')" class="whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:border-teal-500 hover:text-teal-700 transition shadow-2xs">
+            التخصصات المتاحة؟
+          </button>
+          <button onclick="sendSuggestedQuestion('ما الذي يميز تخصص تكنولوجيا المعلومات ومرافقه؟')" class="whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-50 transition shadow-2xs">
+            مرافق تكنولوجيا المعلومات
+          </button>
+          <button onclick="sendSuggestedQuestion('ما المرافق الموجودة في تخصص فن وتصميم؟')" class="whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold bg-white text-amber-800 border border-amber-200 hover:bg-amber-50 transition shadow-2xs">
+            مرافق فن وتصميم
+          </button>
+          <button onclick="sendSuggestedQuestion('ما هي مرافق تخصص التجميل؟')" class="whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold bg-white text-rose-700 border border-rose-200 hover:bg-rose-50 transition shadow-2xs">
+            مرافق التجميل
+          </button>
+        </div>
+      </div>
+
+      <div id="chatMessages" class="chat-scroll flex-1 p-4 overflow-y-auto space-y-3.5 bg-gradient-to-b from-slate-50/60 to-white">
+        <div class="chat-msg flex items-start gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs">
+            🤖
+          </div>
+          <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]">
+            <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+              أهلاً وسهلاً بكِ في <strong>التعرف على التخصصلت المتوفرة ببرنامج BTEC</strong> بمدرسة البلقاء الثانوية الشاملة للبنات! 🌸
+              <br/>
+              يمكنني مساعدتكِ في التعرف على برنامج BTEC والتخصصات الأربعة المتوفرة لدينا (<strong>تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل</strong>) ومرافقها التعليمية. كيف يمكنني مساعدتكِ اليوم؟
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="typingIndicator" class="hidden px-4 py-2 bg-white border-t border-slate-100">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-100 text-slate-600 text-xs font-bold">
+          <span>المساعد يكتب الإجابة</span>
+          <span class="flex gap-1">
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+          </span>
+        </div>
+      </div>
+
+      <form id="chatForm" onsubmit="handleChatSubmit(event)" class="p-3.5 bg-slate-50 border-t border-slate-200 shrink-0">
+        <div class="flex items-center gap-2">
+          <input
+            id="chatInput"
+            type="text"
+            autocomplete="off"
+            placeholder="اكتبي سؤالكِ هنا حول BTEC أو التخصصات..."
+            class="flex-1 px-4 py-3 rounded-2xl border border-slate-300 text-sm font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent shadow-2xs"
+          />
+          <button
+            id="sendBtn"
+            type="submit"
+            aria-label="إرسال السؤال"
+            class="px-5 py-3 rounded-2xl bg-teal-600 hover:bg-teal-700 active:scale-95 text-white font-bold text-sm shadow-sm transition flex items-center gap-1.5 shrink-0 disabled:opacity-50"
+          >
+            <span>إرسال</span>
+            <svg viewBox="0 0 24 24" class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+  <!-- أيقونة عائمة لفتح/إغلاق المساعد الذكي من الخريطة (تم تصحيح أيقونة X الزاحفة بدقة) -->
+  <button id="chatLauncher" type="button" onclick="toggleAssistantChat()" aria-label="فتح وإغلاق المساعد الذكي" title="تحدثي مع المساعد الذكي">
+    <svg id="launcherIconSvg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M32 7V14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="32" cy="6" r="4" fill="#FDE68A" stroke="currentColor" stroke-width="2"/>
+      <rect x="10" y="16" width="44" height="35" rx="13" fill="white" fill-opacity=".16" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M10 28H6C3.8 28 2 29.8 2 32s1.8 4 4 4h4M54 28h4c2.2 0 4 1.8 4 4s-1.8 4-4 4h-4" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="17" y="25" width="30" height="17" rx="7" fill="#E0F2FE"/>
+      <circle cx="25" cy="33.5" r="3" fill="#2563EB"/>
+      <circle cx="39" cy="33.5" r="3" fill="#2563EB"/>
+      <path d="M26 46C29.5 49 34.5 49 38 46" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M21 54h22" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M25 57v3M39 57v3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- ==================== صفحة تفاصيل التخصص (الرحلة المهنية التفاعلية) ==================== -->
+  <section id="specializationPage" class="hidden max-w-[1380px] mx-auto px-3 sm:px-5 lg:px-6 py-6 sm:py-10" aria-live="polite">
+    
+    <!-- شريط التنقل السريع والعودة -->
+    <div class="mb-6 flex flex-col items-center gap-2 text-center">
+      <button type="button" onclick="returnToCampus()" aria-label="العودة إلى الخريطة الرئيسية"
+        class="group rounded-2xl px-7 py-1.5 text-3xl sm:text-4xl font-black tracking-tight text-slate-900 hover:text-teal-700 hover:scale-105 transition duration-200 focus:outline-none focus:ring-4 focus:ring-teal-100">
+        BTEC
+      </button>
+      <span class="text-[11px] font-bold tracking-wide text-slate-400">اضغطي على BTEC للعودة إلى الخريطة التفاعلية</span>
+    </div>
+
+    <!-- الهيدر البصري للتخصص -->
+    <div id="detailHero" class="relative overflow-hidden rounded-[32px] p-6 sm:p-10 text-white shadow-2xl transition-all duration-500">
+      <div class="absolute -left-16 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 right-1/4 h-72 w-72 rounded-full bg-black/15 blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div class="flex items-center gap-4 sm:gap-6">
+          <div id="detailIcon" class="flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center rounded-3xl bg-white/20 backdrop-blur-md text-5xl shadow-inner ring-2 ring-white/30"></div>
+          <div>
+            <span id="detailBadge" class="inline-flex rounded-full border border-white/30 bg-white/15 px-3.5 py-1 text-xs font-black tracking-wide backdrop-blur-md shadow-sm mb-2.5"></span>
+            <h1 id="detailTitle" class="text-2xl sm:text-4xl font-black leading-tight drop-shadow-sm"></h1>
+            <p id="detailEnglishTitle" class="text-xs sm:text-sm font-bold text-white/75 mt-1 tracking-wide"></p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button id="detailAskAi" type="button" class="rounded-2xl bg-white px-5 py-3 text-xs sm:text-sm font-extrabold text-slate-900 shadow-lg hover:bg-teal-50 hover:scale-105 transition duration-200 flex items-center gap-2">
+            <span>🤖 اسألي المساعد الذكي عن التخصص</span>
+          </button>
+          <button type="button" onclick="returnToCampus()" class="rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-xs sm:text-sm font-extrabold text-white hover:bg-white/20 transition">
+            🗺️ العودة للخريطة
+          </button>
+        </div>
+      </div>
+      
+      <p id="detailDescription" class="relative z-10 mt-6 max-w-4xl text-sm sm:text-base leading-relaxed text-white/95 font-medium"></p>
+    </div>
+
+    <!-- المحتوى التفاعلي المبتكر (3 أبعاد مختلفة لكل تخصص) -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- العمود الرئيسي (8 أعمدة): محطات الرحلة المهنية + نموذج المشروع العملي -->
+      <div class="lg:col-span-8 space-y-6">
+        
+        <!-- 1. محطات رحلة الطالبة التفاعلية -->
+        <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-3.5">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-2xl shadow-inner">🧭</div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-black text-slate-900">محطات الرحلة التعليمية في التخصص</h2>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">اضغطي على كل مرحلة لاكتشاف كيف تبني الطالبة مهاراتها</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- أزرار المراحل التفاعلية -->
+          <div id="journeyTabs" class="grid grid-cols-3 gap-2.5 mb-5"></div>
+
+          <!-- بطاقة عرض المرحلة المختارة -->
+          <div id="journeyStageContent" class="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white p-5 sm:p-6 transition-all duration-300"></div>
+        </div>
+
+        <!-- 2. مختبر المشاريع الواقعية -->
+        <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5">
+          <div class="flex items-center gap-3.5 mb-5">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-2xl shadow-inner">🏆</div>
+            <div>
+              <h2 class="text-lg sm:text-xl font-black text-slate-900">من داخل مشاريع طالبات BTEC</h2>
+              <p class="text-xs sm:text-sm text-slate-500 font-medium">نموذج تطبيقي حقيقي تنفذه الطالبات بدلاً من الامتحان التقليدي</p>
+            </div>
+          </div>
+
+          <div id="projectShowcaseBox" class="rounded-2xl p-5 sm:p-6 border border-slate-200/80 bg-slate-50/80 space-y-4"></div>
+        </div>
+
+      </div>
+
+      <!-- العمود الجانبي (4 أعمدة): جولة تفاعلية في مرافق المدرسة + المهارات المكتسبة -->
+      <aside class="lg:col-span-4 space-y-6">
+        
+        <!-- بطاقة استكشاف المرافق التعليمية التفاعلية -->
+        <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-7 shadow-xl shadow-slate-900/5">
+          <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-slate-100">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-xl">🏫</div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900">مرافق التخصص في مدرستنا</h2>
+              <p class="text-xs text-slate-500 font-medium">اضغطي على المرفق لمعاينة دوره التعليمي</p>
+            </div>
+          </div>
+
+          <div id="detailFacilities" class="space-y-3"></div>
+          <div id="facilityPreviewBox" class="mt-4 rounded-2xl bg-slate-900 text-white p-4 text-xs sm:text-sm leading-relaxed shadow-inner"></div>
+        </div>
+
+        <!-- بطاقة أبرز المهارات المهنية -->
+        <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 shadow-xl shadow-slate-900/5">
+          <h3 class="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+            <span>⚡</span>
+            <span>مهارات تكتسبها الطالبة</span>
+          </h3>
+          <div id="detailSkillsTags" class="flex flex-wrap gap-2"></div>
+        </div>
+
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ==================== المنطق البرمجي وقاعدة المعرفة ==================== -->
+  <script>
+    const BTEC_DATA = {
+      schoolName: "مدرسة البلقاء الثانوية الشاملة للبنات",
+      eventName: "مؤتمر BTEC التعليمي التفاعلي",
+      specializations: {
+        it: {
+          id: "it",
+          title: "تكنولوجيا المعلومات (Information Technology)",
+          englishTitle: "BTEC Level 2 & Level 3 in Information Technology",
+          shortTitle: "تكنولوجيا المعلومات",
+          badge: "★ التخصص الرئيسي",
+          isFeatured: true,
+          icon: "💻",
+          theme: { border: "#4f46e5", softBg: "#eef2ff", badgeText: "#3730a3" },
+          description: "التخصص الرئيسي في الواجهة التعليمية؛ يؤهل الطالبات بمهارات الحوسبة، البرمجة، الشبكات، والتقنيات الرقمية الحديثة وفق معايير BTEC التطبيقية.",
+          facilities: ["مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي."],
+          facilityDetails: [
+            { name: "مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.", role: "بيئة تقنية متكاملة مخصصة لكل مرحلة صفية، تُطبّق فيها الطالبات البرمجة، تصميم المواقع، وإدارة الشبكات عملياً." }
+          ],
+          journeyStages: [
+            { step: "1", label: "الأساس الرقمي", title: "استكشاف الأنظمة والبرمجة", summary: "تتعرف الطالبة على مكونات الحاسوب، أنظمة التشغيل، وأساسيات التفكير المنطقي وكتابة الأكواد البرمجية.", outcome: "بناء أول موقع إلكتروني تفاعلي وفهم بنية البيانات." },
+            { step: "2", label: "التطبيق العملي", title: "الشبكات وتطوير التطبيقات", summary: "العمل داخل مختبرات الحاسوب المخصصة لكل صف لتصميم قواعد البيانات، إعداد الشبكات، وحماية المعلومات.", outcome: "تنفيذ حلول برمجية متكاملة لمشكلات تقنية واقعية." },
+            { step: "3", label: "الاحتراف والمستقبل", title: "مشاريع التخرج والجاهزية الجامعية", summary: "إعداد ملف إنجاز رقمي (Portfolio) يعرض مشاريع الطالبة ويؤهلها لتخصصات علم الحاسوب والذكاء الاصطناعي.", outcome: "شهادة BTEC دولية تفتح أبواب الجامعات وسوق العمل التقني." }
+          ],
+          projectShowcase: {
+            title: "نموذج مشروع تطبيقي: تطوير منصة ذكية لخدمة المجتمع المدرسي",
+            scenario: "تُكلّف الطالبة بتحليل مشكلة إدارية أو تعليمية، ثم تصميم موقع إلكتروني متجاوب وربطه بقاعدة بيانات واختبار سهولة استخدامه.",
+            deliverables: ["تحليل المتطلبات", "تصميم الواجهة UI/UX", "البرمجة والاختبار", "عرض المشروع أمام المقيمين"]
+          },
+          skills: ["البرمجة وتطوير الويب", "إدارة الشبكات", "قواعد البيانات", "الأمن السيبراني", "حل المشكلات التقنية"]
+        },
+        business: {
+          id: "business",
+          title: "إدارة الأعمال (Business Administration)",
+          englishTitle: "BTEC Level 2 & Level 3 in Business Administration",
+          shortTitle: "إدارة الأعمال",
+          badge: "تخصص BTEC",
+          isFeatured: false,
+          icon: "📊",
+          theme: { border: "#059669", softBg: "#ecfdf5", badgeText: "#065f46" },
+          description: "يركز على تنمية مهارات الإدارة، التخطيط، ريادة الأعمال، والتطبيقات المكتبية والتقنية في بيئة تعليمية عملية.",
+          facilities: ["مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي."],
+          facilityDetails: [
+            { name: "مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.", role: "يُستخدم لمحاكاة بيئة الشركات الحديثة، وإعداد الجداول المالية، العروض التقديمية، والتسويق الرقمي." }
+          ],
+          journeyStages: [
+            { step: "1", label: "مبادئ الإدارة", title: "فهم بيئة الأعمال والمؤسسات", summary: "تتعلم الطالبة كيفية عمل الشركات، الهيكل التنظيمي، ومهارات التواصل الإداري الفعّال.", outcome: "إعداد خطط عمل مبسطة وفهم دور كل قسم في المؤسسة." },
+            { step: "2", label: "التطبيق المؤسسي", title: "التسويق والمحاسبة والتطبيقات المكتبية", summary: "توظيف مختبرات الحاسوب في تحليل البيانات المالية، إدارة المشاريع الصغيرة، وتصميم الحملات التسويقية.", outcome: "إتقان البرامج المكتبية وإعداد التقارير الإدارية باحترافية." },
+            { step: "3", label: "ريادة الأعمال", title: "إطلاق مشروع ريادي متكامل", summary: "تبتكر الطالبة فكرة مشروع تجاري، وتدرس جدواه الاقتصادية وتعرضه أمام لجنة التقييم كرائدة أعمال.", outcome: "تأهيل قوي لتخصصات الإدارة، المحاسبة، والتسويق في الجامعة." }
+          ],
+          projectShowcase: {
+            title: "نموذج مشروع تطبيقي: دراسة جدوى وحملة تسويقية لمشروع ريادي",
+            scenario: "تعمل الطالبات كفريق إداري لتأسيس شركة ناشئة افتراضية، وتحديد الجمهور المستهدف والميزانية وخطة الترويج.",
+            deliverables: ["دراسة السوق", "الموازنة المالية", "خطة التسويق الرقمي", "العرض التقديمي للمستثمرين"]
+          },
+          skills: ["ريادة الأعمال", "التخطيط الاستراتيجي", "التسويق الرقمي", "الإدارة المالية", "العمل الجماعي والقيادة"]
+        },
+        art: {
+          id: "art",
+          title: "فن وتصميم (Art and Design)",
+          englishTitle: "BTEC Level 2 & Level 3 in Art and Design",
+          shortTitle: "فن وتصميم",
+          badge: "تخصص BTEC",
+          isFeatured: false,
+          icon: "🎨",
+          theme: { border: "#d97706", softBg: "#fffbeb", badgeText: "#92400e" },
+          description: "يجمع بين الإبداع الفني، الرسم، التصوير الفوتوغرافي، وتصميم الأزياء ضمن بيئة تطبيقية متكاملة.",
+          facilities: ["حاسوب واحد.", "غرفة تصوير.", "مرسم.", "مخيطة."],
+          facilityDetails: [
+            { name: "مرسم.", role: "مساحة إبداعية مجهزة للرسم الحر، التلوين، التشكيل الفني، وتطوير الأفكار البصرية الأولية." },
+            { name: "غرفة تصوير.", role: "استوديو مخصص لتعلم أساسيات الإضاءة، التكوين الفني، والتصوير الفوتوغرافي الاحترافي." },
+            { name: "مخيطة.", role: "مشغل عملي لتصميم الأزياء، التفصيل، والخياطة وتحويل الرسومات الفنية إلى قطع ملبوسة." },
+            { name: "حاسوب واحد.", role: "يُستخدم في المعالجة الرقمية للصور، التصميم الجرافيكي، وتوثيق ملفات الإنجاز الفنية." }
+          ],
+          journeyStages: [
+            { step: "1", label: "التأسيس البصري", title: "أساسيات الرسم ونظرية الألوان", summary: "تتدرب الطالبة داخل المرسم على الرسم اليدوي، المنظور، وتنسيق الألوان وبناء الهوية البصرية.", outcome: "إنتاج لوحات وتصاميم أولية تعكس الحس الفني والابتكار." },
+            { step: "2", label: "التنفيذ بالمشاغل", title: "التصوير الفوتوغرافي وتصميم الأزياء", summary: "تطبيق المشاريع العملية في غرفة التصوير والمخيطة، ودمج الفنون اليدوية بالتصميم الرقمي.", outcome: "إنجاز قطع أزياء مصممة يدوياً وسلاسل صور فوتوغرافية احترافية." },
+            { step: "3", label: "المعرض الفني", title: "معرض الأعمال النهائي (Art Portfolio)", summary: "تنظيم معرض فني يعرض رحلة تطور الفكرة من الاسكتش الورقي حتى المنتج النهائي.", outcome: "جاهزية كاملة لدراسة التصميم الجرافيكي، الأزياء، والفنون الجميلة." }
+          ],
+          projectShowcase: {
+            title: "نموذج مشروع تطبيقي: تصميم مجموعة أزياء مستوحاة من التراث الأردني",
+            scenario: "تبدأ الطالبة بالبحث البصري والرسم في المرسم، ثم تنفيذ القطعة في المخيطة وتوثيقها في غرفة التصوير.",
+            deliverables: ["لوحة الإلهام (Moodboard)", "الرسومات التحضيرية", "التنفيذ في المخيطة", "جلسة التصوير النهائية"]
+          },
+          skills: ["الرسم والتلوين", "التصوير الفوتوغرافي", "تصميم الأزياء والخياطة", "التصميم الرقمي", "الابتكار البصري"]
+        },
+        beauty: {
+          id: "beauty",
+          title: "التجميل (Beauty and Cosmetology)",
+          englishTitle: "BTEC Level 2 & Level 3 in Beauty Therapy & Hairdressing",
+          shortTitle: "التجميل",
+          badge: "تخصص BTEC",
+          isFeatured: false,
+          icon: "✨",
+          theme: { border: "#e11d48", softBg: "#fff1f2", badgeText: "#9f1239" },
+          description: "يؤهل الطالبات في مجالات العناية بالشعر والبشرة وتقنيات التجميل الحديثة عبر التدريب العملي المباشر.",
+          facilities: ["حاسوب واحد.", "مشغل شعر.", "مشغل بشرة."],
+          facilityDetails: [
+            { name: "مشغل شعر.", role: "مشغل عملي مجهز للتدريب على قص وتصفيف الشعر، العناية بصحة الشعر، وتطبيق أحدث التقنيات." },
+            { name: "مشغل بشرة.", role: "بيئة تطبيقية لتعلم تنظيف البشرة، تحليل أنواعها، وتطبيق جلسات العناية الآمنة والصحية." },
+            { name: "حاسوب واحد.", role: "يُستخدم لإدارة سجلات العملاء الافتراضية، البحث العلمي في مكونات المستحضرات، وإعداد ملفات التقييم." }
+          ],
+          journeyStages: [
+            { step: "1", label: "الصحة والسلامة", title: "أساسيات العناية والتعقيم المهني", summary: "تتعرف الطالبة على تشريح البشرة والشعر، معايير السلامة المهنية، وأخلاقيات التعامل مع العملاء.", outcome: "إتقان بروتوكولات التعقيم وتحضير بيئة العمل باحترافية." },
+            { step: "2", label: "التدريب في المشاغل", title: "تطبيقات الشعر والبشرة العملية", summary: "ممارسة تقنيات تصفيف الشعر والعناية بالبشرة داخل مشغل الشعر ومشغل البشرة تحت إشراف متخصص.", outcome: "تنفيذ جلسات عناية متكاملة بدقة ومهارة عالية." },
+            { step: "3", label: "الاحتراف المهني", title: "إدارة الصالون وخدمة العملاء", summary: "تقديم استشارات تجميلية متكاملة وتوثيق نتائج الجلسات ضمن ملف إنجاز مهني معتمد.", outcome: "تأهيل مباشر لسوق العمل أو تأسيس مشروع خاص في مجال التجميل." }
+          ],
+          projectShowcase: {
+            title: "نموذج مشروع تطبيقي: تصميم برنامج عناية متكامل حسب نوع البشرة والشعر",
+            scenario: "تقوم الطالبة بتشخيص حالة افتراضية، واختيار المستحضرات المناسبة، وتنفيذ الجلسة العملية في المشغل.",
+            deliverables: ["بطاقة تشخيص الحالة", "خطة العناية الآمنة", "التطبيق العملي بالمشغل", "تقييم النتيجة ونصائح المتابعة"]
+          },
+          skills: ["العناية بالبشرة", "تصفيف وعلاج الشعر", "معايير التعقيم والسلامة", "التواصل مع العملاء", "إدارة الصالونات"]
+        }
+      }
+    };
+
+    let activeSpecId = null;
+    let activeJourneyStepIndex = 0;
+    let activeFacilityIndex = 0;
+
+    const mainContent = document.querySelector("main");
+    const specializationPage = document.getElementById("specializationPage");
+    const sidebarChatContainer = document.getElementById("sidebarChatContainer");
+    const chatLauncherBtn = document.getElementById("chatLauncher");
+    const launcherIconSvg = document.getElementById("launcherIconSvg");
+
+    function renderJourneyStage(spec, stepIndex) {
+      activeJourneyStepIndex = stepIndex;
+      const tabsContainer = document.getElementById("journeyTabs");
+      const contentContainer = document.getElementById("journeyStageContent");
+      tabsContainer.replaceChildren();
+
+      spec.journeyStages.forEach((stage, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const isActive = idx === stepIndex;
+        btn.className = `journey-tab-btn px-3 py-3 rounded-2xl border text-xs sm:text-sm font-extrabold transition flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+          isActive
+            ? "active text-white shadow-md"
+            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+        }`;
+        if (isActive) {
+          btn.style.backgroundColor = spec.theme.border;
+          btn.style.borderColor = spec.theme.border;
+        }
+        btn.innerHTML = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-black ${
+          isActive ? "bg-white/25 text-white" : "bg-slate-200 text-slate-700"
+        }">${stage.step}</span><span>${stage.label}</span>`;
+        btn.onclick = () => renderJourneyStage(spec, idx);
+        tabsContainer.appendChild(btn);
+      });
+
+      const current = spec.journeyStages[stepIndex];
+      contentContainer.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold" style="background:${spec.theme.softBg}; color:${spec.theme.badgeText};">
+            المرحلة ${current.step} من 3 — ${current.label}
+          </span>
+        </div>
+        <h3 class="text-lg sm:text-xl font-black text-slate-900 mb-2">${current.title}</h3>
+        <p class="text-sm sm:text-base text-slate-700 leading-relaxed mb-4">${current.summary}</p>
+        <div class="rounded-xl p-3.5 border flex items-start gap-2.5" style="background:${spec.theme.softBg}; border-color:${spec.theme.border}33;">
+          <span class="text-base">🎯</span>
+          <div class="text-xs sm:text-sm font-bold text-slate-800">
+            <span class="font-black" style="color:${spec.theme.badgeText};">مخرج المرحلة:</span> ${current.outcome}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFacilityPreview(spec, facilityIdx) {
+      activeFacilityIndex = facilityIdx;
+      const cards = document.querySelectorAll(".facility-card");
+      cards.forEach((card, idx) => {
+        if (idx === facilityIdx) {
+          card.classList.add("selected-facility");
+          card.style.borderColor = spec.theme.border;
+        } else {
+          card.classList.remove("selected-facility");
+          card.style.borderColor = "";
+        }
+      });
+
+      const detail = spec.facilityDetails[facilityIdx] || { name: spec.facilities[facilityIdx], role: "" };
+      const previewBox = document.getElementById("facilityPreviewBox");
+      previewBox.innerHTML = `
+        <div class="flex items-center gap-2 text-amber-300 font-extrabold text-xs mb-1.5">
+          <span>📍</span>
+          <span>دور المرفق في التدريب العملي:</span>
+        </div>
+        <p class="font-bold text-white mb-1">${detail.name}</p>
+        <p class="text-slate-300 text-xs leading-relaxed">${detail.role}</p>
+      `;
+    }
+
+    function selectSpecialization(specId) {
+      const spec = BTEC_DATA.specializations[specId];
+      if (!spec) return;
+
+      activeSpecId = specId;
+      specializationPage.style.setProperty("--spec-accent", spec.theme.border);
+
+      closeAssistantChat();
+
+      mainContent.classList.add("hidden");
+      specializationPage.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      document.getElementById("detailBadge").textContent = spec.badge;
+      document.getElementById("detailIcon").textContent = spec.icon;
+      document.getElementById("detailTitle").textContent = spec.shortTitle;
+      document.getElementById("detailEnglishTitle").textContent = spec.englishTitle;
+      document.getElementById("detailDescription").textContent = spec.description;
+
+      const hero = document.getElementById("detailHero");
+      hero.style.background = `linear-gradient(125deg, ${spec.theme.border} 0%, #0f172a 95%)`;
+
+      renderJourneyStage(spec, 0);
+
+      const projectBox = document.getElementById("projectShowcaseBox");
+      const deliverablesHtml = spec.projectShowcase.deliverables
+        .map(d => `<span class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-extrabold text-slate-800 shadow-2xs">✓ ${d}</span>`)
+        .join("");
+      projectBox.innerHTML = `
+        <h3 class="text-base sm:text-lg font-black text-slate-900">${spec.projectShowcase.title}</h3>
+        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${spec.projectShowcase.scenario}</p>
+        <div>
+          <p class="text-xs font-extrabold text-slate-500 mb-2">مراحل ومخرجات التقييم العملي:</p>
+          <div class="flex flex-wrap gap-2">${deliverablesHtml}</div>
+        </div>
+      `;
+
+      const facilities = document.getElementById("detailFacilities");
+      facilities.replaceChildren();
+
+      spec.facilities.forEach((item, idx) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "facility-card w-full text-right flex items-center justify-between gap-3 rounded-2xl border-2 border-slate-100 bg-white p-3.5 shadow-2xs";
+        card.innerHTML = `
+          <div class="flex items-start gap-3">
+            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-xs font-black text-white" style="background:${spec.theme.border};">${idx + 1}</span>
+            <span class="pt-0.5 text-xs sm:text-sm font-extrabold leading-6 text-slate-800">${item}</span>
+          </div>
+          <span class="text-xs font-bold text-slate-400 shrink-0">معاينة ◀</span>
+        `;
+        card.onclick = () => renderFacilityPreview(spec, idx);
+        facilities.appendChild(card);
+      });
+      renderFacilityPreview(spec, 0);
+
+      const skillsContainer = document.getElementById("detailSkillsTags");
+      skillsContainer.replaceChildren();
+      spec.skills.forEach(skill => {
+        const tag = document.createElement("span");
+        tag.className = "px-3 py-1.5 rounded-xl text-xs font-extrabold border";
+        tag.style.backgroundColor = spec.theme.softBg;
+        tag.style.color = spec.theme.badgeText;
+        tag.style.borderColor = `${spec.theme.border}33`;
+        tag.textContent = skill;
+        skillsContainer.appendChild(tag);
+      });
+
+      document.getElementById("detailAskAi").onclick = () => {
+        toggleAssistantChat(`أخبريني بالتفصيل عن تخصص ${spec.shortTitle} والمرافق التعليمية المتوفرة له في مدرسة البلقاء.`);
+      };
+
+      document.title = `${spec.shortTitle} | برنامج BTEC - مدرسة البلقاء`;
+    }
+
+    /* التحكم بفتح وإغلاق نافذة الشات الجانبية مع إزاحة الخريطة بسلاسة */
+    function toggleAssistantChat(specificQuestion) {
+      const isOpen = sidebarChatContainer.classList.contains("open");
+      if (isOpen) {
+        closeAssistantChat();
+      } else {
+        openAssistantChat(specificQuestion);
+      }
+    }
+
+    function openAssistantChat(specificQuestion) {
+      document.body.classList.add("chat-opened");
+      sidebarChatContainer.classList.add("open");
+      chatLauncherBtn.classList.add("active-launcher");
+      
+      // أيقونة إغلاق احترافية وواضحة ضمن الزر العائم
+      launcherIconSvg.innerHTML = `
+        <path d="M18 18L46 46M46 18L18 46" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      `;
+
+      if (specificQuestion) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => sendSuggestedQuestion(specificQuestion));
+        });
+      } else {
+        requestAnimationFrame(() => chatInputEl.focus());
+      }
+    }
+
+    function closeAssistantChat() {
+      document.body.classList.remove("chat-opened");
+      sidebarChatContainer.classList.remove("open");
+      chatLauncherBtn.classList.remove("active-launcher");
+      
+      // استعادة أيقونة المساعد الروبوت الأصلية للزر العائم
+      launcherIconSvg.innerHTML = `
+        <path d="M32 7V14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="32" cy="6" r="4" fill="#FDE68A" stroke="currentColor" stroke-width="2"/>
+        <rect x="10" y="16" width="44" height="35" rx="13" fill="white" fill-opacity=".16" stroke="currentColor" stroke-width="3.5"/>
+        <path d="M10 28H6C3.8 28 2 29.8 2 32s1.8 4 4 4h4M54 28h4c2.2 0 4 1.8 4 4s-1.8 4-4 4h-4" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+        <rect x="17" y="25" width="30" height="17" rx="7" fill="#E0F2FE"/>
+        <circle cx="25" cy="33.5" r="3" fill="#2563EB"/>
+        <circle cx="39" cy="33.5" r="3" fill="#2563EB"/>
+        <path d="M26 46C29.5 49 34.5 49 38 46" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <path d="M21 54h22" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M25 57v3M39 57v3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      `;
+    }
+
+    function returnToCampus() {
+      activeSpecId = null;
+      specializationPage.classList.add("hidden");
+      mainContent.classList.remove("hidden");
+      closeAssistantChat();
+
+      document.querySelectorAll(".spec-node").forEach(el => el.classList.remove("active-node"));
+      document.title = "مؤتمر BTEC التفاعلي | مدرسة البلقاء الثانوية الشاملة للبنات";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        if (!specializationPage.classList.contains("hidden")) {
+          returnToCampus();
+        } else if (sidebarChatContainer.classList.contains("open")) {
+          closeAssistantChat();
+        }
+      }
+    });
+
+    document.querySelectorAll(".spec-node").forEach(node => {
+      node.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          const id = node.id.replace("node-", "");
+          selectSpecialization(id);
+        }
+      });
+    });
+
+    /**
+     * ============================================================================
+     * 3. طبقة المساعد الذكي المتكاملة (Gemini API + التوجيه السياقي الذكي)
+     * ============================================================================
+     */
+    const STORAGE_KEY_NAME = "btec_balqa_gemini_api_key";
+
+    function getActiveApiKey() {
+      const savedKey = (localStorage.getItem(STORAGE_KEY_NAME) || "").trim();
+      return savedKey || "";
+    }
+
+    function toggleApiSettings() {
+      const panel = document.getElementById("apiSettingsPanel");
+      panel.classList.toggle("hidden");
+      if (!panel.classList.contains("hidden")) {
+        const input = document.getElementById("customApiKeyInput");
+        input.value = getActiveApiKey();
+        input.focus();
+      }
+    }
+
+    function saveCustomApiKey() {
+      const input = document.getElementById("customApiKeyInput");
+      const status = document.getElementById("apiKeySaveStatus");
+      const val = input.value.trim();
+      if (!val) {
+        status.textContent = "يرجى لصق مفتاح Gemini API أولاً.";
+        status.className = "text-[11px] font-bold text-rose-600 block";
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY_NAME, val);
+      status.textContent = "✓ تم حفظ المفتاح بنجاح! المساعد الذكي متصل الآن بنموذج Gemini.";
+      status.className = "text-[11px] font-bold text-emerald-700 block";
+      document.getElementById("aiStatusBadge").textContent = "Gemini متصل";
+    }
+
+    function clearCustomApiKey() {
+      localStorage.removeItem(STORAGE_KEY_NAME);
+      document.getElementById("customApiKeyInput").value = "";
+      const status = document.getElementById("apiKeySaveStatus");
+      status.textContent = "تم مسح المفتاح المحفوظ.";
+      status.className = "text-[11px] font-bold text-slate-600 block";
+      document.getElementById("aiStatusBadge").textContent = "جاهز";
+    }
+
+    function buildSystemInstruction() {
+      const specsSummary = Object.values(BTEC_DATA.specializations)
+        .map((s, idx) => {
+          const facs = s.facilities.map(f => `  - ${f}`).join("\n");
+          return `${idx + 1}. ${s.title}${s.isFeatured ? " (التخصص الرئيسي في الواجهة)" : ""}:\n  الوصف: ${s.description}\n  المرافق المتوفرة في المدرسة:\n${facs}`;
+        })
+        .join("\n\n");
+
+      return `أنتِ المساعد الذكي الرسمي لبرنامج BTEC في "${BTEC_DATA.schoolName}" خلال "${BTEC_DATA.eventName}".
+تتحدثين باللغة العربية الفصحى الودودة والواضحة والمناسبة للطالبات والزائرات وأولياء الأمور.
+
+قاعدة المعرفة المعتمدة والموثوقة عن المدرسة وتخصصاتها الأربعة:
+${specsSummary}
+
+معلومات عامة عن برنامج BTEC:
+- برنامج BTEC هو نظام تعليمي تطبيقي ومهني معتمد دولياً يركز على التعلم العملي والمشاريع والتقييم المستمر بدلاً من الاعتماد فقط على الامتحانات التقليدية، ويؤهل الطالبات لسوق العمل أو التعليم الجامعي.
+
+قواعد صارمة يجب الالتزام بها في كل إجابة:
+1. عندما ترحب بكِ الزائرة (مثل: "مرحبا" أو "أهلاً" أو "السلام عليكم"), رحّبي بها بحرارة باسم مدرسة البلقاء الثانوية الشاملة للبنات ومؤتمر BTEC، وقدّمي لها نبذة سريعة عن التخصصات الأربعة التي يمكنكِ مساعدتها في استكشافها.
+2. اعتمدي فقط على المعلومات المذكورة أعلاه بخصوص مرافق وأعداد مختبرات مدرسة البلقاء الثانوية الشاملة للبنات.
+3. لا تخترعي أبداً أي أعداد إضافية أو أسماء مرافق أو قاعات غير مذكورة في قاعدة المعرفة أعلاه.
+4. إذا سألت الزائرة عن معلومة تفصيلية غير متوفرة في قاعدة المعرفة، اعتذري بلطف ووضّحي أن هذه المعلومة غير متوفرة حالياً في قاعدة بيانات المؤتمر، وانصحيها بمراجعة إدارة المدرسة أو المرشدة التربوية للحصول على التفاصيل الدقيقة.
+5. حافظي على سياق المحادثة السابقة وأجيبي باختصار وتنظيم جميل.`;
+    }
+
+    let conversationHistory = [];
+    let lastDiscussedTopic = null;
+
+    const chatMessagesEl = document.getElementById("chatMessages");
+    const chatInputEl = document.getElementById("chatInput");
+    const typingIndicatorEl = document.getElementById("typingIndicator");
+    const sendBtnEl = document.getElementById("sendBtn");
+
+    function appendMessageBubble(role, text, isError = false) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `chat-msg flex items-start gap-2.5 ${role === "user" ? "flex-row-reverse" : ""}`;
+
+      const avatar = document.createElement("div");
+      avatar.className = `w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs ${
+        role === "user"
+          ? "bg-indigo-600 text-white"
+          : isError
+          ? "bg-rose-600 text-white"
+          : "bg-teal-600 text-white"
+      }`;
+      avatar.textContent = role === "user" ? "👩‍🎓" : isError ? "⚠️" : "🤖";
+
+      const bubble = document.createElement("div");
+      bubble.className =
+        role === "user"
+          ? "bg-indigo-600 text-white rounded-2xl rounded-tl-sm px-3.5 py-2.5 shadow-sm max-w-[84%]"
+          : isError
+          ? "bg-rose-50 border border-rose-200 text-rose-900 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]"
+          : "bg-white border border-slate-200/90 text-slate-800 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]";
+
+      const formattedHtml = formatMessageText(text);
+      bubble.innerHTML = `<div class="text-xs sm:text-sm leading-relaxed font-medium space-y-1.5">${formattedHtml}</div>`;
+
+      wrapper.appendChild(avatar);
+      wrapper.appendChild(bubble);
+      chatMessagesEl.appendChild(wrapper);
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+
+    function formatMessageText(raw) {
+      const escaped = raw
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      const bolded = escaped.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+      return bolded
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .map(line => `<p>${line}</p>`)
+        .join("");
+    }
+
+    async function fetchGeminiWithRetry(payload, maxRetries = 2) {
+      const apiKey = getActiveApiKey();
+      const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash"];
+      let lastError = null;
+
+      for (const modelName of modelsToTry) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        let delay = 700;
+
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              if ((response.status === 429 || response.status >= 500) && attempt < maxRetries) {
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+                continue;
+              }
+              throw new Error(`HTTP_${response.status}`);
+            }
+
+            const data = await response.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              return text;
+            }
+            throw new Error("INVALID_STRUCTURE");
+          } catch (err) {
+            lastError = err;
+            if (attempt < maxRetries) {
+              await new Promise(res => setTimeout(res, delay));
+              delay *= 2;
+            }
+          }
+        }
+      }
+
+      throw lastError || new Error("ALL_MODELS_FAILED");
+    }
+
+    function generateKnowledgeGroundedReply(userQuery) {
+      const q = userQuery.trim().toLowerCase();
+
+      if (/^(مرحبا|مرحبًا|اهلا|أاهلا|أهلاً|السلام عليكم|سلام|هاي|هلا|صباح الخير|مساء الخير|كيفك|كيف حالك)/.test(q) && q.length < 35) {
+        return `أهلاً وسهلاً بكِ في **مؤتمر BTEC** بـ **مدرسة البلقاء الثانوية الشاملة للبنات**! 🌸\nيسعدني جداً مرافقتكِ اليوم. يتوفر في مدرستنا أربعة تخصصات BTEC رئيسية:\n• **تكنولوجيا المعلومات** (التخصص الرئيسي)\n• **إدارة الأعمال**\n• **فن وتصميم**\n• **التجميل**\n\nأي تخصص ترغبين في التعرف على تفاصيله ومرافقه؟`;
+      }
+
+      if ((q.includes("فرق") || q.includes("مقارنة") || q.includes("الاختلاف")) && (q.includes("تكنولوجيا") || q.includes("حاسوب")) && (q.includes("اعمال") || q.includes("أعمال"))) {
+        lastDiscussedTopic = "compare_it_biz";
+        return `الفرق الأساسي بين التخصصين يعتمد على مجال الدراسة والتطبيق:\n• **تكنولوجيا المعلومات (IT):** يركز على البرمجة، الشبكات، الحوسبة، والأنظمة الرقمية، ويُعد التخصص الرئيسي في الواجهة.\n• **إدارة الأعمال:** يركز على التخطيط الإداري، ريادة الأعمال، والتطبيقات المكتبية والتجارية.\n\n**من حيث المرافق في مدرستنا:** يتوفر لكلٍّ من التخصصين **مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي**.`;
+      }
+
+      if (q.includes("تكنولوجيا") || q.includes("حاسوب") || q.includes("برمجة") || q.includes("it")) {
+        lastDiscussedTopic = "it";
+        return `**تخصص تكنولوجيا المعلومات (Information Technology)** هو التخصص الرئيسي في واجهة الموقع، ويؤهل الطالبات بمهارات الحوسبة والبرمجة والتقنيات الحديثة.\n\n**المرافق التعليمية المتوفرة في المدرسة:**\n• مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.`;
+      }
+
+      if (q.includes("ادارة") || q.includes("إدارة") || q.includes("اعمال") || q.includes("أعمال") || q.includes("business")) {
+        lastDiscussedTopic = "business";
+        return `**تخصص إدارة الأعمال (Business Administration)** يركز على تنمية مهارات الإدارة والتخطيط وريادة الأعمال والتطبيقات التقنية.\n\n**المرافق التعليمية المتوفرة في المدرسة:**\n• مختبر حاسوب واحد لكل صف، من الصف العاشر وحتى التوجيهي.`;
+      }
+
+      if (q.includes("فن") || q.includes("تصميم") || q.includes("مرسم") || q.includes("تصوير") || q.includes("مخيطة") || q.includes("art")) {
+        lastDiscussedTopic = "art";
+        return `**تخصص فن وتصميم (Art and Design)** يجمع بين الإبداع الفني والرسم والتصوير وتصميم الأزياء.\n\n**المرافق التعليمية المتوفرة في المدرسة:**\n• حاسوب واحد.\n• غرفة تصوير.\n• مرسم.\n• مخيطة.`;
+      }
+
+      if (q.includes("تجميل") || q.includes("شعر") || q.includes("بشرة") || q.includes("beauty")) {
+        lastDiscussedTopic = "beauty";
+        return `**تخصص التجميل (Beauty and Cosmetology)** يؤهل الطالبات في مجالات العناية بالشعر والبشرة وتقنيات التجميل الحديثة.\n\n**المرافق التعليمية المتوفرة في المدرسة:**\n• حاسوب واحد.\n• مشغل شعر.\n• مشغل بشرة.`;
+      }
+
+      if (q.includes("ما هو") || q.includes("ماهو") || q.includes("تعريف") || q.includes("نظام btec") || q.includes("برنامج btec")) {
+        return `**برنامج BTEC** هو نظام تعليمي تطبيقي ومهني معتمد دولياً، يركز على **التعلم العملي والمشاريع والتقييم المستمر** بدلاً من الاعتماد فقط على الامتحانات التقليدية، مما يؤهل الطالبات لسوق العمل أو إكمال الدراسة الجامعية.`;
+      }
+
+      if (q.includes("تخصصات") || q.includes("نبذة") || q.includes("المتاحة") || q.includes("الموجودة") || q.includes("اختار") || q.includes("أختار")) {
+        return `تتوفر في **مدرسة البلقاء الثانوية الشاملة للبنات** أربعة تخصصات ضمن برنامج BTEC:\n1. **تكنولوجيا المعلومات (التخصص الرئيسي):** مختبر حاسوب واحد لكل صف من العاشر وحتى التوجيهي.\n2. **إدارة الأعمال:** مختبر حاسوب واحد لكل صف من العاشر وحتى التوجيهي.\n3. **فن وتصميم:** حاسوب واحد، غرفة تصوير، مرسم، ومخيطة.\n4. **التجميل:** حاسوب واحد، مشغل شعر، ومشغل بشرة.\n\nيمكنكِ الضغط على أي منصة في الخريطة لاستكشاف تفاصيلها مباشرة!`;
+      }
+
+      if ((q.includes("مرافق") || q.includes("مختبر") || q.includes("كم") || q.includes("تفاصيل")) && lastDiscussedTopic) {
+        const spec = BTEC_DATA.specializations[lastDiscussedTopic];
+        if (spec) {
+          const list = spec.facilities.map(f => `• ${f}`).join("\n");
+          return `المرافق المتوفرة لتخصص **${spec.shortTitle}** في مدرستنا هي:\n${list}`;
+        }
+      }
+
+      return `عذراً، هذه المعلومة التفصيلية غير متوفرة حالياً في قاعدة بيانات مؤتمر BTEC لمدرسة البلقاء الثانوية الشاملة للبنات.\n\nيمكنني إجابتكِ بدقة حول **برنامج BTEC** أو تفاصيل ومرافق التخصصات الأربعة (**تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**). كما يمكنكِ تفعيل الربط المباشر مع Gemini عبر زر الإعدادات (⚙️) في الأعلى للأسئلة العامة الموسعة.`;
+    }
+
+    async function sendMessageToAI(userText) {
+      const trimmed = userText.trim();
+      if (!trimmed) return;
+
+      appendMessageBubble("user", trimmed);
+      chatInputEl.value = "";
+      chatInputEl.disabled = true;
+      sendBtnEl.disabled = true;
+      typingIndicatorEl.classList.remove("hidden");
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+
+      conversationHistory.push({
+        role: "user",
+        parts: [{ text: trimmed }]
+      });
+
+      const payload = {
+        contents: conversationHistory,
+        system_instruction: {
+          parts: [{ text: buildSystemInstruction() }]
+        },
+        generationConfig: {
+          temperature: 0.35,
+          maxOutputTokens: 700
+        }
+      };
+
+      try {
+        const replyText = await fetchGeminiWithRetry(payload);
+
+        conversationHistory.push({
+          role: "model",
+          parts: [{ text: replyText }]
+        });
+
+        document.getElementById("aiStatusBadge").textContent = "Gemini متصل";
+        appendMessageBubble("model", replyText);
+      } catch (error) {
+        const groundedReply = generateKnowledgeGroundedReply(trimmed);
+        conversationHistory.push({
+          role: "model",
+          parts: [{ text: groundedReply }]
+        });
+        appendMessageBubble("model", groundedReply);
+      } finally {
+        typingIndicatorEl.classList.add("hidden");
+        chatInputEl.disabled= false;
+        sendBtnEl.disabled = false;
+        chatInputEl.focus();
+      }
+    }
+
+    function handleChatSubmit(event) {
+      event.preventDefault();
+      sendMessageToAI(chatInputEl.value);
+    }
+
+    function sendSuggestedQuestion(questionText) {
+      if (chatInputEl.disabled) return;
+      sendMessageToAI(questionText);
+    }
+
+    function resetChat() {
+      conversationHistory = [];
+      chatMessagesEl.innerHTML = `
+        <div class="chat-msg flex items-start gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs">
+            🤖
+          </div>
+          <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]">
+            <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+              تم بدء محادثة جديدة! 🌟 اسأليني أي سؤال حول برنامج <strong>BTEC</strong> أو التخصصات الأربعة ومرافقها في <strong>مدرسة البلقاء الثانوية الشاملة للبنات</strong>.
+            </p>
+          </div>
+        </div>
+      `;
+      chatInputEl.value = "";
+      chatInputEl.focus();
+    }
+  </script>
+</body>
+</html>
