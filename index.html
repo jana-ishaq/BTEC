@@ -1319,7 +1319,6 @@
       <div id="chatMessages" class="chat-scroll flex-1 p-4 overflow-y-auto space-y-3.5 bg-gradient-to-b from-slate-50/60 to-white">
         <div class="chat-msg flex items-start gap-2.5">
           <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs">
-            🤖
           </div>
           <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]">
             <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
@@ -1411,7 +1410,7 @@
         </div>
         <div class="flex flex-wrap gap-3">
           <button id="detailAskAi" type="button" class="rounded-2xl bg-white px-5 py-3 text-xs sm:text-sm font-extrabold text-slate-900 shadow-lg hover:bg-teal-50 hover:scale-105 transition duration-200 flex items-center gap-2">
-            <span>🤖 اسألي المساعد الذكي عن التخصص</span>
+            <span>الاستفسارات عن التخصص</span>
           </button>
           <button type="button" onclick="returnToCampus()" class="rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-xs sm:text-sm font-extrabold text-white hover:bg-white/20 transition">
             🗺️ العودة للخريطة
@@ -1500,7 +1499,7 @@
       eventName: "برنامج BTEC التعليمي ",
       specializations: {
         it: {
-          id: "it",
+          id: "IT",
           title: "تكنولوجيا المعلومات (Information Technology)",
           englishTitle: "BTEC Level 2 & Level 3 in Information Technology",
           shortTitle: "تكنولوجيا المعلومات",
@@ -1565,8 +1564,8 @@
           facilityDetails: [
             { name: "مرسم.", role: "مساحة إبداعية مجهزة للرسم الحر، التلوين، التشكيل الفني، وتطوير الأفكار البصرية الأولية." },
             { name: "غرفة تصوير.", role: "استوديو مخصص لتعلم أساسيات الإضاءة، التكوين الفني، والتصوير الفوتوغرافي الاحترافي." },
-            { name: "مخيطة.", role: "مشغل عملي لتصميم الأزياء، التفصيل، والخياطة وتحويل الرسومات الفنية إلى قطع ملبوسة." },
-            { name: "حاسوب واحد.", role: "يُستخدم في المعالجة الرقمية للصور، التصميم الجرافيكي، وتوثيق ملفات الإنجاز الفنية." }
+            { name: "غرفة ازياء.", role: "مشغل عملي لتصميم الأزياء، التفصيل، والخياطة وتحويل الرسومات الفنية إلى قطع ملبوسة." },
+            { name: "مشغل حاسوب .", role: "يُستخدم في المعالجة الرقمية للصور، التصميم الجرافيكي، وتوثيق ملفات الإنجاز الفنية." }
           ],
           journeyStages: [
             { step: "1", label: "التأسيس البصري", title: "أساسيات الرسم ونظرية الألوان", summary: "تتدرب الطالبة داخل المرسم على الرسم اليدوي، المنظور، وتنسيق الألوان وبناء الهوية البصرية.", outcome: "إنتاج لوحات وتصاميم أولية تعكس الحس الفني والابتكار." },
@@ -1578,7 +1577,7 @@
             scenario: "تبدأ الطالبة بالبحث البصري والرسم في المرسم، ثم تنفيذ القطعة في المخيطة وتوثيقها في غرفة التصوير.",
             deliverables: ["لوحة الإلهام (Moodboard)", "الرسومات التحضيرية", "التنفيذ في المخيطة", "جلسة التصوير النهائية"]
           },
-          skills: ["الرسم والتلوين", "التصوير الفوتوغرافي", "تصميم الأزياء والخياطة", "التصميم الرقمي", "الابتكار البصري"]
+          skills: ["الرسم ", "التصوير الفوتوغرافي", "تصميم الأزياء والخياطة", "التصميم الرقمي", "الابتكار البصري"]
         },
         beauty: {
           id: "beauty",
@@ -1597,7 +1596,7 @@
             { name: "حاسوب واحد.", role: "يُستخدم لإدارة سجلات العملاء الافتراضية، البحث العلمي في مكونات المستحضرات، وإعداد ملفات التقييم." }
           ],
           journeyStages: [
-            { step: "1", label: "الصحة والسلامة", title: "أساسيات العناية والتعقيم المهني", summary: "تتعرف الطالبة على تشريح البشرة والشعر، معايير السلامة المهنية، وأخلاقيات التعامل مع العملاء.", outcome: "إتقان بروتوكولات التعقيم وتحضير بيئة العمل باحترافية." },
+            { step: "1", label: "الصحة والسلامة", title: "أساسيات العناية والتعقيم المهني", summary: "تتعرف الطالبة على البشرة والشعر، معايير السلامة المهنية، وأخلاقيات التعامل مع العملاء.", outcome: "إتقان بروتوكولات التعقيم وتحضير بيئة العمل باحترافية." },
             { step: "2", label: "التدريب في المشاغل", title: "تطبيقات الشعر والبشرة العملية", summary: "ممارسة تقنيات تصفيف الشعر والعناية بالبشرة داخل مشغل الشعر ومشغل البشرة تحت إشراف متخصص.", outcome: "تنفيذ جلسات عناية متكاملة بدقة ومهارة عالية." },
             { step: "3", label: "الاحتراف المهني", title: "إدارة الصالون وخدمة العملاء", summary: "تقديم استشارات تجميلية متكاملة وتوثيق نتائج الجلسات ضمن ملف إنجاز مهني معتمد.", outcome: "تأهيل مباشر لسوق العمل أو تأسيس مشروع خاص في مجال التجميل." }
           ],
@@ -1821,7 +1820,7 @@
       closeAssistantChat();
 
       document.querySelectorAll(".spec-node").forEach(el => el.classList.remove("active-node"));
-      document.title = "برنامج BTEC التفاعلي | مدرسة البلقاء الثانوية الشاملة للبنات";
+      document.title = "برنامج BTEC مدرسة البلقاء الثانوية الشاملة للبنات";
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1847,7 +1846,7 @@
 
     /**
      * ============================================================================
-     * 3. طبقة المساعد الذكي المتكاملة (Gemini API + التوجيه السياقي الذكي)
+     * 3. طبقة المساعد الذكي المتكاملة ( التوجيه السياقي الذكي)
      * ============================================================================
      */
    let lastDiscussedTopic = null;
@@ -1869,7 +1868,7 @@
           ? "bg-rose-600 text-white"
           : "bg-teal-600 text-white"
       }`;
-      avatar.textContent = role === "user" ? "👩‍🎓" : isError ? "⚠️" : "🤖";
+      avatar.textContent = role === "user" ? "👩‍🎓" : isError ? "⚠️";
 
       const bubble = document.createElement("div");
       bubble.className =
@@ -1989,11 +1988,10 @@
       chatMessagesEl.innerHTML = `
         <div class="chat-msg flex items-start gap-2.5">
           <div class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs">
-            🤖
           </div>
           <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]">
             <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-              تم بدء محادثة جديدة! 🌟 اسأليني أي سؤال حول برنامج <strong>BTEC</strong> أو التخصصات الأربعة ومرافقها في <strong>مدرسة البلقاء الثانوية الشاملة للبنات</strong>.
+              تم بدء محادثة جديدة اكتبي أي سؤال حول برنامج <strong>BTEC</strong> أو التخصصات الأربعة ومرافقها في <strong>مدرسة البلقاء الثانوية الشاملة للبنات</strong>.
             </p>
           </div>
         </div>
