@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>برنامج BTEC | مدرسة البلقاء الثانوية الشاملة للبنات</title>
+  <title>برنامج BTEC | مدرسة البلقاء الثانوية الشاملة</title>
+  <meta name="description" content="الخريطة التفاعلية لبرنامج BTEC والتخصصات التعليمية ومعلومات الوحدات الدراسية." />
+  <meta name="theme-color" content="#2f7a78" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%232f7a78'/%3E%3Cpath d='M12 18c8-4 15-3 20 2 5-5 12-6 20-2v29c-8-3-15-2-20 3-5-5-12-6-20-3z' fill='none' stroke='white' stroke-width='3.5' stroke-linejoin='round'/%3E%3Cpath d='M32 21v28M19 26h7m-7 8h7m12-8h7m-7 8h7' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='48' cy='14' r='5' fill='%23f5c66b'/%3E%3C/svg%3E" />
 
   <!-- خطوط عربية حديثة وواضحة -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -349,7 +352,7 @@
       transition: padding-left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* عند فتح الشات، نزحزح محتوى الخريطة يساراً لتعطي مساحة واسعة ومحترفة للشات على اليمين */
+    /* عند فتح الشات، نزحزح محتوى الخريطة يسارا لتعطي مساحة واسعة ومحترفة للشات على اليمين */
     body.chat-opened .map-panel {
       padding-left: 540px !important;
     }
@@ -667,7 +670,7 @@
       }
     }
 
-    /* الأجهزة اللوحية والهواتف: تظهر المحادثة أسفل الخريطة بدلاً من تغطيتها */
+    /* الأجهزة اللوحية والهواتف: تظهر المحادثة أسفل الخريطة بدلا من تغطيتها */
     @media (max-width: 1024px) {
       body.chat-opened main {
         width: 100% !important;
@@ -706,9 +709,136 @@
       }
     }
 
+
+    /* شاشة البداية */
+    .btec-splash { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: radial-gradient(circle at 50% 45%, #173b50 0%, #101c31 48%, #080f1e 100%); color: #fff; transition: opacity .65s ease, visibility .65s ease; }
+    .btec-splash.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .btec-splash:before,.btec-splash:after { content:""; position:absolute; width:min(42vw,420px); aspect-ratio:1; border:1px solid rgba(117,220,218,.13); border-radius:50%; animation:orbit 12s linear infinite; }
+    .btec-splash:after { width:min(58vw,580px); border-color:rgba(246,211,101,.10); animation-direction:reverse; animation-duration:18s; }
+    .splash-content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:14px; padding:30px 24px; text-align:center; }
+    .splash-mark { width:108px; height:108px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.18); border-radius:30px; background:linear-gradient(145deg,rgba(105,211,208,.16),rgba(255,255,255,.04)); box-shadow:0 20px 70px rgba(0,0,0,.25),inset 0 1px rgba(255,255,255,.14); animation:markFloat 3.4s ease-in-out infinite; }
+    .splash-bolt { width:54px; height:76px; fill:#f6d365; filter:drop-shadow(0 0 18px rgba(246,211,101,.75)); animation: boltFlash 1.5s ease-in-out infinite; }
+    .splash-word { font-size:clamp(3.8rem,12vw,6.2rem); line-height:1; font-weight:900; letter-spacing:.12em; text-shadow:0 0 24px rgba(95,210,226,.3); animation:splashPulse 2.2s ease-in-out infinite; }
+    .splash-content p { color:#c7d9e8; font-size:clamp(.9rem,2.5vw,1.1rem); font-weight:700; margin:0; }
+    .splash-school { color:#f4d88b; font-size:clamp(.82rem,2vw,1rem); font-weight:800; }
+    .splash-kicker { color:#83d9d4; font-size:10px; font-weight:900; letter-spacing:.24em; text-transform:uppercase; }
+    .splash-progress { width:min(250px,65vw); height:4px; border-radius:99px; overflow:hidden; background:rgba(255,255,255,.18); margin-top:10px; }
+    .splash-progress span { display:block; width:38%; height:100%; border-radius:99px; background:linear-gradient(90deg,#69d3d0,#f6d365); animation:loadSweep 1.8s ease-in-out infinite; }
+    @keyframes boltFlash { 0%,100% {opacity:.7; transform:translateY(0) scale(.96); filter:drop-shadow(0 0 8px rgba(246,211,101,.35));} 45% {opacity:1; transform:translateY(-5px) scale(1.04); filter:drop-shadow(0 0 25px rgba(246,211,101,.95));} }
+    @keyframes splashPulse { 0%,100% {opacity:.85; transform:scale(.985);} 50% {opacity:1; transform:scale(1.02);} }
+    @keyframes loadSweep { from {transform:translateX(-120%);} to {transform:translateX(360%);} }
+    @keyframes orbit { to { transform:rotate(360deg); } }
+    @keyframes markFloat { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-9px) rotate(2deg); } }
+    .reveal-ready { opacity:0; transform:translateY(18px); transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.25,1); }
+    .reveal-ready.is-visible { opacity:1; transform:translateY(0); }
+    .grade-guide { margin-top:22px; padding:clamp(18px,3vw,26px); border:1px solid #cbdedb; border-radius:24px; background:linear-gradient(135deg,#f1faf7,#f7f8ff); color:#203342; }
+    .grade-guide h3 { color:#173b50; font-size:1.08rem; font-weight:900; }
+    .grade-guide p,.grade-guide li { color:#425466; font-size:.86rem; line-height:1.9; }
+    .grade-guide .guide-card { background:rgba(255,255,255,.82); border:1px solid #dce8e7; border-radius:16px; padding:14px; }
+    .grade-guide .guide-number { color:#0f766e; font-size:1.45rem; font-weight:900; }
+    .grade-guide a { color:#0f766e; text-decoration:underline; text-underline-offset:3px; font-weight:800; }
+
+    /* إعدادات الوصول */
+    .site-controls { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:9px; }
+    .font-controls { display:flex; align-items:center; gap:5px; padding:5px 8px; border:1px solid #dbe5e8; border-radius:14px; background:#f8fbfa; }
+    .control-caption { font-size:11px; font-weight:800; color:#475569; margin-inline-end:4px; }
+    .font-controls button, .theme-toggle { min-width:34px; min-height:34px; border-radius:10px; border:1px solid #d5e1e5; background:#fff; color:#1e293b; font-weight:900; padding:4px 8px; cursor:pointer; }
+    .font-controls button:hover, .theme-toggle:hover { border-color:#2f7a78; background:#e8f5f2; }
+    .theme-toggle { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; font-size:12px; }
+    .materials-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+    .qualification-hours { display:flex; flex-wrap:wrap; gap:8px; }
+    .hours-chip { border:1px solid #cfe2df; border-radius:12px; background:#eff8f6; color:#155e59; padding:8px 12px; font-size:12px; font-weight:800; }
+    .materials-table { width:100%; border-collapse:separate; border-spacing:0; min-width:520px; overflow:hidden; border:1px solid #e2e8f0; border-radius:16px; }
+    .materials-table th { background:#edf5f3; color:#1e3a3a; font-size:12px; font-weight:900; text-align:right; padding:12px 14px; }
+    .materials-table td { background:#fff; color:#334155; font-size:13px; font-weight:700; padding:12px 14px; border-top:1px solid #e8eef0; }
+    .materials-table tr:nth-child(even) td { background:#f8fbfa; }
+    .materials-note { margin-top:14px; padding:12px 14px; border-right:3px solid #d59b36; border-radius:8px; background:#fff9eb; color:#76521a; font-size:12px; line-height:1.8; }
+    .materials-source { margin-top:9px; color:#64748b; font-size:11px; }
+    .materials-source a { color:#0f766e; text-decoration:underline; text-underline-offset:3px; font-weight:800; }
+
+    /* المظهر الداكن: يحافظ على التخطيط والرسومات مع تبديل ألوان الواجهات */
+    html[data-theme="dark"] body { background:#0b1220 !important; color:#e5e7eb !important; }
+    html[data-theme="dark"] .bg-waves { background-image:radial-gradient(at 85% 10%,rgba(56,189,178,.07) 0,transparent 50%),radial-gradient(at 10% 85%,rgba(91,92,230,.08) 0,transparent 50%) !important; }
+    html[data-theme="dark"] header { background:rgba(15,23,42,.94) !important; border-color:#263548 !important; }
+    html[data-theme="dark"] .map-panel, html[data-theme="dark"] main [class*="bg-white"], html[data-theme="dark"] main [class*="bg-slate-50"], html[data-theme="dark"] #specializationPage [class*="bg-white"], html[data-theme="dark"] #specializationPage [class*="bg-slate-50"] { background:#172235 !important; border-color:#334155 !important; }
+    html[data-theme="dark"] main [class*="text-slate-900"], html[data-theme="dark"] main [class*="text-slate-800"], html[data-theme="dark"] main [class*="text-slate-700"], html[data-theme="dark"] #specializationPage [class*="text-slate-900"], html[data-theme="dark"] #specializationPage [class*="text-slate-800"], html[data-theme="dark"] #specializationPage [class*="text-slate-700"], html[data-theme="dark"] header [class*="text-slate-900"] { color:#e5edf7 !important; }
+    html[data-theme="dark"] main [class*="text-slate-600"], html[data-theme="dark"] main [class*="text-slate-500"], html[data-theme="dark"] #specializationPage [class*="text-slate-600"], html[data-theme="dark"] #specializationPage [class*="text-slate-500"], html[data-theme="dark"] header [class*="text-slate-500"] { color:#a9b8ca !important; }
+    html[data-theme="dark"] main [class*="border-slate-"], html[data-theme="dark"] #specializationPage [class*="border-slate-"], html[data-theme="dark"] #specializationPage [class*="border-white"] { border-color:#334155 !important; }
+    html[data-theme="dark"] .materials-table { border-color:#334155; }
+    html[data-theme="dark"] .materials-table th { background:#203449; color:#e5edf7; }
+    html[data-theme="dark"] .materials-table td, html[data-theme="dark"] .materials-table tr:nth-child(even) td { background:#172235; color:#d6e1ee; border-color:#334155; }
+    html[data-theme="dark"] .materials-note { background:#352d1d; color:#f3d89d; border-color:#d59b36; }
+    html[data-theme="dark"] .materials-source { color:#a9b8ca; }
+    html[data-theme="dark"] .materials-source a { color:#67d3c8; }
+    html[data-theme="dark"] .hours-chip { background:#153b3b; color:#b8f2e9; border-color:#28615d; }
+    html[data-theme="dark"] .font-controls, html[data-theme="dark"] .theme-toggle { background:#172235; border-color:#40516a; color:#e5edf7; }
+    html[data-theme="dark"] .control-caption { color:#c2d0df; }
+    html[data-theme="dark"] #sidebarChatContainer { background:#111c2d !important; border-color:#334155 !important; }
+    html[data-theme="dark"] #chatMessages { background:#0f1929 !important; }
+    html[data-theme="dark"] #chatInput { background:#172235 !important; color:#f1f5f9 !important; border-color:#475569 !important; }
+    html[data-theme="dark"] .chat-msg .bg-white { background:#1e2b40 !important; color:#e5edf7 !important; border-color:#3a4a60 !important; }
+    html[data-theme="dark"] .chat-msg [class*="text-slate-"] { color:#e5edf7 !important; }
+    html[data-theme="dark"] .font-controls button { background:#26364b; color:#fff; border-color:#455a73; }
+    /* تباين إضافي للعناصر ذات الألوان المميزة في الوضع الداكن */
+    html[data-theme="dark"] main [class*="bg-indigo-50"], html[data-theme="dark"] main [class*="bg-teal-50"], html[data-theme="dark"] main [class*="bg-emerald-50"], html[data-theme="dark"] main [class*="bg-amber-50"], html[data-theme="dark"] main [class*="bg-rose-50"], html[data-theme="dark"] #specializationPage [class*="bg-indigo-50"], html[data-theme="dark"] #specializationPage [class*="bg-teal-50"], html[data-theme="dark"] #specializationPage [class*="bg-emerald-50"], html[data-theme="dark"] #specializationPage [class*="bg-amber-50"], html[data-theme="dark"] #specializationPage [class*="bg-rose-50"] { background:#203249 !important; border-color:#3a526b !important; }
+    /* معالجة شاملة لألوان Tailwind الفاتحة حتى لا تبقى كتابة فاتحة فوق خلفية فاتحة */
+    html[data-theme="dark"] main [class*="bg-"][class*="-50"], html[data-theme="dark"] main [class*="bg-"][class*="-100"], html[data-theme="dark"] #specializationPage [class*="bg-"][class*="-50"], html[data-theme="dark"] #specializationPage [class*="bg-"][class*="-100"] { background-color:#203249 !important; border-color:#405a73 !important; }
+    html[data-theme="dark"] main [class*="text-"][class*="-900"], html[data-theme="dark"] main [class*="text-"][class*="-800"], html[data-theme="dark"] main [class*="text-"][class*="-700"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-900"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-800"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-700"] { color:#e3edf8 !important; }
+    html[data-theme="dark"] main [class*="text-"][class*="-600"], html[data-theme="dark"] main [class*="text-"][class*="-500"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-600"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-500"] { color:#b8c9dc !important; }
+    html[data-theme="dark"] main [class*="border-"][class*="-100"], html[data-theme="dark"] main [class*="border-"][class*="-200"], html[data-theme="dark"] #specializationPage [class*="border-"][class*="-100"], html[data-theme="dark"] #specializationPage [class*="border-"][class*="-200"] { border-color:#405a73 !important; }
+    html[data-theme="dark"] main [class*="text-indigo-"], html[data-theme="dark"] main [class*="text-teal-"], html[data-theme="dark"] main [class*="text-emerald-"], html[data-theme="dark"] main [class*="text-amber-"], html[data-theme="dark"] main [class*="text-rose-"], html[data-theme="dark"] #specializationPage [class*="text-indigo-"], html[data-theme="dark"] #specializationPage [class*="text-teal-"], html[data-theme="dark"] #specializationPage [class*="text-emerald-"], html[data-theme="dark"] #specializationPage [class*="text-amber-"], html[data-theme="dark"] #specializationPage [class*="text-rose-"] { color:#b9e8e5 !important; }
+    html[data-theme="dark"] main [class*="bg-white/"], html[data-theme="dark"] #specializationPage [class*="bg-white/"] { background:#172235 !important; }
+    html[data-theme="dark"] .grade-guide { background:linear-gradient(135deg,#142b36,#18243a) !important; border-color:#36566a !important; color:#e7eef7 !important; }
+    html[data-theme="dark"] .grade-guide h3, html[data-theme="dark"] .grade-guide h4, html[data-theme="dark"] .grade-guide strong, html[data-theme="dark"] .grade-guide b { color:#f0f6ff !important; }
+    html[data-theme="dark"] .grade-guide p, html[data-theme="dark"] .grade-guide li { color:#c4d2e2 !important; }
+    html[data-theme="dark"] .grade-guide .guide-card { background:#1d3045 !important; border-color:#3a526b !important; }
+    html[data-theme="dark"] .grade-guide .guide-number { color:#7fe0d5 !important; }
+    html[data-theme="dark"] .grade-guide a { color:#7fe0d5 !important; }
+    html[data-theme="dark"] #detailSkillsTags span { background:#20364b !important; color:#d9efff !important; border-color:#49647d !important; }
+    /* Keep the journey details readable when its content card stays white in dark mode. */
+    html[data-theme="dark"] #journeyStageContent { background:#ffffff !important; color:#263445 !important; border-color:#d7e0ea !important; }
+    html[data-theme="dark"] #journeyStageContent h3,
+    html[data-theme="dark"] #journeyStageContent p,
+    html[data-theme="dark"] #journeyStageContent .text-slate-900,
+    html[data-theme="dark"] #journeyStageContent .text-slate-800,
+    html[data-theme="dark"] #journeyStageContent .text-slate-700 { color:#263445 !important; }
+    html[data-theme="dark"] #journeyStageContent .text-slate-600,
+    html[data-theme="dark"] #journeyStageContent .text-slate-500 { color:#475569 !important; }
+    html[data-theme="dark"] #journeyStageContent > div:last-child { color:#263445 !important; }
+    html[data-theme="dark"] #journeyStageContent > div:last-child span { color:#334155 !important; }
+    /* مخرج المرحلة: خلفية بيضاء ونص أسود صريح في الوضع الداكن. */
+    html[data-theme="dark"] #journeyStageContent .journey-outcome {
+      background:#ffffff !important;
+      border-color:#cbd5e1 !important;
+      color:#000000 !important;
+    }
+    html[data-theme="dark"] #journeyStageContent .journey-outcome,
+    html[data-theme="dark"] #journeyStageContent .journey-outcome * {
+      color:#000000 !important;
+      -webkit-text-fill-color:#000000 !important;
+      opacity:1 !important;
+    }
+
+    html[data-theme="dark"] .materials-note { background:#302b20 !important; color:#f5dfb0 !important; border-color:#b98b3d !important; }
+    html[data-theme="dark"] .materials-source { color:#d0dbea !important; }
+    html[data-theme="dark"] .materials-source a { color:#7fe0d5 !important; }
+    html[data-theme="dark"] .font-controls button:hover, html[data-theme="dark"] .theme-toggle:hover { background:#29435a !important; color:#fff !important; }
+    @media (max-width:760px) { .site-controls { width:100%; justify-content:flex-start; } .control-caption { display:none; } .materials-heading { align-items:flex-start; } }
+    @media (prefers-reduced-motion: reduce) { .splash-bolt,.splash-word,.splash-progress span,.splash-mark,.btec-splash:before,.btec-splash:after { animation:none !important; } .btec-splash { transition:none; } .reveal-ready { opacity:1; transform:none; transition:none; } }
+
   </style>
 </head>
 <body class="bg-waves text-slate-800 antialiased selection:bg-teal-600 selection:text-white">
+  <div id="btecSplash" class="btec-splash" role="status" aria-label="شاشة بدء برنامج BTEC">
+    <div class="splash-content">
+      <div class="splash-kicker">LEARN · CREATE · ACHIEVE</div>
+      <div class="splash-mark"><svg class="splash-bolt" viewBox="0 0 100 140" aria-hidden="true"><path d="M57 4 15 77h29l-7 59 49-82H57z" /></svg></div>
+      <div class="splash-word">BTEC</div>
+      <p>برنامج التعليم المهني والتقني</p>
+      <div class="splash-school">مدرسة البلقاء الثانوية الشاملة</div>
+      <div class="splash-progress" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
 
   <!-- ==================== رأس الصفحة (Header) ==================== -->
   <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-teal-900/10 shadow-sm">
@@ -723,7 +853,7 @@
         <div>
           <div class="flex items-center gap-2 flex-wrap">
             <h1 class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight">
-              مدرسة البلقاء الثانوية الشاملة للبنات
+              مدرسة البلقاء الثانوية الشاملة
             </h1>
             <button type="button" onclick="returnToCampus()" title="العودة إلى الخريطة التفاعلية" aria-label="العودة إلى الخريطة التفاعلية عبر BTEC"
               class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition cursor-pointer">
@@ -734,6 +864,18 @@
             الخريطة التفاعلية للتخصصات والمرافق التعليمية برنامج BTEC المدرسي
           </p>
         </div>
+      </div>
+
+      <div class="site-controls" role="group" aria-label="إعدادات العرض وإمكانية الوصول">
+        <div class="font-controls" role="group" aria-label="حجم الخط">
+          <span class="control-caption">حجم الخط</span>
+          <button id="fontDecrease" type="button" aria-label="تصغير الخط" title="تصغير الخط">A−</button>
+          <button id="fontReset" type="button" aria-label="إعادة حجم الخط الافتراضي" title="الحجم الافتراضي">A</button>
+          <button id="fontIncrease" type="button" aria-label="تكبير الخط" title="تكبير الخط">A+</button>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="تفعيل المظهر الداكن">
+          <span id="themeIcon" aria-hidden="true">◐</span><span id="themeLabel">الوضع الداكن</span>
+        </button>
       </div>
 
     </div>
@@ -754,7 +896,7 @@
             </h2>
           </div>
           <p class="text-xs font-semibold text-slate-500 bg-slate-100/90 px-3 py-1 rounded-full">
-            اضغط على أي منصة تخصص لاستكشاف مرافقه التعليمية
+            اختر أحد التخصصات لاستكشاف معلوماته ومرافقه التعليمية
           </p>
         </div>
 
@@ -1164,7 +1306,7 @@
                 </g>
                 <g class="spec-tooltip" transform="translate(620, 36)">
                   <rect x="-78" y="-14" width="156" height="24" rx="12" fill="#0f172a"/>
-                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">اختر تخصصًا لاستكشاف مرافقه</text>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">اختر تخصصا لاستكشاف مرافقه</text>
                 </g>
               </g>
 
@@ -1322,7 +1464,7 @@
           </div>
           <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]">
             <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-              أهلاً وسهلاً في <strong>التعرف على التخصصات المتوفرة ببرنامج BTEC</strong> بمدرسة البلقاء الثانوية الشاملة للبنات! 🌸
+              أهلا وسهلا في <strong>التعرف على التخصصات المتوفرة ببرنامج BTEC</strong> بمدرسة البلقاء الثانوية الشاملة! 
               <br/>
               يمكنني تقديم معلومات عن برنامج BTEC والتخصصات الأربعة المتوفرة (<strong>تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل</strong>) ومرافقها التعليمية. ما الاستفسار الذي يمكنني المساعدة فيه؟
             </p>
@@ -1332,7 +1474,7 @@
 
       <div id="typingIndicator" class="hidden px-4 py-2 bg-white border-t border-slate-100">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-100 text-slate-600 text-xs font-bold">
-          <span>جارٍ إعداد الإجابة</span>
+          <span>جار إعداد الإجابة</span>
           <span class="flex gap-1">
             <span class="typing-dot w-1.5 h-1.5 rounded-full bg-teal-600"></span>
             <span class="typing-dot w-1.5 h-1.5 rounded-full bg-teal-600"></span>
@@ -1413,13 +1555,46 @@
             <span>الاستفسارات عن التخصص</span>
           </button>
           <button type="button" onclick="returnToCampus()" class="rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-xs sm:text-sm font-extrabold text-white hover:bg-white/20 transition">
-            🗺️ العودة للخريطة
+            العودة إلى الخريطة
           </button>
         </div>
       </div>
       
       <p id="detailDescription" class="relative z-10 mt-6 max-w-4xl text-sm sm:text-base leading-relaxed text-white/95 font-medium"></p>
     </div>
+
+    <section id="materialsSection" class="materials-panel mt-6 rounded-3xl border border-slate-200/90 bg-white/95 p-5 sm:p-7 shadow-xl shadow-slate-900/5" aria-labelledby="materialsTitle">
+      <div class="materials-heading">
+        <div>
+          <h2 id="materialsTitle" class="text-lg sm:text-xl font-black text-slate-900">المواد والوحدات الدراسية</h2>
+          <p id="materialsIntro" class="text-sm text-slate-600 mt-1">الوحدات المعتمدة لكل مستوى دراسي.</p>
+        </div>
+        <div id="qualificationHours" class="qualification-hours" aria-live="polite"></div>
+      </div>
+      <div id="materialsTableWrap" class="overflow-x-auto mt-5"></div>
+      <p class="materials-note">تعرض الجداول إجمالي ساعات البرنامج المعتمد، وتوضح ساعات الوحدة (GLH) عندما تتوفر مطابقة مع مواصفات Pearson الرسمية.</p>
+      <p class="materials-source">المصادر: <a id="materialsSourceLink" href="https://btec.moe.gov.jo/" target="_blank" rel="noopener noreferrer">وزارة التربية والتعليم الأردنية</a> <span id="pearsonSourceWrap">| <a id="pearsonL2SourceLink" href="https://qualifications.pearson.com/" target="_blank" rel="noopener noreferrer">مواصفات Pearson للمستوى الثاني</a> | <a id="pearsonL3SourceLink" href="https://qualifications.pearson.com/" target="_blank" rel="noopener noreferrer">مواصفات Pearson للمستوى الثالث</a></span>. ساعات الوحدة هي ساعات تعليمية موجهة (GLH)، وتعرض فقط عند توفر تطابق موثق.</p>
+      <section class="grade-guide" aria-labelledby="gradeGuideTitle">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+          <div><span class="text-xs font-black tracking-wider text-teal-700">STUDENT GUIDE</span><h3 id="gradeGuideTitle" class="mt-1">فهم الساعات الدراسية وحساب المعدل</h3><p class="mt-1">دليل مبسط يوضح حجم البرنامج وكيف ترتبط تقييمات BTEC بنتيجة الثانوية العامة.</p></div>
+          <span class="rounded-full px-3 py-1 text-xs font-extrabold bg-teal-100 text-teal-800">دليل الطالب</span>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <div class="guide-card"><div class="guide-number">480 GLH</div><strong class="block text-sm text-slate-800">المستوى الثاني – Level 2</strong><p class="mt-1">إجمالي ساعات التعلم الموجه للبرنامج، ويبني المهارات الأساسية في التخصص.</p></div>
+          <div class="guide-card"><div class="guide-number">720 GLH</div><strong class="block text-sm text-slate-800">المستوى الثالث – Level 3</strong><p class="mt-1">إجمالي ساعات التعلم الموجه للبرنامج، ويتوسع في المهارات التطبيقية والتخصصية.</p></div>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div><h4 class="font-black text-sm text-slate-900 mb-2">ما المقصود بـ GLH؟</h4><p>اختصار <b>Guided Learning Hours</b> ويعني ساعات التعلم الموجه: الوقت الذي يكون فيه المعلم أو المدرب أو المقيّم مشاركا في توجيه تعلم الطالب، مثل الدروس والتدريب العملي والدراسة بإشراف والتقييم. لذلك لا تعني GLH مجموع كل الوقت الذي تقضيه الطالبة في الدراسة الفردية.</p><p class="mt-2">توضح الساعات حجم الوحدة والوقت التعليمي الموجه المتوقع لها، وتساعد على فهم وزنها ضمن البرنامج. وهي ليست علامة أو نسبة مئوية بحد ذاتها.</p></div>
+          <div><h4 class="font-black text-sm text-slate-900 mb-2">كيف يتم احتساب المعدل في المسار المهني التقني؟</h4>
+            <div class="guide-card mb-2"><div class="flex items-center justify-between gap-2"><b class="text-sm text-slate-800">تقييمات برنامج BTEC – المستوى الثالث</b><span class="guide-number">70%</span></div><p class="mt-1">تدخل تقييمات المستوى الثالث في الجزء الأكبر من معدل الثانوية العامة للمسار المهني التقني.</p></div>
+            <div class="guide-card"><div class="flex items-center justify-between gap-2"><b class="text-sm text-slate-800">مباحث الثقافة العامة المشتركة الأربعة</b><span class="guide-number">30%</span></div><p class="mt-1">اللغة العربية، واللغة الإنجليزية، والتربية الإسلامية، وتاريخ الأردن من خلال الامتحان العام.</p></div>
+            <p class="mt-2">بصيغة مبسطة: <b>المعدل العام = 70% من تقييمات المستوى الثالث + 30% من نتائج المباحث المشتركة الأربعة.</b> هذا توزيع مكونات معدل الثانوية العامة للمسار المهني التقني، وليس متوسطا حسابيا لعلامات وحدات BTEC.</p>
+          </div>
+        </div>
+        <div class="mt-4 rounded-2xl border border-teal-200 bg-white/70 p-4"><h4 class="font-black text-sm text-slate-900">كيف تحصلين على تقدير الوحدة في BTEC؟</h4><p class="mt-1">يعتمد التقييم على تحقيق معايير التعلم والتقييم المحددة لكل وحدة، وقد تظهر نتائج الوحدة بصيغ مثل <b>Pass (P)</b> و<b>Merit (M)</b> و<b>Distinction (D)</b> بحسب متطلبات المؤهل. وفي المؤهلات التي تستخدم نظام النقاط، تتحول نتيجة الوحدة إلى نقاط وفق تقديرها وحجمها بساعات GLH، ثم تجمع النقاط وتقارن بحدود التقدير النهائي المحددة في مواصفة المؤهل. لذلك لا يتم تحويل كل وحدة إلى نسبة مئوية ثم أخذ متوسطها تلقائيا.</p></div>
+        <p class="mt-3 text-xs">المراجع: <a href="https://moe.gov.jo/sites/default/files/ltr_lwtny_ltqyym_ltlb_fy_lrdn_2024.pdf" target="_blank" rel="noopener noreferrer">الإطار الوطني لتقييم الطلبة – وزارة التربية والتعليم</a> · <a href="https://moe.gov.jo/sites/default/files/tlymt_mthn_lthnwy_lm_0.pdf" target="_blank" rel="noopener noreferrer">تعليمات امتحان الثانوية العامة – وزارة التربية والتعليم</a> · <a href="https://btec.moe.gov.jo/إدارة-التعليم-المهني-والإنتاج/" target="_blank" rel="noopener noreferrer">إدارة التعليم المهني والتقني – BTEC الأردن</a> · <a href="https://btec.moe.gov.jo/الواجبات-المحددة/" target="_blank" rel="noopener noreferrer">آلية التقييم والواجبات المحددة</a> · <a href="https://qualifications.pearson.com/en/support/support-topics/results-certification/understanding-marks-and-grades/calculating-your-overall-btec-grade.html/student" target="_blank" rel="noopener noreferrer">طريقة احتساب تقدير BTEC لدى Pearson</a></p>
+      </section>
+    </section>
 
     <!-- المحتوى التفاعلي المبتكر (3 أبعاد مختلفة لكل تخصص) -->
     <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -1431,7 +1606,7 @@
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
             <div class="flex items-center gap-3.5">
-              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-2xl shadow-inner">🧭</div>
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-2xl shadow-inner"></div>
               <div>
                 <h2 class="text-lg sm:text-xl font-black text-slate-900">محطات الرحلة التعليمية في التخصص</h2>
                 <p class="text-xs sm:text-sm text-slate-500 font-medium">اختر كل مرحلة لاكتشاف المهارات التي يكتسبها المتعلم</p>
@@ -1449,10 +1624,10 @@
         <!-- 2. مختبر المشاريع الواقعية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5">
           <div class="flex items-center gap-3.5 mb-5">
-            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-2xl shadow-inner">🏆</div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-2xl shadow-inner"></div>
             <div>
-              <h2 class="text-lg sm:text-xl font-black text-slate-900">من داخل مشاريع طالبات BTEC</h2>
-              <p class="text-xs sm:text-sm text-slate-500 font-medium">نموذج تطبيقي حقيقي تنفذه المتعلمين بدلاً من الامتحان التقليدي</p>
+              <h2 class="text-lg sm:text-xl font-black text-slate-900">مثال تطبيقي على ما تم وصفه</h2>
+              <p class="text-xs sm:text-sm text-slate-500 font-medium">شاهد كيف تتحول معارف التخصص ومهاراته إلى مشروع عملي بخطوات ومخرجات واضحة</p>
             </div>
           </div>
 
@@ -1467,9 +1642,9 @@
         <!-- بطاقة استكشاف المرافق التعليمية التفاعلية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-7 shadow-xl shadow-slate-900/5">
           <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-slate-100">
-            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-xl">🏫</div>
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-xl"></div>
             <div>
-              <h2 class="text-base sm:text-lg font-black text-slate-900">مرافق التخصص في مدرستنا</h2>
+              <h2 class="text-base sm:text-lg font-black text-slate-900">مرافق التخصص في المدرسة</h2>
               <p class="text-xs text-slate-500 font-medium">المرافق التعليمية في المدرسة</p>
             </div>
           </div>
@@ -1480,8 +1655,8 @@
         <!-- بطاقة أبرز المهارات المهنية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 shadow-xl shadow-slate-900/5">
           <h3 class="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-            <span>⚡</span>
-            <span>مهارات تكتسبها المتعلم</span>
+            <span></span>
+            <span>المهارات التي يكتسبها الطلاب</span>
           </h3>
           <div id="detailSkillsTags" class="flex flex-wrap gap-2"></div>
         </div>
@@ -1494,7 +1669,7 @@
   <!-- ==================== المنطق البرمجي وقاعدة المعرفة ==================== -->
   <script>
     const BTEC_DATA = {
-      schoolName: "مدرسة البلقاء الثانوية الشاملة للبنات",
+      schoolName: "مدرسة البلقاء الثانوية الشاملة",
       eventName: "برنامج BTEC التعليمي ",
       specializations: {
         it: {
@@ -1514,9 +1689,10 @@
             { step: "3", label: "الاحتراف والمستقبل", title: "مشاريع التخرج والجاهزية الجامعية", summary: "تنفيذ مشروعات تقنية وتوثيق مراحل العمل والنتائج، مع بناء أساس لمواصلة الدراسة أو التوجه إلى مجالات العمل في تقنية المعلومات.", outcome: "اكتساب معارف ومهارات تقنية تدعم مواصلة الدراسة أو التقدم إلى فرص مهنية مرتبطة بتكنولوجيا المعلومات." }
           ],
           projectShowcase: {
-            title: "نموذج مشروع تطبيقي: تطوير منصة ذكية لخدمة المجتمع المدرسي",
-            scenario: "تُكلّف المتعلم بتحليل مشكلة إدارية أو تعليمية، ثم تصميم موقع إلكتروني متجاوب وربطه بقاعدة بيانات واختبار سهولة استخدامه.",
-            deliverables: ["تحليل المتطلبات", "تصميم الواجهة UI/UX", "البرمجة والاختبار", "عرض المشروع أمام المقيمين"]
+            title: "مشروع تطبيقي: إنشاء منصة إلكترونية لخدمات المدرسة",
+            scenario: "تخيّل أن المدرسة تريد تسهيل وصول الطلبة إلى معلومات الأنشطة والإعلانات والخدمات. يبدأ المتعلم بجمع احتياجات المستخدمين، ثم يخطط لمنصة سهلة الاستخدام ويطور نموذجاً أولياً لها.",
+            steps: ["تحديد المشكلة وجمع متطلبات المستخدمين", "رسم مخطط الصفحات وتصميم الواجهة (UI/UX)", "بناء صفحات تفاعلية باستخدام HTML وCSS وJavaScript", "اختبار الروابط والنماذج وسهولة الاستخدام على الهاتف والحاسوب", "عرض الحل وتوثيق الملاحظات والتحسينات"],
+            deliverables: ["وثيقة متطلبات", "مخطط وتصميم واجهات", "نموذج موقع قابل للتجربة", "نتائج اختبار وتقييم", "عرض المشروع"]
           },
           skills: ["البرمجة وتطوير الويب", "إدارة الشبكات", "قواعد البيانات", "الأمن السيبراني", "حل المشكلات التقنية"]
         },
@@ -1534,12 +1710,13 @@
           journeyStages: [
             { step: "1", label: "مبادئ الإدارة", title: "فهم بيئة الأعمال والمؤسسات", summary: "يتعرف المتعلم على أنواع المؤسسات وأهدافها وطرق عملها، والعوامل التي تؤثر في نجاح الأعمال، وأدوار العاملين داخلها.", outcome: "فهم طبيعة المؤسسات وأهدافها والمهام التي تدعم سير العمل فيها." },
             { step: "2", label: "التطبيق المؤسسي", title: "التسويق والمحاسبة والتطبيقات المكتبية", summary: "تطبيق مفاهيم التسويق والتمويل وإدارة الفعاليات وخدمة العملاء، واستخدام المعلومات والبيانات لدعم القرارات التجارية.", outcome: "إعداد معلومات وتقارير تساعد على التخطيط والتواصل واتخاذ القرارات في بيئة الأعمال." },
-            { step: "3", label: "ريادة الأعمال", title: "إطلاق مشروع ريادي متكامل", summary: "يبحث المتعلم في فكرة تجارية، ويدرس احتياجات السوق والجوانب المالية والتسويقية، ويضع تصورًا لإطلاق مشروع أو تطويره.", outcome: "بناء قاعدة معرفية تساعد على مواصلة الدراسة أو التوجه إلى مجالات الأعمال مثل التسويق والتمويل والإدارة والموارد البشرية." }
+            { step: "3", label: "ريادة الأعمال", title: "إطلاق مشروع ريادي متكامل", summary: "يبحث المتعلم في فكرة تجارية، ويدرس احتياجات السوق والجوانب المالية والتسويقية، ويضع تصورا لإطلاق مشروع أو تطويره.", outcome: "بناء قاعدة معرفية تساعد على مواصلة الدراسة أو التوجه إلى مجالات الأعمال مثل التسويق والتمويل والإدارة والموارد البشرية." }
           ],
           projectShowcase: {
-            title: "نموذج مشروع تطبيقي: دراسة جدوى وحملة تسويقية لمشروع ريادي",
-            scenario: "يعمل المتعلمون كفريق إداري لتأسيس شركة ناشئة افتراضية، وتحديد الجمهور المستهدف والميزانية وخطة الترويج.",
-            deliverables: ["دراسة السوق", "الموازنة المالية", "خطة التسويق الرقمي", "العرض التقديمي للمستثمرين"]
+            title: "مشروع تطبيقي: إعداد خطة لمشروع تجاري طلابي",
+            scenario: "تعمل مجموعة كفريق تأسيس لمشروع صغير يقدم منتجاً أو خدمة داخل المجتمع المدرسي. تدرس الفكرة والجمهور المستهدف، وتضع تصوراً للتكاليف والتسعير والترويج قبل تقديم الخطة.",
+            steps: ["اختيار فكرة المشروع وتحديد حاجات العملاء", "إجراء استبيان مبسط وتحليل المنافسين", "تقدير التكاليف ووضع سعر مناسب وتوقع المبيعات", "إعداد خطة تسويق وهوية ورسائل ترويجية", "تقديم الخطة ومناقشة نقاط القوة وفرص التطوير"],
+            deliverables: ["وصف فكرة المشروع", "ملخص بحث السوق", "جدول تكاليف وتسعير", "خطة تسويقية", "عرض خطة العمل"]
           },
           skills: ["ريادة الأعمال", "التخطيط الاستراتيجي", "التسويق الرقمي", "الإدارة المالية", "العمل الجماعي والقيادة"]
         },
@@ -1555,14 +1732,15 @@
           description: "يطور المهارات الإبداعية والتقنية في مجالات الفن والتصميم، مثل الرسم والتواصل البصري والتصميم الجرافيكي والتصوير الفوتوغرافي والأزياء والمنسوجات، وقد يمتد إلى تصميم المنتجات والواجهات والوسائط المتعددة.",
           facilities: ["مشغل الحاسوب", "غرفة التصوير", "مرسم", "غرفة أزياء", "غرفة حرف"],
           journeyStages: [
-            { step: "1", label: "التأسيس البصري", title: "أساسيات الرسم ونظرية الألوان", summary: "يستكشف المتعلم الأفكار بصريًا من خلال الرسم والتجريب بالخامات والألوان وتطوير مهارات التعبير والتواصل البصري.", outcome: "إنتاج لوحات وتصاميم أولية تعكس الحس الفني والابتكار." },
-            { step: "2", label: "التنفيذ بالمشاغل", title: "التصوير الفوتوغرافي وتصميم الأزياء", summary: "ينفذ المتعلم أعمالًا ومشروعات في مجالات التصوير والتصميم الجرافيكي والأزياء والمنسوجات، ويختار أساليب وأدوات مناسبة لفكرة المشروع.", outcome: "إنتاج أعمال فنية وتصميمية وتوثيق مراحل تطويرها ضمن ملف أعمال." },
+            { step: "1", label: "التأسيس البصري", title: "أساسيات الرسم ونظرية الألوان", summary: "يستكشف المتعلم الأفكار بصريا من خلال الرسم والتجريب بالخامات والألوان وتطوير مهارات التعبير والتواصل البصري.", outcome: "إنتاج لوحات وتصاميم أولية تعكس الحس الفني والابتكار." },
+            { step: "2", label: "التنفيذ بالمشاغل", title: "التصوير الفوتوغرافي وتصميم الأزياء", summary: "ينفذ المتعلم أعمالا ومشروعات في مجالات التصوير والتصميم الجرافيكي والأزياء والمنسوجات، ويختار أساليب وأدوات مناسبة لفكرة المشروع.", outcome: "إنتاج أعمال فنية وتصميمية وتوثيق مراحل تطويرها ضمن ملف أعمال." },
             { step: "3", label: "المعرض الفني", title: "معرض الأعمال النهائي (Art Portfolio)", summary: "تنظيم وعرض ملف أعمال يوضح البحث والتجريب وتطور الفكرة والنتيجة النهائية.", outcome: "بناء أساس لمواصلة الدراسة أو التوجه إلى مجالات الصناعات الإبداعية والتصميم والفنون." }
           ],
           projectShowcase: {
-            title: "نموذج مشروع تطبيقي: تصميم مجموعة أزياء مستوحاة من التراث الأردني",
-            scenario: "يبدأ المتعلم بالبحث البصري وتطوير الرسومات، ثم ينفذ تصميمًا مستوحى من التراث ويوثق مراحل العمل والنتيجة",
-            deliverables: ["لوحة الإلهام (Moodboard)", "الرسومات التحضيرية", "تنفيذ التصميم", "جلسة التصوير النهائية"]
+            title: "مشروع تطبيقي: تصميم هوية بصرية لفعالية مدرسية",
+            scenario: "تتلقى مجموعة من المصممين brief لتصميم هوية بصرية لفعالية مدرسية. يحول المتعلمون الفكرة إلى مجموعة متناسقة من التصاميم بعد البحث والتجريب واختيار الخامات والأدوات المناسبة.",
+            steps: ["فهم هدف الفعالية والجمهور والرسالة المطلوبة", "جمع مراجع بصرية وإعداد لوحة إلهام (Moodboard)", "تجربة الاسكتشات والألوان والخطوط والتكوين", "تنفيذ الشعار والملصق وتصميم منشور رقمي متناسق", "عرض الأعمال وتلقي الملاحظات وتطوير النسخة النهائية"],
+            deliverables: ["بحث ومراجع بصرية", "لوحة إلهام واسكتشات", "شعار وهوية بصرية", "ملصق ومنشور رقمي", "ملف أعمال (Portfolio)"]
           },
           skills: ["الرسم ", "التصوير الفوتوغرافي", "تصميم الأزياء والخياطة", "التصميم الرقمي", "الابتكار البصري"]
         },
@@ -1583,9 +1761,10 @@
             { step: "3", label: "الاحتراف المهني", title: "إدارة الصالون وخدمة العملاء", summary: "تطوير مهارات التواصل وخدمة العملاء والترويج للمنتجات والخدمات، والتعرف على أسس إدارة مشروع في قطاع الشعر والتجميل.", outcome: "اكتساب مهارات تدعم التقدم إلى فرص مهنية أو مواصلة الدراسة أو التخطيط لمشروع في قطاع الشعر والتجميل." }
           ],
           projectShowcase: {
-            title: "نموذج مشروع تطبيقي: تصميم برنامج عناية متكامل حسب نوع البشرة والشعر",
-            scenario: "يقوم المتعلم بتشخيص حالة افتراضية، واختيار المستحضرات المناسبة، وتنفيذ الجلسة العملية في المشغل.",
-            deliverables: ["بطاقة تشخيص الحالة", "خطة العناية الآمنة", "التطبيق العملي بالمشغل", "تقييم النتيجة ونصائح المتابعة"]
+            title: "مشروع تطبيقي: إعداد وتنفيذ خدمة تجميل ضمن سيناريو صالون",
+            scenario: "يتعامل المتعلم مع حالة تدريبية لعميل يطلب خدمة مناسبة من الخدمات التي درسها. يبدأ بالتواصل وفهم الطلب، ثم يجهز مساحة العمل والأدوات وفق تعليمات النظافة والسلامة، وينفذ التطبيق التدريبي ويقيّم جودة الخدمة.",
+            steps: ["استقبال العميل وتحديد الخدمة المطلوبة وفهم التوقعات", "تجهيز مكان العمل والأدوات واتباع تعليمات النظافة والسلامة", "اختيار خطوات الخدمة المناسبة ضمن نطاق التدريب والوحدة", "تنفيذ الخدمة العملية مع مراعاة التواصل وراحة العميل", "تقييم النتيجة وتسجيل الملاحظات واقتراح العناية اللاحقة المناسبة"],
+            deliverables: ["بطاقة استشارة عميل", "قائمة تجهيز ونظافة", "تطبيق عملي موثق", "تقييم جودة الخدمة", "سجل ملاحظات وانعكاس مهني"]
           },
           skills: ["العناية بالبشرة", "تصفيف وعلاج الشعر", "معايير التعقيم والسلامة", "التواصل مع العملاء", "إدارة الصالونات"]
         }
@@ -1637,7 +1816,7 @@
         </div>
         <h3 class="text-lg sm:text-xl font-black text-slate-900 mb-2">${current.title}</h3>
         <p class="text-sm sm:text-base text-slate-700 leading-relaxed mb-4">${current.summary}</p>
-        <div class="rounded-xl p-3.5 border flex items-start gap-2.5" style="background:${spec.theme.softBg}; border-color:${spec.theme.border}33;">
+        <div class="journey-outcome rounded-xl p-3.5 border flex items-start gap-2.5" style="background:${spec.theme.softBg}; border-color:${spec.theme.border}33;">
           <span class="text-base">🎯</span>
           <div class="text-xs sm:text-sm font-bold text-slate-800">
             <span class="font-black" style="color:${spec.theme.badgeText};">مخرج المرحلة:</span> ${current.outcome}
@@ -1645,6 +1824,126 @@
         </div>
       `;
     }
+
+    const OFFICIAL_TRACK_URLS = {
+      it: "https://btec.moe.gov.jo/تكنولوجيا-المعلومات/",
+      business: "https://btec.moe.gov.jo/الأعمال/",
+      art: "https://btec.moe.gov.jo/الفن-والتصميم/",
+      beauty: "https://btec.moe.gov.jo/الشعر-والتجميل/"
+    };
+    const PEARSON_SPEC_URLS = {
+      it: {
+        level2: "https://qualifications.pearson.com/content/dam/pdf/btec-international-level-2/information-technology/2022/specification-and-sample-assessments/information-technology-specification.pdf",
+        level3: "https://qualifications.pearson.com/content/dam/pdf/btec-international-level-3/it/specification-and-sample-assessments/btec-international-level-3-it-specification.pdf"
+      },
+      business: {
+        level2: "https://qualifications.pearson.com/content/dam/pdf/btec-international-level-2/business/2022/specification-and-sample-assessments/business-specification.pdf",
+        level3: "https://qualifications.pearson.com/content/dam/pdf/btec-international-level-3/business/specification-and-sample-assessments/btecint-bus-spec.pdf"
+      },
+      art: {
+        level2: "https://qualifications.pearson.com/content/dam/pdf/btec-international-level-2/art-and-design/specification-and-sample-assessments/btec-international-l2-art-design-specification.pdf",
+        level3: "https://qualifications.pearson.com/content/dam/pdf/btec-international-level-3/art-and-design/specification-and-sample-assessments/btec-international-level-3-art-and-design-specification.pdf"
+      },
+      beauty: null
+    };
+    // Guided Learning Hours are included only where the official Pearson unit title and size can be matched.
+    const VERIFIED_UNIT_HOURS = {
+      it: {
+        level2: [60, 60, 60, 60, 60, 60, 60, 60],
+        level3: [120, 60, 120, 60, 60, 90, 90, null, 60]
+      },
+      business: {
+        level2: [30, 30, 30, 30, 30, 60, 30, 60, 30, 30, 60, 60],
+        level3: [90, 60, 120, 90, 90, 90, 60, 60, 60]
+      },
+      art: {
+        level2: [60, 60, 60, 60, 60, 60, 60, 60],
+        level3: [270, 90, 90, 270]
+      },
+      beauty: { level2: [], level3: [] }
+    };
+
+    function renderMaterials(specId) {
+      const units = BTEC_UNITS[specId];
+      if (!units) return;
+      const totals = { level2: 480, level3: 720 };
+      document.getElementById("qualificationHours").innerHTML = `
+        <span class="hours-chip">المستوى الثاني: ${totals.level2} ساعة إجمالية</span>
+        <span class="hours-chip">المستوى الثالث: ${totals.level3} ساعة إجمالية</span>`;
+      const rows = [];
+      [["level2", "المستوى الثاني", units.level2], ["level3", "المستوى الثالث", units.level3]].forEach(([levelKey, levelLabel, list]) => {
+        list.forEach((unit, index) => {
+          const hours = VERIFIED_UNIT_HOURS[specId]?.[levelKey]?.[index];
+          const hoursText = Number.isFinite(hours) ? `${hours} ساعة تعليمية موجهة` : "غير متاحة في مرجع رسمي مطابق";
+          rows.push(`<tr><td>${unit}</td><td>${levelLabel}</td><td>${hoursText}</td></tr>`);
+        });
+      });
+      document.getElementById("materialsTableWrap").innerHTML = `
+        <table class="materials-table">
+          <thead><tr><th scope="col">المادة / الوحدة الدراسية</th><th scope="col">المستوى</th><th scope="col">ساعات الوحدة (GLH)</th></tr></thead>
+          <tbody>${rows.join("")}</tbody>
+        </table>`;
+      document.getElementById("materialsSourceLink").href = OFFICIAL_TRACK_URLS[specId] || "https://btec.moe.gov.jo/";
+      const pearsonWrap = document.getElementById("pearsonSourceWrap");
+      const pearsonSources = PEARSON_SPEC_URLS[specId];
+      if (pearsonSources) {
+        document.getElementById("pearsonL2SourceLink").href = pearsonSources.level2;
+        document.getElementById("pearsonL3SourceLink").href = pearsonSources.level3;
+        pearsonWrap.hidden = false;
+      } else {
+        pearsonWrap.hidden = true;
+      }
+    }
+
+    function initializeAccessibility() {
+      const root = document.documentElement;
+      const fontKey = "btec-font-scale-v1";
+      const themeKey = "btec-theme-v1";
+      const safeGet = (key) => { try { return localStorage.getItem(key); } catch (_) { return null; } };
+      const safeSet = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
+      let scale = Number(safeGet(fontKey)) || 1;
+      scale = Math.min(1.25, Math.max(0.9, scale));
+      function applyScale() {
+        root.style.fontSize = `${16 * scale}px`;
+        safeSet(fontKey, String(scale));
+      }
+      applyScale();
+      document.getElementById("fontIncrease").addEventListener("click", () => { scale = Math.min(1.25, +(scale + .05).toFixed(2)); applyScale(); });
+      document.getElementById("fontDecrease").addEventListener("click", () => { scale = Math.max(.9, +(scale - .05).toFixed(2)); applyScale(); });
+      document.getElementById("fontReset").addEventListener("click", () => { scale = 1; applyScale(); });
+      function applyTheme(theme) {
+        const dark = theme === "dark";
+        root.setAttribute("data-theme", dark ? "dark" : "light");
+        const btn = document.getElementById("themeToggle");
+        btn.setAttribute("aria-pressed", String(dark));
+        btn.setAttribute("aria-label", dark ? "تفعيل المظهر الفاتح" : "تفعيل المظهر الداكن");
+        document.getElementById("themeIcon").textContent = dark ? "☀" : "◐";
+        document.getElementById("themeLabel").textContent = dark ? "الوضع الفاتح" : "الوضع الداكن";
+        safeSet(themeKey, dark ? "dark" : "light");
+      }
+      applyTheme(safeGet(themeKey) === "dark" ? "dark" : "light");
+      document.getElementById("themeToggle").addEventListener("click", () => applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark"));
+    }
+
+    function initializeSplash() {
+      const splash = document.getElementById("btecSplash");
+      const dismiss = () => splash.classList.add("is-hidden");
+      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.setTimeout(dismiss, reduced ? 250 : 3000);
+    }
+
+    initializeAccessibility();
+    initializeSplash();
+
+    function initializeRevealMotion() {
+      const targets = document.querySelectorAll("main section, #specializationPage .materials-panel, #specializationPage aside > div");
+      if (!("IntersectionObserver" in window) || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+      const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+      }), { threshold: 0.08, rootMargin: "0px 0px -35px 0px" });
+      targets.forEach((element, index) => { element.classList.add("reveal-ready"); element.style.transitionDelay = `${Math.min(index % 4, 3) * 65}ms`; observer.observe(element); });
+    }
+    initializeRevealMotion();
 
     function selectSpecialization(specId) {
       const spec = BTEC_DATA.specializations[specId];
@@ -1669,16 +1968,30 @@
       hero.style.background = `linear-gradient(125deg, ${spec.theme.border} 0%, #0f172a 95%)`;
 
       renderJourneyStage(spec, 0);
+      renderMaterials(specId);
 
       const projectBox = document.getElementById("projectShowcaseBox");
+      const stepsHtml = (spec.projectShowcase.steps || []).map((step, i) => `
+        <li class="flex items-start gap-3 rounded-xl border border-slate-200/80 bg-white/90 dark:bg-slate-900/70 dark:border-slate-700 p-3">
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black text-white" style="background:${spec.theme.border}">${i + 1}</span>
+          <span class="text-sm leading-6 font-semibold text-slate-700 dark:text-slate-100">${step}</span>
+        </li>`).join("");
       const deliverablesHtml = spec.projectShowcase.deliverables
-        .map(d => `<span class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-extrabold text-slate-800 shadow-2xs">✓ ${d}</span>`)
+        .map(d => `<span class="px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-extrabold text-slate-800 dark:text-slate-100 shadow-sm">✓ ${d}</span>`)
         .join("");
       projectBox.innerHTML = `
-        <h3 class="text-base sm:text-lg font-black text-slate-900">${spec.projectShowcase.title}</h3>
-        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${spec.projectShowcase.scenario}</p>
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="rounded-full px-3 py-1 text-xs font-black" style="background:${spec.theme.softBg};color:${spec.theme.badgeText}">تطبيق عملي</span>
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">Project in Action</span>
+        </div>
+        <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white mb-3">${spec.projectShowcase.title}</h3>
+        <p class="text-sm text-slate-700 dark:text-slate-200 leading-7 mb-5">${spec.projectShowcase.scenario}</p>
+        <div class="mb-5">
+          <p class="text-sm font-black text-slate-800 dark:text-slate-100 mb-3">كيف ينفذ المتعلم المشروع؟</p>
+          <ol class="grid gap-2 sm:grid-cols-2">${stepsHtml}</ol>
+        </div>
         <div>
-          <p class="text-xs font-extrabold text-slate-500 mb-2">مراحل ومخرجات التقييم العملي:</p>
+          <p class="text-sm font-black text-slate-800 dark:text-slate-100 mb-3">مخرجات المشروع (Project Outcomes)</p>
           <div class="flex flex-wrap gap-2">${deliverablesHtml}</div>
         </div>
       `;
@@ -1771,7 +2084,7 @@
       closeAssistantChat();
 
       document.querySelectorAll(".spec-node").forEach(el => el.classList.remove("active-node"));
-      document.title = "برنامج BTEC مدرسة البلقاء الثانوية الشاملة للبنات";
+      document.title = "برنامج BTEC | مدرسة البلقاء الثانوية الشاملة";
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1819,7 +2132,7 @@
           ? "bg-rose-600 text-white"
           : "bg-teal-600 text-white"
       }`;
-      avatar.textContent = role === "user" ? "👤" : isError ? "⚠️" : "📘";
+      avatar.textContent = role === "user" ? "👤" : isError ? "⚠" : "📘";
 
       const bubble = document.createElement("div");
       bubble.className =
@@ -1852,55 +2165,239 @@
         .join("");
     }
 
+    const BTEC_UNITS = {
+      it: {
+        level2: [
+          "استخدام تكنولوجيا المعلومات لدعم المعلومات والاتصالات في المؤسسات",
+          "نمذجة البيانات وجداول البيانات",
+          "مقدمة في شبكات الحاسوب",
+          "مقدمة في البرمجة",
+          "مقدمة في الرسوم الرقمية والرسوم المتحركة",
+          "مقدمة في تطوير مواقع الويب",
+          "مقدمة في التطبيقات",
+          "مقدمة في تصميم الألعاب"
+        ],
+        level3: [
+          "نظم تكنولوجيا المعلومات – الاستراتيجية والإدارة والبنية التحتية",
+          "تطوير المواقع الإلكترونية",
+          "الأمن السيبراني وإدارة الحوادث",
+          "تطوير ألعاب الحاسوب",
+          "الدعم الفني والإدارة لتكنولوجيا المعلومات",
+          "البرمجة",
+          "إدارة مشاريع تكنولوجيا المعلومات",
+          "مقدمة في الذكاء الاصطناعي (AI)",
+          "تطوير تطبيقات الهاتف المحمول"
+        ]
+      },
+      business: {
+        level2: [
+          "أغراض إنشاء الشركات",
+          "المؤسسات التجارية",
+          "التنبؤ بالأداء المالي للشركة",
+          "خطة التسويق",
+          "الأشخاص في المنظمات",
+          "الأعمال عبر الإنترنت",
+          "أخلاقيات العمل",
+          "إنشاء شركة صغيرة",
+          "العمل ضمن فرق",
+          "إدارة الشؤون المالية الشخصية",
+          "تقنيات الترويج والعرض المرئية لأعمال البيع بالتجزئة",
+          "إدارة شركة صغيرة"
+        ],
+        level3: [
+          "البحث والتخطيط لحملة تسويقية",
+          "مبادئ الإدارة",
+          "اتخاذ القرارات الخاصة بالأعمال",
+          "استكشاف الأعمال",
+          "تمويل الأعمال",
+          "إدارة إحدى الفعاليات",
+          "الموارد البشرية",
+          "دراسة خدمة العملاء",
+          "أخلاقيات العمل"
+        ]
+      },
+      art: {
+        level2: [
+          "تطوير الفن والتصميم استجابة لأحد المواضيع",
+          "التواصل المرئي",
+          "تكوين محفظة للفن والتصميم",
+          "مشروع بحث عملي",
+          "العمل على موجز التصميم الجرافيكي",
+          "العمل باستخدام موجز تصوير فوتوغرافي",
+          "العمل باستخدام المنسوجات",
+          "العمل باستخدام تصميم الأزياء"
+        ],
+        level3: [
+          "تطوير المهارات",
+          "الاستجابة لأحد الموجزات",
+          "التقدم الشخصي",
+          "استجابة المجال الإبداعي"
+        ]
+      },
+      beauty: {
+        level2: [
+          "استكشاف قطاع الشعر والجمال",
+          "مهام الاستقبال في الصالون",
+          "ترويج المنتجات والخدمات وبيعها للعملاء في الصالون",
+          "الشعر والبشرة والأظافر",
+          "تقديم خدمات العناية ببشرة الوجه",
+          "وضع مستحضرات التجميل",
+          "تطبيق تقنيات المانيكير والباديكير",
+          "تقنيات إزالة الشعر",
+          "شامبو وبلسم الشعر",
+          "فن تصفيف الشعر",
+          "فن العناية بالأظافر",
+          "المؤسسة التجارية"
+        ],
+        level3: [
+          "الصالون الاحترافي",
+          "الصحة والعافية",
+          "المكياج الإبداعي وفن الحناء",
+          "تقنيات الأظافر المتقدمة",
+          "علاجات الجلد المتقدمة",
+          "صبغ الشعر وتبييضه",
+          "التدليك والعلاج بالروائح العطرية",
+          "قص الشعر والتصفيف",
+          "تقنيات المساج المتقدمة",
+          "بدء مشروع وإدارته"
+        ]
+      }
+    };
+
+    const SPECIALIZATION_KNOWLEDGE = {
+      it: {
+        title: "تكنولوجيا المعلومات",
+        aliases: ["تكنولوجيا المعلومات", "تقنية المعلومات", "it", "حاسوب", "الحاسوب", "البرمجة", "شبكات", "امن سيبراني", "امن المعلومات"],
+        overview: "يركز على استخدام أنظمة وتقنيات الحاسوب لحل المشكلات، وإدارة البيانات، وتطوير البرمجيات والخدمات الرقمية.",
+        topics: "البرمجة، قواعد البيانات ونمذجة البيانات، الشبكات، تطوير المواقع والتطبيقات والألعاب، الدعم الفني، الأمن السيبراني، إدارة المشاريع التقنية والذكاء الاصطناعي.",
+        skills: "التفكير المنطقي، حل المشكلات، كتابة البرامج، تحليل البيانات، اختبار الحلول، إدارة الأنظمة والعمل ضمن فريق.",
+        careers: "من المجالات المهنية المرتبطة به: تطوير البرمجيات والمواقع والتطبيقات، الدعم الفني، إدارة الشبكات، قواعد البيانات، الأمن السيبراني وتحليل الأنظمة. بعض الوظائف تتطلب دراسة جامعية أو شهادات وخبرة إضافية.",
+        facility: "مختبر حاسوب"
+      },
+      business: {
+        title: "إدارة الأعمال",
+        aliases: ["ادارة الاعمال", "الأعمال", "اعمال", "business", "ادارة", "التسويق", "الموارد البشرية", "تمويل"],
+        overview: "يدرس كيفية عمل المؤسسات وتنظيم مواردها وأنشطتها، وكيفية التخطيط والتسويق وإدارة المال والموظفين وخدمة العملاء.",
+        topics: "استكشاف الأعمال، التسويق والحملات التسويقية، التمويل، مبادئ الإدارة، اتخاذ القرارات، إدارة الفعاليات، الموارد البشرية، خدمة العملاء وأخلاقيات العمل.",
+        skills: "التواصل، التخطيط والتنظيم، العمل الجماعي، إعداد الميزانيات، خدمة العملاء، البحث التسويقي، حل المشكلات واتخاذ القرارات.",
+        careers: "من المجالات المرتبطة به: المبيعات، التسويق، خدمة العملاء، المساندة الإدارية، تنظيم الفعاليات، الموارد البشرية والمشروعات الصغيرة. بعض الوظائف تتطلب دراسة أو تدريبا إضافيا.",
+        facility: "مختبر حاسوب"
+      },
+      art: {
+        title: "فن وتصميم",
+        aliases: ["فن وتصميم", "الفن والتصميم", "فن", "تصميم", "جرافيك", "تصميم جرافيكي", "تصوير", "ازياء", "منسوجات", "رسم"],
+        overview: "يركز على تطوير الأفكار الإبداعية وتحويلها إلى أعمال فنية وتصميمية باستخدام خامات وتقنيات يدوية ورقمية.",
+        topics: "التواصل المرئي، التصميم الجرافيكي، التصوير الفوتوغرافي، الأزياء والمنسوجات، البحث والتجريب، تطوير المهارات، إعداد ملف الأعمال والاستجابة للموجزات والمشروعات الإبداعية.",
+        skills: "الرسم والتكوين، توليد الأفكار، البحث البصري، استخدام الخامات والتقنيات، التصميم الرقمي، عرض الأعمال وتطوير ملف أعمال.",
+        careers: "من المجالات المرتبطة به: التصميم الجرافيكي والرقمي، التصوير، تصميم الأزياء والمنسوجات، تصميم المنتجات والديكور والوسائط الإبداعية. قد تتطلب بعض المسارات تخصصا جامعيا أو ملف أعمال قويا.",
+        facility: "مشغل الحاسوب، غرفة التصوير، مرسم، غرفة أزياء، غرفة حرف"
+      },
+      beauty: {
+        title: "التجميل",
+        aliases: ["التجميل", "الشعر والتجميل", "الشعر والجمال", "beauty", "شعر", "بشرة", "مكياج", "اظافر", "صالون"],
+        overview: "يركز على أساسيات وممارسات خدمات الشعر والبشرة والأظافر والمكياج، مع الاهتمام بالتعامل المهني مع العملاء والصحة والسلامة.",
+        topics: "استكشاف قطاع الشعر والجمال، الاستقبال وخدمة العملاء، الشعر والبشرة والأظافر، العناية بالوجه، مستحضرات التجميل، المانيكير والباديكير، إزالة الشعر، تصفيف الشعر، الحناء، العلاجات المتقدمة وإدارة مشروع تجميلي.",
+        skills: "التواصل مع العملاء، تطبيق إجراءات النظافة والسلامة، اختيار المنتجات المناسبة للخدمة، مهارات الشعر والبشرة والأظافر، تنظيم العمل وإدارة مشروع صغير.",
+        careers: "من المجالات المرتبطة به: خدمات الصالونات والعناية بالشعر والبشرة والأظافر والمكياج، والاستقبال وبيع منتجات وخدمات التجميل. ممارسة بعض الخدمات قد تخضع لمتطلبات تدريب أو ترخيص محلية.",
+        facility: "حاسوب واحد، مشغل شعر، مشغل بشرة"
+      }
+    };
+
+    function normalizeQuestion(value) {
+      return value.trim().toLowerCase()
+        .replace(/[أإآ]/g, "ا")
+        .replace(/ة/g, "ه")
+        .replace(/[ـ]/g, "")
+        .replace(/[؟?!،,.]/g, " ")
+        .replace(/\s+/g, " ");
+    }
+
+    function detectSpecialization(q) {
+      const ordered = ["it", "business", "art", "beauty"];
+      for (const key of ordered) {
+        const aliases = SPECIALIZATION_KNOWLEDGE[key].aliases;
+        if (aliases.some(alias => q.includes(normalizeQuestion(alias)))) return key;
+      }
+      return null;
+    }
+
+    function formatUnitList(units) {
+      return units.map((unit, index) => `${index + 1}. ${unit}`).join("\n");
+    }
+
+    function getMaterialsReply(key, q) {
+      const units = BTEC_UNITS[key];
+      const asksLevel2 = /الثاني(?! عشر)|مستوى ثاني|level ?2|\bl2\b|الصف العاشر/.test(q);
+      const asksLevel3 = /الثالث|مستوى ثالث|level ?3|\bl3\b|الحادي عشر|الثاني عشر/.test(q);
+      const spec = SPECIALIZATION_KNOWLEDGE[key];
+      let answer = `**الوحدات الدراسية لتخصص ${spec.title}:**\n`;
+      if (asksLevel2) {
+        answer += `\n**المستوى الثاني:**\n${formatUnitList(units.level2)}`;
+      } else if (asksLevel3) {
+        answer += `\n**المستوى الثالث:**\n${formatUnitList(units.level3)}`;
+      } else {
+        answer += `\n**المستوى الثاني:**\n${formatUnitList(units.level2)}`;
+        answer += `\n\n**المستوى الثالث:**\n${formatUnitList(units.level3)}`;
+      }
+      answer += `\n\nهذه أسماء الوحدات المنشورة لمسار BTEC في موقع وزارة التربية والتعليم الأردنية. وقد تختلف تفاصيل التنفيذ والتوزيع بحسب الخطة المعتمدة والمدرسة.`;
+      return answer;
+    }
+
     function generateKnowledgeGroundedReply(userQuery) {
-      const q = userQuery.trim().toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
+      const q = normalizeQuestion(userQuery);
+      const explicitTopic = detectSpecialization(q);
+      if (explicitTopic) lastDiscussedTopic = explicitTopic;
+      const topic = explicitTopic || lastDiscussedTopic;
+      const isMaterialsQuestion = /(مواد|المواد|وحدات|الوحدات|ماذا يدرس|شو بدرس|شو بيدرس|ماذا يتعلم|المقررات|المحتوى الدراسي)/.test(q);
 
-      if (/^(مرحبا|مرحبًا|اهلا|أاهلا|أهلاً|السلام عليكم|سلام|هاي|هلا|صباح الخير|مساء الخير|كيفك|كيف حالك)/.test(q) && q.length < 35) {
-        return `أهلاً وسهلاً في **برنامج BTEC** بـ **مدرسة البلقاء الثانوية الشاملة للبنات**! 🌸\nيتوفر في المدرسة أربعة تخصصات ضمن البرنامج:\n• **تكنولوجيا المعلومات**\n• **إدارة الأعمال**\n• **فن وتصميم**\n• **التجميل**\n\nيمكنك الاستفسار عن مجال الدراسة أو المرافق التعليمية لأي تخصص.`;
+      if (/^(مرحبا|اهلا|السلام عليكم|سلام|هاي|هلا|صباح الخير|مساء الخير|كيفك|كيف حالك)/.test(q) && q.length < 35) {
+        return `أهلا بك في **برنامج BTEC** في **مدرسة البلقاء الثانوية الشاملة**.\nالتخصصات المتاحة في الموقع: **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**.\nيمكنك السؤال عن الوحدات الدراسية، محتوى التخصص، المهارات، المجالات المهنية أو المرافق المسجلة.`;
       }
 
-      if ((q.includes("فرق") || q.includes("مقارنة") || q.includes("الاختلاف")) && (q.includes("تكنولوجيا") || q.includes("حاسوب")) && (q.includes("اعمال") || q.includes("أعمال"))) {
-        lastDiscussedTopic = "compare_it_biz";
-        return `يختلف التخصصان في طبيعة المهارات التي يركزان عليها:\n• **تكنولوجيا المعلومات:** يركز على أنظمة وتقنيات المعلومات، البرمجة، تطوير المواقع والتطبيقات، الشبكات، تحليل البيانات، والأمن السيبراني.\n• **إدارة الأعمال:** يركز على فهم المؤسسات، التسويق، التمويل، الموارد البشرية، خدمة العملاء، إدارة الفعاليات، وريادة الأعمال.\n\n**المرافق المسجلة في المدرسة:** يتوفر لكل من التخصصين **مختبر حاسوب**.`;
+      if (isMaterialsQuestion) {
+        if (topic) return getMaterialsReply(topic, q);
+        return `حتى أعرض الوحدات الصحيحة، اذكر اسم التخصص: **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، أو التجميل**. ويمكنك تحديد المستوى الثاني أو الثالث.`;
       }
 
-      if (q.includes("تكنولوجيا") || q.includes("حاسوب") || q.includes("برمجة") || q.includes("it") || q.includes("امن سيبراني") || q.includes("شبكات")) {
-        lastDiscussedTopic = "it";
-        return `**تخصص تكنولوجيا المعلومات (Information Technology)** يعرّف المتعلم على أنظمة تكنولوجيا المعلومات واستخدام البرمجيات وتحليل البيانات، ويطوّر مهاراته في البرمجة وتطوير المواقع والتطبيقات والألعاب، والشبكات، والأمن السيبراني، وإدارة المشاريع التقنية.\n\n**المرفق التعليمي المسجل في المدرسة:**\n• مختبر حاسوب`;
+      if ((q.includes("فرق") || q.includes("مقارنه") || q.includes("الاختلاف")) && (q.includes("تكنولوجيا") || q.includes("حاسوب")) && (q.includes("اعمال") || q.includes("اداره"))) {
+        return `**الفرق بين التخصصين:**\n• **تكنولوجيا المعلومات:** يركز على الأنظمة والبرمجة والشبكات والبيانات والأمن السيبراني.\n• **إدارة الأعمال:** يركز على المؤسسات والتسويق والتمويل والإدارة والموارد البشرية وخدمة العملاء.\n\nكلاهما يتضمن وحدات عملية ومشروعات، لكن طبيعة المهارات والمحتوى مختلفة.`;
       }
 
-      if (q.includes("ادارة") || q.includes("إدارة") || q.includes("اعمال") || q.includes("أعمال") || q.includes("business") || q.includes("تسويق") || q.includes("محاسبه") || q.includes("تمويل")) {
-        lastDiscussedTopic = "business";
-        return `**تخصص إدارة الأعمال (Business)** يركز على فهم بيئة الأعمال وطريقة عمل المؤسسات، ويشمل موضوعات مثل استكشاف الأعمال، التسويق، التمويل، إدارة الفعاليات، الموارد البشرية، خدمة العملاء، أخلاقيات العمل، واتخاذ القرارات التجارية وريادة الأعمال.\n\n**المرفق التعليمي المسجل في المدرسة:**\n• مختبر حاسوب`;
+      if (topic && /(وظائف|وظيفه|اعمال|مهن|مستقبل|اشتغل|سوق العمل|فرص العمل)/.test(q)) {
+        return `**المجالات المهنية المرتبطة بتخصص ${SPECIALIZATION_KNOWLEDGE[topic].title}:**\n${SPECIALIZATION_KNOWLEDGE[topic].careers}\n\nالشهادة وحدها لا تعني ضمان وظيفة محددة؛ وقد تحتاج بعض الوظائف إلى دراسة جامعية أو تدريب أو ترخيص إضافي.`;
       }
 
-      if (q.includes("فن") || q.includes("تصميم") || q.includes("مرسم") || q.includes("تصوير") || q.includes("ازياء") || q.includes("حرف")) {
-        lastDiscussedTopic = "art";
-        return `**تخصص فن وتصميم (Art and Design)** يطوّر المهارات الفنية والإبداعية والتقنية، ويشمل مجالات مثل الرسم والتواصل البصري، التصميم الجرافيكي، التصوير الفوتوغرافي، تصميم الأزياء والمنسوجات، وتصميم المنتجات والواجهات والوسائط المتعددة. وتُستخدم المشروعات وملفات الأعمال لإظهار البحث والتجريب وتطور الفكرة والنتيجة النهائية.\n\n**المرافق التعليمية المسجلة في المدرسة:**\n• مشغل الحاسوب\n• غرفة التصوير\n• مرسم\n• غرفة أزياء\n• غرفة حرف`;
+      if (topic && /(مهارات|مهاره|اتعلم|تعلم|اكتسب|قدرات)/.test(q)) {
+        return `**المهارات التي يطورها تخصص ${SPECIALIZATION_KNOWLEDGE[topic].title}:**\n${SPECIALIZATION_KNOWLEDGE[topic].skills}\n\nوتتحدد المهارات التفصيلية بحسب الوحدات والمشروعات التي يدرسها المتعلم.`;
       }
 
-      if (q.includes("تجميل") || q.includes("شعر") || q.includes("بشره") || q.includes("beauty") || q.includes("مكياج") || q.includes("اظافر") || q.includes("صالون")) {
-        lastDiscussedTopic = "beauty";
-        return `**تخصص التجميل (Hair and Beauty)** يركز على خدمات الشعر والبشرة والأظافر والمكياج، ويشمل التعرف على قطاع الصالونات وخدمة العملاء والترويج للمنتجات والخدمات وممارسات الصحة والسلامة. وقد تتضمن الدراسة موضوعات متقدمة مثل التدليك والعلاج بالروائح العطرية وريادة الأعمال وإدارة مشروع تجميلي، وفق الوحدات المعتمدة للمسار.\n\n**المرافق التعليمية المسجلة في المدرسة:**\n• حاسوب واحد\n• مشغل شعر\n• مشغل بشرة`;
+      if (topic && /(مجالات|يشمل|يتضمن|محتوى|عن التخصص|احكيلي|اشرح|شو هو|ما هو|ماهو|تعريف)/.test(q)) {
+        const spec = SPECIALIZATION_KNOWLEDGE[topic];
+        return `**تخصص ${spec.title}:**\n${spec.overview}\n\n**أبرز مجالاته:** ${spec.topics}\n\n**المهارات:** ${spec.skills}\n\nللاطلاع على أسماء الوحدات الدراسية، اسأل: ما المواد الموجودة في هذا التخصص؟`;
       }
 
-      if (q.includes("ما هو") || q.includes("ماهو") || q.includes("تعريف") || q.includes("نظام btec") || q.includes("برنامج btec")) {
-        return `**برنامج BTEC** برنامج للتعليم المهني والتقني يركز على اكتساب المعرفة والمهارات من خلال التعلم التطبيقي والمشروعات والتقييمات المرتبطة بمجال التخصص، بهدف دعم الانتقال إلى التعليم العالي أو فرص العمل.`;
+      if (topic && /(مرافق|مختبر|مشغل|غرفه|غرفة)/.test(q)) {
+        return `**المرافق المسجلة لتخصص ${SPECIALIZATION_KNOWLEDGE[topic].title} في المدرسة:**\n• ${SPECIALIZATION_KNOWLEDGE[topic].facility}`;
       }
 
-      if (q.includes("تخصصات") || q.includes("نبذه") || q.includes("المتاحه") || q.includes("الموجوده") || q.includes("اختار") || q.includes("اختيار")) {
-        return `تتوفر في **مدرسة البلقاء الثانوية الشاملة للبنات** أربعة تخصصات ضمن برنامج BTEC:\n1. **تكنولوجيا المعلومات:** البرمجة، تطوير المواقع والتطبيقات، الشبكات، تحليل البيانات والأمن السيبراني. المرفق: مختبر حاسوب.\n2. **إدارة الأعمال:** التسويق، التمويل، الإدارة، الموارد البشرية، خدمة العملاء وريادة الأعمال. المرفق: مختبر حاسوب.\n3. **فن وتصميم:** الرسم والتواصل البصري، التصميم الجرافيكي، التصوير، الأزياء والمنسوجات ومجالات التصميم الإبداعي. المرافق: مشغل الحاسوب، غرفة التصوير، مرسم، غرفة أزياء، غرفة حرف.\n4. **التجميل:** خدمات الشعر والبشرة والأظافر والمكياج، الصحة والسلامة وخدمة العملاء. المرافق: حاسوب واحد، مشغل شعر، مشغل بشرة.\n\nيمكن اختيار أي تخصص من الخريطة لاستكشاف تفاصيله.`;
+      if (/(المستوى الثاني|المستوى الثالث|level 2|level 3|الصف العاشر|الحادي عشر|الثاني عشر)/.test(q) && topic) {
+        return getMaterialsReply(topic, q);
       }
 
-      if ((q.includes("مرافق") || q.includes("مختبر") || q.includes("كم") || q.includes("تفاصيل")) && lastDiscussedTopic) {
-        const spec = BTEC_DATA.specializations[lastDiscussedTopic];
-        if (spec) {
-          const list = spec.facilities.map(f => `• ${f}`).join("\n");
-          return `المرافق المسجلة لتخصص **${spec.shortTitle}** في المدرسة هي:\n${list}`;
-        }
+      if (topic) {
+        const spec = SPECIALIZATION_KNOWLEDGE[topic];
+        return `**${spec.title}:** ${spec.overview}\n\nيمكنني توضيح الوحدات الدراسية أو المهارات أو المجالات المهنية أو المرافق. اكتب سؤالك بشكل محدد.`;
       }
 
-      return `يمكنني تقديم معلومات عن **برنامج BTEC** والتخصصات الأربعة في المدرسة: **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**، بما يشمل مجالات الدراسة والمهارات والمرافق المسجلة.`;
+      if (/(تخصصات|التخصصات|نبذه|المتاحه|الموجوده|اختار|اختيار)/.test(q)) {
+        return `تتوفر في الموقع أربعة تخصصات ضمن برنامج BTEC:\n1. **تكنولوجيا المعلومات:** البرمجة، البيانات، الشبكات، تطوير المواقع والتطبيقات والأمن السيبراني.\n2. **إدارة الأعمال:** التسويق، التمويل، الإدارة، الموارد البشرية وخدمة العملاء.\n3. **فن وتصميم:** التواصل المرئي والتصميم الجرافيكي والتصوير والأزياء والمنسوجات.\n4. **التجميل:** الشعر والبشرة والأظافر والمكياج وخدمات الصالون.\n\nاذكر اسم التخصص لمعرفة وحداته الدراسية ومهاراته ومجالاته المهنية.`;
+      }
+
+      if (/(btec|بيتك|برنامج|دبلوم|شهاده|شهادة)/.test(q)) {
+        return `**برنامج BTEC** هو مسار للتعليم المهني والتقني يعتمد على وحدات دراسية وتطبيقات ومشروعات وتقييمات مرتبطة بالتخصص. يهدف إلى تنمية المعرفة والمهارات العملية، ويدعم مواصلة التعليم أو الانتقال إلى مجالات العمل.\n\nتختلف الوحدات بحسب التخصص والمستوى. يمكنك أن تسألني عن تخصص محدد أو عن مواده الدراسية.`;
+      }
+
+      return `أستطيع الإجابة عن المعلومات المدرجة في قاعدة معرفة الموقع حول **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**، مثل الوحدات الدراسية الرسمية للمستويين الثاني والثالث، ومحتوى التخصص والمهارات والمجالات المهنية والمرافق.\n\nإذا كان سؤالك خارج المعلومات المتاحة، اذكر التخصص أو أعد صياغة السؤال حتى أحدد المعلومة المطلوبة بدقة.`;
     }
 
     async function sendMessage(userText) {
@@ -1942,7 +2439,7 @@
           </div>
           <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]">
             <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
-              تم بدء محادثة جديدة اكتب أي سؤال حول برنامج <strong>BTEC</strong> أو التخصصات الأربعة ومرافقها في <strong>مدرسة البلقاء الثانوية الشاملة للبنات</strong>.
+              تم بدء محادثة جديدة اكتب أي سؤال حول برنامج <strong>BTEC</strong> أو التخصصات الأربعة ومرافقها في <strong>مدرسة البلقاء الثانوية الشاملة</strong>.
             </p>
           </div>
         </div>
