@@ -65,7 +65,6 @@
       min-height: 100vh;
     }
 
-    /* خلفية موجية ناعمة مستوحاة من الهوية البصرية */
     .bg-waves {
       background-image:
         radial-gradient(at 85% 10%, rgba(91, 92, 230, 0.08) 0px, transparent 50%),
@@ -73,7 +72,6 @@
         radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.7) 0px, transparent 80%);
     }
 
-    /* حاوية الخريطة ثلاثية الأبعاد والتفاعل مع فتح الشات */
     .map-stage {
       perspective: 1400px;
       position: relative;
@@ -96,7 +94,6 @@
       }
     }
 
-    /* حركات عائمة ناعمة ومتزنة للعناصر */
     @keyframes floatSlow {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
@@ -158,7 +155,6 @@
       animation: cloudDrift 9s ease-in-out infinite;
     }
 
-    /* التفاعل مع منصات التخصصات داخل SVG */
     .spec-node {
       cursor: pointer;
       outline: none !important;
@@ -232,7 +228,6 @@
       transform: translateY(0);
     }
 
-    /* شريط تمرير أنيق للمحادثة */
     .chat-scroll::-webkit-scrollbar {
       width: 6px;
     }
@@ -247,7 +242,6 @@
       background: #94a3b8;
     }
 
-    /* حركة ظهور رسائل المحادثة */
     @keyframes msgPop {
       from {
         opacity: 0;
@@ -263,7 +257,6 @@
       animation: msgPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    /* نقاط انتظار الذكاء الاصطناعي */
     .typing-dot {
       animation: typingBounce 1.3s infinite ease-in-out;
     }
@@ -275,7 +268,6 @@
       40% { transform: scale(1); opacity: 1; }
     }
 
-    /* ضمان وضوح النص المكتوب داخل مربع الإدخال باللون الداكن */
     #chatInput {
       color: #0f172a !important;
       background-color: #ffffff !important;
@@ -286,9 +278,6 @@
       opacity: 1;
     }
 
-    /* ============================================================
-       RESPONSIVE LAYOUT & LARGE PROFESSIONAL SIDEBAR CHAT (إزاحة الخريطة ونافذة احترافية واسعة)
-       ============================================================ */
     html {
       width: 100%;
       min-width: 320px;
@@ -338,7 +327,6 @@
       display: none !important;
     }
 
-    /* حاوية الخريطة التي ستنزاح بسلاسة عند فتح الشات */
     .map-panel {
       width: 100% !important;
       min-height: calc(100vh - 86px);
@@ -352,7 +340,6 @@
       transition: padding-left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* عند فتح الشات، نزحزح محتوى الخريطة يسارا لتعطي مساحة واسعة ومحترفة للشات على اليمين */
     body.chat-opened .map-panel {
       padding-left: 540px !important;
     }
@@ -394,7 +381,6 @@
       touch-action: manipulation;
     }
 
-    /* نافذة مرشد BTEC الاحترافية الواسعة */
     #sidebarChatContainer {
       position: fixed;
       z-index: 110;
@@ -432,7 +418,6 @@
       border-radius: 0 !important;
     }
 
-    /* أيقونة فتح وإغلاق الشات العائمة */
     #chatLauncher {
       position: fixed;
       z-index: 120;
@@ -484,7 +469,6 @@
       100% { transform: scale(1.28); opacity: 0; }
     }
 
-    /* خلفية بصرية للخريطة */
     body.bg-waves {
       background-color: #eaf7f7 !important;
       background-image:
@@ -564,7 +548,6 @@
       }
     }
 
-    /* صفحات التخصصات التفاعلية */
     #specializationPage {
       animation: detailPageIn .45s cubic-bezier(.22,1,.36,1) both;
     }
@@ -606,7 +589,6 @@
       box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
     }
   
-    /* ===== Chat + map: true side-by-side layout, no overlap ===== */
     @media (min-width: 1025px) {
       body.chat-opened main {
         width: calc(100% - 520px) !important;
@@ -670,7 +652,6 @@
       }
     }
 
-    /* الأجهزة اللوحية والهواتف: تظهر المحادثة أسفل الخريطة بدلا من تغطيتها */
     @media (max-width: 1024px) {
       body.chat-opened main {
         width: 100% !important;
@@ -709,8 +690,6 @@
       }
     }
 
-
-    /* شاشة البداية */
     .btec-splash { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: radial-gradient(circle at 50% 45%, #173b50 0%, #101c31 48%, #080f1e 100%); color: #fff; transition: opacity .65s ease, visibility .65s ease; }
     .btec-splash.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .btec-splash:before,.btec-splash:after { content:""; position:absolute; width:min(42vw,420px); aspect-ratio:1; border:1px solid rgba(117,220,218,.13); border-radius:50%; animation:orbit 12s linear infinite; }
@@ -738,7 +717,6 @@
     .grade-guide .guide-number { color:#0f766e; font-size:1.45rem; font-weight:900; }
     .grade-guide a { color:#0f766e; text-decoration:underline; text-underline-offset:3px; font-weight:800; }
 
-    /* إعدادات الوصول */
     .site-controls { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:9px; }
     .font-controls { display:flex; align-items:center; gap:5px; padding:5px 8px; border:1px solid #dbe5e8; border-radius:14px; background:#f8fbfa; }
     .control-caption { font-size:11px; font-weight:800; color:#475569; margin-inline-end:4px; }
@@ -756,7 +734,6 @@
     .materials-source { margin-top:9px; color:#64748b; font-size:11px; }
     .materials-source a { color:#0f766e; text-decoration:underline; text-underline-offset:3px; font-weight:800; }
 
-    /* المظهر الداكن: يحافظ على التخطيط والرسومات مع تبديل ألوان الواجهات */
     html[data-theme="dark"] body { background:#0b1220 !important; color:#e5e7eb !important; }
     html[data-theme="dark"] .bg-waves { background-image:radial-gradient(at 85% 10%,rgba(56,189,178,.07) 0,transparent 50%),radial-gradient(at 10% 85%,rgba(91,92,230,.08) 0,transparent 50%) !important; }
     html[data-theme="dark"] header { background:rgba(15,23,42,.94) !important; border-color:#263548 !important; }
@@ -779,7 +756,7 @@
     html[data-theme="dark"] .chat-msg .bg-white { background:#1e2b40 !important; color:#e5edf7 !important; border-color:#3a4a60 !important; }
     html[data-theme="dark"] .chat-msg [class*="text-slate-"] { color:#e5edf7 !important; }
     html[data-theme="dark"] .font-controls button { background:#26364b; color:#fff; border-color:#455a73; }
-    /* تباين قسم المثال التطبيقي في الوضع الفاتح: النصوص الأساسية سوداء وواضحة. */
+    
     html:not([data-theme="dark"]) #projectShowcaseBox,
     html:not([data-theme="dark"]) #projectShowcaseBox h3,
     html:not([data-theme="dark"]) #projectShowcaseBox p,
@@ -798,9 +775,9 @@
     html:not([data-theme="dark"]) #projectShowcaseBox .shadow-sm { border-color:#cbd5e1 !important; }
     html:not([data-theme="dark"]) #projectShowcaseBox > div:first-child > span:nth-child(2) { color:#000000 !important; }
     html:not([data-theme="dark"]) #specializationPage h2 + p { color:#000000 !important; }
-    /* تباين إضافي للعناصر ذات الألوان المميزة في الوضع الداكن */
+    
     html[data-theme="dark"] main [class*="bg-indigo-50"], html[data-theme="dark"] main [class*="bg-teal-50"], html[data-theme="dark"] main [class*="bg-emerald-50"], html[data-theme="dark"] main [class*="bg-amber-50"], html[data-theme="dark"] main [class*="bg-rose-50"], html[data-theme="dark"] #specializationPage [class*="bg-indigo-50"], html[data-theme="dark"] #specializationPage [class*="bg-teal-50"], html[data-theme="dark"] #specializationPage [class*="bg-emerald-50"], html[data-theme="dark"] #specializationPage [class*="bg-amber-50"], html[data-theme="dark"] #specializationPage [class*="bg-rose-50"] { background:#203249 !important; border-color:#3a526b !important; }
-    /* معالجة شاملة لألوان Tailwind الفاتحة حتى لا تبقى كتابة فاتحة فوق خلفية فاتحة */
+    
     html[data-theme="dark"] main [class*="bg-"][class*="-50"], html[data-theme="dark"] main [class*="bg-"][class*="-100"], html[data-theme="dark"] #specializationPage [class*="bg-"][class*="-50"], html[data-theme="dark"] #specializationPage [class*="bg-"][class*="-100"] { background-color:#203249 !important; border-color:#405a73 !important; }
     html[data-theme="dark"] main [class*="text-"][class*="-900"], html[data-theme="dark"] main [class*="text-"][class*="-800"], html[data-theme="dark"] main [class*="text-"][class*="-700"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-900"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-800"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-700"] { color:#e3edf8 !important; }
     html[data-theme="dark"] main [class*="text-"][class*="-600"], html[data-theme="dark"] main [class*="text-"][class*="-500"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-600"], html[data-theme="dark"] #specializationPage [class*="text-"][class*="-500"] { color:#b8c9dc !important; }
@@ -814,7 +791,7 @@
     html[data-theme="dark"] .grade-guide .guide-number { color:#7fe0d5 !important; }
     html[data-theme="dark"] .grade-guide a { color:#7fe0d5 !important; }
     html[data-theme="dark"] #detailSkillsTags span { background:#20364b !important; color:#d9efff !important; border-color:#49647d !important; }
-    /* Keep the journey details readable when its content card stays white in dark mode. */
+    
     html[data-theme="dark"] #journeyStageContent { background:#ffffff !important; color:#263445 !important; border-color:#d7e0ea !important; }
     html[data-theme="dark"] #journeyStageContent h3,
     html[data-theme="dark"] #journeyStageContent p,
@@ -825,7 +802,7 @@
     html[data-theme="dark"] #journeyStageContent .text-slate-500 { color:#475569 !important; }
     html[data-theme="dark"] #journeyStageContent > div:last-child { color:#263445 !important; }
     html[data-theme="dark"] #journeyStageContent > div:last-child span { color:#334155 !important; }
-    /* مخرج المرحلة: خلفية بيضاء ونص أسود صريح في الوضع الداكن. */
+    
     html[data-theme="dark"] #journeyStageContent .journey-outcome {
       background:#ffffff !important;
       border-color:#cbd5e1 !important;
@@ -845,8 +822,6 @@
     @media (max-width:760px) { .site-controls { width:100%; justify-content:flex-start; } .control-caption { display:none; } .materials-heading { align-items:flex-start; } }
     @media (prefers-reduced-motion: reduce) { .splash-bolt,.splash-word,.splash-progress span,.splash-mark,.btec-splash:before,.btec-splash:after { animation:none !important; } .btec-splash { transition:none; } .reveal-ready { opacity:1; transform:none; transition:none; } }
 
-
-    /* نظام ألوان متوازن وحيوي مع الحفاظ على ألوان هوية كل تخصص. */
     html:not([data-theme="dark"]) body {
       background:linear-gradient(125deg,#f8fcff 0%,#edf8f4 36%,#f5f0ff 72%,#fff7ed 100%) !important;
       color:#172033 !important;
@@ -856,7 +831,6 @@
       color:#f5f7ff !important;
     }
 
-    /* البطاقات والمناطق ذات الخلفيات الدلالية: درجات لطيفة في الفاتح وعميقة في الداكن. */
     html:not([data-theme="dark"]) main [class*="bg-"]:not(button):not([role="button"]),
     html:not([data-theme="dark"]) #specializationPage [class*="bg-"]:not(button):not([role="button"]):not(#detailHero *),
     html:not([data-theme="dark"]) header [class*="bg-"]:not(button):not([role="button"]),
@@ -876,7 +850,6 @@
       border-color:#465a78 !important;
     }
 
-    /* النصوص الأساسية تقابل الخلفيات، مع إبقاء الأزرار الملونة بنص أبيض. */
     html:not([data-theme="dark"]) main,
     html:not([data-theme="dark"]) #specializationPage,
     html:not([data-theme="dark"]) header { color:#172033 !important; }
@@ -904,7 +877,6 @@
     html[data-theme="dark"] main :is(button,[role="button"])[class*="bg-"],
     html[data-theme="dark"] #specializationPage :is(button,[role="button"])[class*="bg-"] { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
 
-    /* حقول الإدخال واضحة في المظهرين. */
     html:not([data-theme="dark"]) main input,
     html:not([data-theme="dark"]) main textarea,
     html:not([data-theme="dark"]) main select { background:linear-gradient(135deg,#fff,#f3f8fc) !important; color:#172033 !important; -webkit-text-fill-color:#172033 !important; border-color:#cbd8e5 !important; }
@@ -914,7 +886,6 @@
     html[data-theme="dark"] main input::placeholder,
     html[data-theme="dark"] main textarea::placeholder { color:#bdcadd !important; }
 
-    /* بطاقات المحتوى الديناميكي تتبع المظهر الحالي. */
     html:not([data-theme="dark"]) #journeyStageContent,
     html:not([data-theme="dark"]) #projectShowcaseBox { background:linear-gradient(135deg,#ffffff 0%,#edf7f7 58%,#f4efff 100%) !important; color:#172033 !important; border-color:#d5e2ed !important; }
     html:not([data-theme="dark"]) #journeyStageContent *,
@@ -924,13 +895,11 @@
     html[data-theme="dark"] #journeyStageContent *,
     html[data-theme="dark"] #projectShowcaseBox * { color:#f5f7ff !important; -webkit-text-fill-color:#f5f7ff !important; }
 
-    /* مخرج المرحلة يحتفظ بتباين عالٍ في كل وضع. */
     html:not([data-theme="dark"]) #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#ffffff,#f0f7ff) !important; color:#111827 !important; border-color:#cbd8e5 !important; }
     html:not([data-theme="dark"]) #journeyStageContent .journey-outcome * { color:#111827 !important; -webkit-text-fill-color:#111827 !important; }
     html[data-theme="dark"] #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#203249,#292b49) !important; color:#ffffff !important; border-color:#637995 !important; }
     html[data-theme="dark"] #journeyStageContent .journey-outcome * { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
 
-    /* عنوان التخصص يحتفظ بتدرجه الأصلي الخاص بالتخصص؛ النص داخله أبيض دائما. */
     #detailHero,
     #detailHero * { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
     #detailHero { isolation:isolate; }
@@ -947,8 +916,6 @@
     #detailHero #detailIcon { background:rgba(255,255,255,.20) !important; }
     #detailHero #detailBadge { background:rgba(255,255,255,.15) !important; }
 
-
-    /* لمسات مبهجة هادئة: ألوان متنوعة، حدود ناعمة وحركة تفاعلية خفيفة. */
     .theme-toggle, .font-controls button { transition:transform .22s ease, box-shadow .22s ease, background .22s ease; }
     .theme-toggle:hover, .font-controls button:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(47,122,120,.16); }
     main section [class*="rounded-"]:not(button),
@@ -987,8 +954,6 @@
       .theme-toggle, .font-controls button { transition:none !important; }
     }
 
-
-    /* توازن نهائي للتباين: كل سطح يحتفظ بدرجته، والنص يتبع سطوع الخلفية. */
     html:not([data-theme="dark"]) {
       color-scheme: light;
       --surface-main: #ffffff;
@@ -1006,7 +971,6 @@
       --line-main: #465a78;
     }
 
-    /* خلفيات المحتوى العامة متدرجة وهادئة، دون المساس بتدرج عنوان التخصص. */
     html:not([data-theme="dark"]) main .bg-white,
     html:not([data-theme="dark"]) main .bg-slate-50,
     html:not([data-theme="dark"]) #specializationPage .bg-white,
@@ -1024,7 +988,6 @@
       border-color: #465a78 !important;
     }
 
-    /* البطاقات الملونة تبقى مبهجة، مع تعميق ألوانها في الوضع الداكن. */
     html:not([data-theme="dark"]) main [class*="bg-indigo-50"],
     html:not([data-theme="dark"]) #specializationPage [class*="bg-indigo-50"] { background:linear-gradient(135deg,#f2efff,#e8eaff) !important; }
     html:not([data-theme="dark"]) main [class*="bg-teal-50"],
@@ -1046,7 +1009,6 @@
     html[data-theme="dark"] main [class*="bg-rose-50"],
     html[data-theme="dark"] #specializationPage [class*="bg-rose-50"] { background:linear-gradient(135deg,#48283b,#5a3047) !important; }
 
-    /* تباين النصوص على البطاقات الملونة: داكن فوق الفاتح وفاتح فوق الداكن. */
     html:not([data-theme="dark"]) main [class*="bg-indigo-50"] *,
     html:not([data-theme="dark"]) main [class*="bg-teal-50"] *,
     html:not([data-theme="dark"]) main [class*="bg-emerald-50"] *,
@@ -1074,7 +1036,6 @@
       -webkit-text-fill-color:#f8fbff !important;
     }
 
-    /* شريط اسم التخصص يحتفظ بلونه الأصلي، والنصوص داخله بيضاء باستثناء الزر ذي الخلفية البيضاء */
     #detailHero { 
       isolation: isolate; 
     }
@@ -1096,7 +1057,6 @@
     #detailHero #detailIcon { background:rgba(255,255,255,.20) !important; }
     #detailHero #detailBadge { background:rgba(255,255,255,.15) !important; }
 
-    /* تثبيت لون الزر الأبيض ("الاستفسارات عن التخصص") ليكون زر أبيض بالكامل ونصه داكن بدون أي مربع داخلي */
     #detailHero #detailAskAi {
       background: #ffffff !important;
       background-color: #ffffff !important;
@@ -1116,7 +1076,6 @@
       background-color: #f1f5f9 !important;
     }
 
-    /* زر العودة إلى الخريطة: شفافية أنيقة مع نص أبيض ناصع وواضح */
     #detailHero button:last-of-type {
       background: rgba(15, 23, 42, 0.45) !important;
       background-color: rgba(15, 23, 42, 0.45) !important;
@@ -1133,7 +1092,6 @@
       background: rgba(15, 23, 42, 0.65) !important;
     }
 
-    /* مخرجات المرحلة والمثال التطبيقي يلتزمان بتباين واضح في الوضعين. */
     html:not([data-theme="dark"]) #journeyStageContent,
     html:not([data-theme="dark"]) #projectShowcaseBox {
       background:linear-gradient(135deg,#ffffff 0%,#edf9f6 55%,#f4efff 100%) !important;
@@ -1157,7 +1115,6 @@
     html[data-theme="dark"] #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#203249,#292b49) !important; color:#ffffff !important; }
     html[data-theme="dark"] #journeyStageContent .journey-outcome * { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
 
-    /* عناصر الواجهة التفاعلية والروابط والحقول. */
     html:not([data-theme="dark"]) main input,
     html:not([data-theme="dark"]) main textarea,
     html:not([data-theme="dark"]) main select { background:linear-gradient(135deg,#ffffff,#eef6ff) !important; color:#172033 !important; -webkit-text-fill-color:#172033 !important; border-color:#cbd8e5 !important; }
@@ -1175,7 +1132,6 @@
     html[data-theme="dark"] main :is(button,[role="button"])[class*="bg-"],
     html[data-theme="dark"] #specializationPage :is(button,[role="button"])[class*="bg-"] { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
 
-    /* بهجة خفيفة: لمسات لونية وحركة لطيفة دون تشتيت أو مبالغة. */
     .materials-panel, .grade-guide, #projectShowcaseBox, #journeyStageContent,
     #specializationPage aside > div {
       transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
@@ -1199,8 +1155,6 @@
       #specializationPage aside > div, .theme-toggle, .font-controls button { transition:none !important; animation:none !important; }
     }
 
-
-    /* تحسين إضافي شامل للتباين في الوضعين الفاتح والداكن */
     html:not([data-theme="dark"]) .materials-table td { color: #0f172a !important; }
     html:not([data-theme="dark"]) .materials-table th { color: #0f172a !important; }
     html:not([data-theme="dark"]) #detailFacilities span:last-child { color: #0f172a !important; }
@@ -1222,11 +1176,9 @@
     </div>
   </div>
 
-  <!-- ==================== رأس الصفحة (Header) ==================== -->
   <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-teal-900/10 shadow-sm">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
       
-      <!-- هوية المدرسة والشعار -->
       <div class="flex items-center gap-3.5">
         <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-teal-700 via-teal-600 to-indigo-600 p-2.5 shadow-md shadow-teal-900/15 flex items-center justify-center shrink-0">
           <img src="logo.png" alt="شعار مدرسة البلقاء" class="w-full h-full object-contain">
@@ -1263,11 +1215,9 @@
     </div>
   </header>
 
-  <!-- ==================== المحتوى الرئيسي (الخريطة التفاعلية) ==================== -->
   <main class="max-w-[1660px] mx-auto px-3 sm:px-5 lg:px-6 py-4 lg:py-5">
     <div class="main-layout">
 
-      <!-- مساحة الخريطة التفاعلية الكبيرة بملء الشاشة -->
       <section id="mapSection" aria-label="خريطة التخصصات التفاعلية" class="map-panel relative bg-white/85 backdrop-blur-sm rounded-3xl border border-white shadow-xl shadow-teal-950/5 p-2.5 sm:p-4">
         
         <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-2 max-w-[1500px] mx-auto">
@@ -1382,7 +1332,6 @@
                 </filter>
               </defs>
 
-              <!-- هالة المياه المحيطة بالجزيرة -->
               <ellipse cx="620" cy="435" rx="605" ry="370" fill="url(#lagoonWaterGrad)"/>
               <g fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.65">
                 <path d="M 55 430 Q 45 360 72 295"/>
@@ -1393,7 +1342,6 @@
                 <path d="M 895 72 Q 1005 95 1090 155"/>
               </g>
 
-              <!-- عناصر جوية -->
               <g class="cloud-drift" opacity="0.82">
                 <g transform="translate(130, 72)">
                   <ellipse cx="0" cy="0" rx="38" ry="14" fill="#ffffff"/>
@@ -1412,7 +1360,6 @@
                 <path d="M 995 72 Q 1000 66 1005 72 Q 1010 66 1015 72"/>
               </g>
 
-              <!-- قاعدة الجزيرة -->
               <g id="islandBase" filter="url(#islandDropShadow)">
                 <path d="M 42 415 C 32 315, 92 225, 175 162 C 255 102, 355 62, 475 54 C 575 48, 675 48, 775 58 C 895 70, 995 112, 1072 175 C 1148 238, 1205 322, 1196 422 C 1188 518, 1132 595, 1052 652 C 965 715, 855 752, 725 766 C 620 776, 515 774, 412 758 C 288 738, 185 692, 112 622 C 58 568, 48 492, 42 415 Z" fill="url(#islandRockGrad)"/>
                 <path d="M 42 396 C 32 296, 92 206, 175 144 C 255 84, 355 44, 475 36 C 575 30, 675 30, 775 40 C 895 52, 995 94, 1072 156 C 1148 220, 1205 304, 1196 404 C 1188 500, 1132 576, 1052 634 C 965 696, 855 734, 725 748 C 620 758, 515 756, 412 740 C 288 720, 185 674, 112 604 C 58 550, 48 474, 42 396 Z" fill="url(#islandSandGrad)"/>
@@ -1444,7 +1391,6 @@
                 </g>
               </g>
 
-              <!-- شبكة الطرق والممرات -->
               <g id="campusPathways" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path id="windingLoop" d="M 620 248 C 730 245, 830 218, 908 268 C 982 316, 960 412, 886 468 C 812 522, 730 504, 620 526 C 510 548, 412 538, 332 482 C 254 428, 244 326, 324 272 C 404 218, 510 250, 620 248 Z" stroke="#d5c7af" stroke-width="40"/>
                 <path d="M 620 248 C 730 245, 830 218, 908 268 C 982 316, 960 412, 886 468 C 812 522, 730 504, 620 526 C 510 548, 412 538, 332 482 C 254 428, 244 326, 324 272 C 404 218, 510 250, 620 248 Z" stroke="url(#pathGrad)" stroke-width="32"/>
@@ -1465,7 +1411,6 @@
                 <path d="M 620 458 C 652 518, 588 568, 620 628" stroke="#c5b69d" stroke-width="2" stroke-dasharray="7 9"/>
               </g>
 
-              <!-- تفاصيل الحرم المدرسي -->
               <g id="decorativeScenery">
                 <g class="tree-sway" transform="translate(380, 128)">
                   <ellipse cx="0" cy="38" rx="22" ry="9" fill="#14532d" opacity="0.22"/>
@@ -1646,7 +1591,6 @@
                 </g>
               </g>
 
-              <!-- المنصة المركزية -->
               <g id="centralHub" class="animate-center-hub" filter="url(#softShadow)">
                 <path d="M 488 392 L 488 424 A 132 78 0 0 0 752 424 L 752 392 Z" fill="url(#centerSideGrad)"/>
                 <ellipse cx="620" cy="392" rx="132" ry="78" fill="url(#centerBaseGrad)" stroke="#ffffff" stroke-width="4"/>
@@ -1660,7 +1604,6 @@
                 <text x="620" y="420" text-anchor="middle" fill="#2f7a78" font-size="15" font-weight="800">في مدرسة البلقاء</text>
               </g>
 
-              <!-- 1. تكنولوجيا المعلومات -->
               <g id="node-it" class="spec-node animate-float-it" onclick="selectSpecialization('it')" role="button" tabindex="0" aria-label="تخصص تكنولوجيا المعلومات">
                 <ellipse class="hover-glow-ring" cx="620" cy="158" rx="154" ry="92" fill="none" stroke="#818cf8" stroke-width="6" opacity="0.8"/>
                 <ellipse class="hover-glow-ring" cx="620" cy="158" rx="140" ry="82" fill="#6366f1" fill-opacity="0.16"/>
@@ -1692,7 +1635,6 @@
                 </g>
               </g>
 
-              <!-- 2. إدارة الأعمال -->
               <g id="node-business" class="spec-node animate-float-delayed-1" onclick="selectSpecialization('business')" role="button" tabindex="0" aria-label="تخصص إدارة الأعمال">
                 <ellipse class="hover-glow-ring" cx="998" cy="342" rx="126" ry="74" fill="none" stroke="#34d399" stroke-width="5.5"/>
                 <ellipse class="hover-glow-ring" cx="998" cy="342" rx="114" ry="66" fill="#10b981" fill-opacity="0.16"/>
@@ -1719,7 +1661,6 @@
                 </g>
               </g>
 
-              <!-- 3. فن وتصميم -->
               <g id="node-art" class="spec-node animate-float-delayed-2" onclick="selectSpecialization('art')" role="button" tabindex="0" aria-label="تخصص فن وتصميم">
                 <ellipse class="hover-glow-ring" cx="242" cy="342" rx="126" ry="74" fill="none" stroke="#fbbf24" stroke-width="5.5"/>
                 <ellipse class="hover-glow-ring" cx="242" cy="342" rx="114" ry="66" fill="#f59e0b" fill-opacity="0.16"/>
@@ -1748,7 +1689,6 @@
                 </g>
               </g>
 
-              <!-- 4. التجميل -->
               <g id="node-beauty" class="spec-node animate-float-delayed-3" onclick="selectSpecialization('beauty')" role="button" tabindex="0" aria-label="تخصص التجميل">
                 <ellipse class="hover-glow-ring" cx="620" cy="618" rx="128" ry="74" fill="none" stroke="#fb7185" stroke-width="5.5"/>
                 <ellipse class="hover-glow-ring" cx="620" cy="618" rx="116" ry="66" fill="#f43f5e" fill-opacity="0.16"/>
@@ -1782,7 +1722,6 @@
     </div>
   </main>
 
-  <!-- ==================== نافذة الشات الجانبية الاحترافية الواسعة على الخريطة ==================== -->
   <div id="sidebarChatContainer" aria-label="مرشد BTEC">
     <aside aria-label="مرشد BTEC للاستفسارات" class="assistant-panel bg-white flex flex-col h-full overflow-hidden relative">
       <div class="p-4 bg-gradient-to-l from-teal-700 via-teal-600 to-indigo-700 text-white flex items-center justify-between gap-2 shrink-0">
@@ -1882,6 +1821,7 @@
           >
             <span>إرسال</span>
             <svg viewBox="0 0 24 24" class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5">
+              عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها.
               <path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>
           </button>
@@ -1890,7 +1830,6 @@
     </aside>
   </div>
 
-  <!-- أيقونة عائمة لفتح/إغلاق مرشد BTEC من الخريطة (تم تصحيح أيقونة X الزاحفة بدقة) -->
   <button id="chatLauncher" type="button" onclick="toggleAssistantChat()" aria-label="فتح وإغلاق مرشد BTEC" title="افتح مرشد BTEC">
     <svg id="launcherIconSvg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M32 7V14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -1906,10 +1845,8 @@
     </svg>
   </button>
 
-  <!-- ==================== صفحة تفاصيل التخصص (الرحلة المهنية التفاعلية) ==================== -->
   <section id="specializationPage" class="hidden max-w-[1380px] mx-auto px-3 sm:px-5 lg:px-6 py-6 sm:py-10" aria-live="polite">
     
-    <!-- شريط التنقل السريع والعودة -->
     <div class="mb-6 flex flex-col items-center gap-2 text-center">
       <button type="button" onclick="returnToCampus()" aria-label="العودة إلى الخريطة الرئيسية"
         class="group rounded-2xl px-7 py-1.5 text-3xl sm:text-4xl font-black tracking-tight text-slate-900 hover:text-teal-700 hover:scale-105 transition duration-200 focus:outline-none focus:ring-4 focus:ring-teal-100">
@@ -1918,7 +1855,6 @@
       <span class="text-[11px] font-bold tracking-wide text-slate-400">اختر BTEC للعودة إلى الخريطة التفاعلية</span>
     </div>
 
-    <!-- الهيدر البصري للتخصص -->
     <div id="detailHero" class="relative overflow-hidden rounded-[32px] p-6 sm:p-10 text-white shadow-2xl transition-all duration-500">
       <div class="absolute -left-16 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 right-1/4 h-72 w-72 rounded-full bg-black/15 blur-3xl pointer-events-none"></div>
@@ -1978,13 +1914,10 @@
       </section>
     </section>
 
-    <!-- المحتوى التفاعلي المبتكر (3 أبعاد مختلفة لكل تخصص) -->
     <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      <!-- العمود الرئيسي (8 أعمدة): محطات الرحلة المهنية + نموذج المشروع العملي -->
       <div class="lg:col-span-8 space-y-6">
         
-        <!-- 1. محطات رحلة المتعلم التفاعلية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
             <div class="flex items-center gap-3.5">
@@ -1996,14 +1929,11 @@
             </div>
           </div>
 
-          <!-- أزرار المراحل التفاعلية -->
           <div id="journeyTabs" class="grid grid-cols-3 gap-2.5 mb-5"></div>
 
-          <!-- بطاقة عرض المرحلة المختارة -->
           <div id="journeyStageContent" class="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white p-5 sm:p-6 transition-all duration-300"></div>
         </div>
 
-        <!-- 2. مختبر المشاريع الواقعية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5">
           <div class="flex items-center gap-3.5 mb-5">
             <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-2xl shadow-inner"></div>
@@ -2018,10 +1948,8 @@
 
       </div>
 
-      <!-- العمود الجانبي (4 أعمدة): جولة تفاعلية في مرافق المدرسة + المهارات المكتسبة -->
       <aside class="lg:col-span-4 space-y-6">
         
-        <!-- بطاقة استكشاف المرافق التعليمية التفاعلية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-7 shadow-xl shadow-slate-900/5">
           <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-slate-100">
             <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-xl"></div>
@@ -2034,7 +1962,6 @@
           <div id="detailFacilities" class="space-y-3"></div>
         </div>
 
-        <!-- بطاقة أبرز المهارات المهنية -->
         <div class="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 shadow-xl shadow-slate-900/5">
           <h3 class="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
             <span></span>
@@ -2048,7 +1975,6 @@
     </div>
   </section>
 
-  <!-- ==================== المنطق البرمجي وقاعدة المعرفة ==================== -->
   <script>
     const BTEC_DATA = {
       schoolName: "مدرسة البلقاء الثانوية الشاملة",
@@ -2228,7 +2154,6 @@
       },
       beauty: null
     };
-    // Guided Learning Hours are included only where the official Pearson unit title and size can be matched.
     const VERIFIED_UNIT_HOURS = {
       it: {
         level2: [60, 60, 60, 60, 60, 60, 60, 60],
@@ -2410,7 +2335,6 @@
       document.title = `${spec.shortTitle} | برنامج BTEC - مدرسة البلقاء`;
     }
 
-    /* التحكم بفتح وإغلاق نافذة الشات الجانبية مع إزاحة الخريطة بسلاسة */
     function toggleAssistantChat(specificQuestion) {
       const isOpen = sidebarChatContainer.classList.contains("open");
       if (isOpen) {
@@ -2425,7 +2349,6 @@
       sidebarChatContainer.classList.add("open");
       chatLauncherBtn.classList.add("active-launcher");
       
-      // أيقونة إغلاق احترافية وواضحة ضمن الزر العائم
       launcherIconSvg.innerHTML = `
         <path d="M18 18L46 46M46 18L18 46" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
       `;
@@ -2444,7 +2367,6 @@
       sidebarChatContainer.classList.remove("open");
       chatLauncherBtn.classList.remove("active-launcher");
       
-      // استعادة أيقونة المساعد الروبوت الأصلية للزر العائم
       launcherIconSvg.innerHTML = `
         <path d="M32 7V14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
         <circle cx="32" cy="6" r="4" fill="#FDE68A" stroke="currentColor" stroke-width="2"/>
@@ -2490,12 +2412,7 @@
       });
     });
 
-    /**
-     * ============================================================================
-     * 3. طبقة مرشد BTEC المتكاملة ( التوجيه السياقي)
-     * ============================================================================
-     */
-   let lastDiscussedTopic = null;
+    let lastDiscussedTopic = null;
 
     const chatMessagesEl = document.getElementById("chatMessages");
     const chatInputEl = document.getElementById("chatInput");
@@ -2756,7 +2673,7 @@
 
       if (isMaterialsQuestion) {
         if (topic) return getMaterialsReply(topic, q);
-        return `حتى أعرض الوحدات الصحيحة، اذكر اسم التخصص: **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، أو التجميل**. ويمكنك تحديد المستوى الثاني أو الثالث.`;
+        return `عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها. يرجى ذكر اسم التخصص المرتبط بالوحدات (تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، أو التجميل).`;
       }
 
       if ((q.includes("فرق") || q.includes("مقارنه") || q.includes("الاختلاف")) && (q.includes("تكنولوجيا") || q.includes("حاسوب")) && (q.includes("اعمال") || q.includes("اداره"))) {
@@ -2796,7 +2713,13 @@
         return `**برنامج BTEC** هو مسار للتعليم المهني والتقني يعتمد على وحدات دراسية وتطبيقات ومشروعات وتقييمات مرتبطة بالتخصص. يهدف إلى تنمية المعرفة والمهارات العملية، ويدعم مواصلة التعليم أو الانتقال إلى مجالات العمل.\n\nتختلف الوحدات بحسب التخصص والمستوى. يمكنك أن تسألني عن تخصص محدد أو عن مواده الدراسية.`;
       }
 
-      return `أستطيع الإجابة عن المعلومات المدرجة في قاعدة معرفة الموقع حول **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**، مثل الوحدات الدراسية الرسمية للمستويين الثاني والثالث، ومحتوى التخصص والمهارات والمجالات المهنية والمرافق.\n\nإذا كان سؤالك خارج المعلومات المتاحة، اذكر التخصص أو أعد صياغة السؤال حتى أحدد المعلومة المطلوبة بدقة.`;
+      // الفحص الشامل للأسئلة الخارجية والغريبة
+      const allowedKeywords = /(تكنولوجيا|المعلومات|حاسوب|إدارة|الأعمال|إدارة الأعمال|فن وتصميم|تصميم|التجميل|شعر|بشرة|مرافق|مختبر|مشغل|مرسم|وحدات|مواد|مهارات|وظائف|btec|بيتك|مدرسة|البلقاء)/;
+      if (!allowedKeywords.test(q)) {
+        return `عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها. يمكنك سؤالي عن تخصصات برنامج BTEC (تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل) ومرافقها وموادها الدراسية في مدرسة البلقاء الثانوية الشاملة.`;
+      }
+
+      return `عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها. أستطيع الإجابة فقط عن تخصصات ومرافق ووحدات برنامج BTEC في مدرسة البلقاء الثانوية الشاملة.`;
     }
 
     async function sendMessage(userText) {
