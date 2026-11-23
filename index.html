@@ -779,6 +779,25 @@
     html[data-theme="dark"] .chat-msg .bg-white { background:#1e2b40 !important; color:#e5edf7 !important; border-color:#3a4a60 !important; }
     html[data-theme="dark"] .chat-msg [class*="text-slate-"] { color:#e5edf7 !important; }
     html[data-theme="dark"] .font-controls button { background:#26364b; color:#fff; border-color:#455a73; }
+    /* تباين قسم المثال التطبيقي في الوضع الفاتح: النصوص الأساسية سوداء وواضحة. */
+    html:not([data-theme="dark"]) #projectShowcaseBox,
+    html:not([data-theme="dark"]) #projectShowcaseBox h3,
+    html:not([data-theme="dark"]) #projectShowcaseBox p,
+    html:not([data-theme="dark"]) #projectShowcaseBox li > span:last-child,
+    html:not([data-theme="dark"]) #projectShowcaseBox .text-slate-900,
+    html:not([data-theme="dark"]) #projectShowcaseBox .text-slate-800,
+    html:not([data-theme="dark"]) #projectShowcaseBox .text-slate-700,
+    html:not([data-theme="dark"]) #projectShowcaseBox .text-slate-600,
+    html:not([data-theme="dark"]) #projectShowcaseBox .text-slate-500 {
+      color:#000000 !important;
+      -webkit-text-fill-color:#000000 !important;
+      opacity:1 !important;
+    }
+    html:not([data-theme="dark"]) #projectShowcaseBox { background:#f8fafc !important; }
+    html:not([data-theme="dark"]) #projectShowcaseBox li,
+    html:not([data-theme="dark"]) #projectShowcaseBox .shadow-sm { border-color:#cbd5e1 !important; }
+    html:not([data-theme="dark"]) #projectShowcaseBox > div:first-child > span:nth-child(2) { color:#000000 !important; }
+    html:not([data-theme="dark"]) #specializationPage h2 + p { color:#000000 !important; }
     /* تباين إضافي للعناصر ذات الألوان المميزة في الوضع الداكن */
     html[data-theme="dark"] main [class*="bg-indigo-50"], html[data-theme="dark"] main [class*="bg-teal-50"], html[data-theme="dark"] main [class*="bg-emerald-50"], html[data-theme="dark"] main [class*="bg-amber-50"], html[data-theme="dark"] main [class*="bg-rose-50"], html[data-theme="dark"] #specializationPage [class*="bg-indigo-50"], html[data-theme="dark"] #specializationPage [class*="bg-teal-50"], html[data-theme="dark"] #specializationPage [class*="bg-emerald-50"], html[data-theme="dark"] #specializationPage [class*="bg-amber-50"], html[data-theme="dark"] #specializationPage [class*="bg-rose-50"] { background:#203249 !important; border-color:#3a526b !important; }
     /* معالجة شاملة لألوان Tailwind الفاتحة حتى لا تبقى كتابة فاتحة فوق خلفية فاتحة */
@@ -826,6 +845,369 @@
     @media (max-width:760px) { .site-controls { width:100%; justify-content:flex-start; } .control-caption { display:none; } .materials-heading { align-items:flex-start; } }
     @media (prefers-reduced-motion: reduce) { .splash-bolt,.splash-word,.splash-progress span,.splash-mark,.btec-splash:before,.btec-splash:after { animation:none !important; } .btec-splash { transition:none; } .reveal-ready { opacity:1; transform:none; transition:none; } }
 
+
+    /* نظام ألوان متوازن وحيوي مع الحفاظ على ألوان هوية كل تخصص. */
+    html:not([data-theme="dark"]) body {
+      background:linear-gradient(125deg,#f8fcff 0%,#edf8f4 36%,#f5f0ff 72%,#fff7ed 100%) !important;
+      color:#172033 !important;
+    }
+    html[data-theme="dark"] body {
+      background:linear-gradient(125deg,#081321 0%,#101d31 42%,#1c1933 76%,#102b2a 100%) !important;
+      color:#f5f7ff !important;
+    }
+
+    /* البطاقات والمناطق ذات الخلفيات الدلالية: درجات لطيفة في الفاتح وعميقة في الداكن. */
+    html:not([data-theme="dark"]) main [class*="bg-"]:not(button):not([role="button"]),
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-"]:not(button):not([role="button"]):not(#detailHero *),
+    html:not([data-theme="dark"]) header [class*="bg-"]:not(button):not([role="button"]),
+    html:not([data-theme="dark"]) main [style*="background"]:not(#detailHero),
+    html:not([data-theme="dark"]) #specializationPage [style*="background"]:not(#detailHero):not(#detailHero *) {
+      background-color:#f4f8fc !important;
+      background-image:linear-gradient(135deg,#ffffff 0%,#eef7f7 54%,#f3efff 100%) !important;
+      border-color:#d5e2ed !important;
+    }
+    html[data-theme="dark"] main [class*="bg-"]:not(button):not([role="button"]),
+    html[data-theme="dark"] #specializationPage [class*="bg-"]:not(button):not([role="button"]):not(#detailHero *),
+    html[data-theme="dark"] header [class*="bg-"]:not(button):not([role="button"]),
+    html[data-theme="dark"] main [style*="background"]:not(#detailHero),
+    html[data-theme="dark"] #specializationPage [style*="background"]:not(#detailHero):not(#detailHero *) {
+      background-color:#17263b !important;
+      background-image:linear-gradient(135deg,#17263b 0%,#202d49 58%,#292341 100%) !important;
+      border-color:#465a78 !important;
+    }
+
+    /* النصوص الأساسية تقابل الخلفيات، مع إبقاء الأزرار الملونة بنص أبيض. */
+    html:not([data-theme="dark"]) main,
+    html:not([data-theme="dark"]) #specializationPage,
+    html:not([data-theme="dark"]) header { color:#172033 !important; }
+    html:not([data-theme="dark"]) main :not(svg):not(svg *),
+    html:not([data-theme="dark"]) #specializationPage :not(svg):not(svg *),
+    html:not([data-theme="dark"]) header :not(svg):not(svg *) {
+      color:#172033;
+      -webkit-text-fill-color:currentColor;
+    }
+    html[data-theme="dark"] main,
+    html[data-theme="dark"] #specializationPage,
+    html[data-theme="dark"] header { color:#f5f7ff !important; }
+    html[data-theme="dark"] main :not(svg):not(svg *),
+    html[data-theme="dark"] #specializationPage :not(svg):not(svg *),
+    html[data-theme="dark"] header :not(svg):not(svg *) {
+      color:#f5f7ff;
+      -webkit-text-fill-color:currentColor;
+    }
+    html:not([data-theme="dark"]) main a,
+    html:not([data-theme="dark"]) #specializationPage a { color:#075e75 !important; -webkit-text-fill-color:#075e75 !important; }
+    html[data-theme="dark"] main a,
+    html[data-theme="dark"] #specializationPage a { color:#8ee7f0 !important; -webkit-text-fill-color:#8ee7f0 !important; }
+    html:not([data-theme="dark"]) main :is(button,[role="button"])[class*="bg-"],
+    html:not([data-theme="dark"]) #specializationPage :is(button,[role="button"])[class*="bg-"] { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+    html[data-theme="dark"] main :is(button,[role="button"])[class*="bg-"],
+    html[data-theme="dark"] #specializationPage :is(button,[role="button"])[class*="bg-"] { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+
+    /* حقول الإدخال واضحة في المظهرين. */
+    html:not([data-theme="dark"]) main input,
+    html:not([data-theme="dark"]) main textarea,
+    html:not([data-theme="dark"]) main select { background:linear-gradient(135deg,#fff,#f3f8fc) !important; color:#172033 !important; -webkit-text-fill-color:#172033 !important; border-color:#cbd8e5 !important; }
+    html[data-theme="dark"] main input,
+    html[data-theme="dark"] main textarea,
+    html[data-theme="dark"] main select { background:linear-gradient(135deg,#17263b,#202d43) !important; color:#f5f7ff !important; -webkit-text-fill-color:#f5f7ff !important; border-color:#526782 !important; }
+    html[data-theme="dark"] main input::placeholder,
+    html[data-theme="dark"] main textarea::placeholder { color:#bdcadd !important; }
+
+    /* بطاقات المحتوى الديناميكي تتبع المظهر الحالي. */
+    html:not([data-theme="dark"]) #journeyStageContent,
+    html:not([data-theme="dark"]) #projectShowcaseBox { background:linear-gradient(135deg,#ffffff 0%,#edf7f7 58%,#f4efff 100%) !important; color:#172033 !important; border-color:#d5e2ed !important; }
+    html:not([data-theme="dark"]) #journeyStageContent *,
+    html:not([data-theme="dark"]) #projectShowcaseBox * { color:#172033 !important; -webkit-text-fill-color:#172033 !important; }
+    html[data-theme="dark"] #journeyStageContent,
+    html[data-theme="dark"] #projectShowcaseBox { background:linear-gradient(135deg,#17263b 0%,#202d49 60%,#292341 100%) !important; color:#f5f7ff !important; border-color:#465a78 !important; }
+    html[data-theme="dark"] #journeyStageContent *,
+    html[data-theme="dark"] #projectShowcaseBox * { color:#f5f7ff !important; -webkit-text-fill-color:#f5f7ff !important; }
+
+    /* مخرج المرحلة يحتفظ بتباين عالٍ في كل وضع. */
+    html:not([data-theme="dark"]) #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#ffffff,#f0f7ff) !important; color:#111827 !important; border-color:#cbd8e5 !important; }
+    html:not([data-theme="dark"]) #journeyStageContent .journey-outcome * { color:#111827 !important; -webkit-text-fill-color:#111827 !important; }
+    html[data-theme="dark"] #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#203249,#292b49) !important; color:#ffffff !important; border-color:#637995 !important; }
+    html[data-theme="dark"] #journeyStageContent .journey-outcome * { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+
+    /* عنوان التخصص يحتفظ بتدرجه الأصلي الخاص بالتخصص؛ النص داخله أبيض دائما. */
+    #detailHero,
+    #detailHero * { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+    #detailHero { isolation:isolate; }
+    #detailHero > div.absolute:first-child { background:rgba(255,255,255,.10) !important; }
+    #detailHero > div.absolute:nth-child(2) { background:rgba(0,0,0,.15) !important; }
+
+    #detailHero > div.absolute:first-child { background: rgba(255,255,255,0.10) !important; }
+    #detailHero > div.absolute:nth-child(2) { background: rgba(0,0,0,0.18) !important; }
+    #detailHero #detailDescription,
+    #detailHero #detailTitle,
+    #detailHero #detailEnglishTitle {
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+    #detailHero #detailIcon { background:rgba(255,255,255,.20) !important; }
+    #detailHero #detailBadge { background:rgba(255,255,255,.15) !important; }
+
+
+    /* لمسات مبهجة هادئة: ألوان متنوعة، حدود ناعمة وحركة تفاعلية خفيفة. */
+    .theme-toggle, .font-controls button { transition:transform .22s ease, box-shadow .22s ease, background .22s ease; }
+    .theme-toggle:hover, .font-controls button:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(47,122,120,.16); }
+    main section [class*="rounded-"]:not(button),
+    #specializationPage aside > div,
+    #projectShowcaseBox { transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease; }
+    main section [class*="rounded-"]:not(button):hover,
+    #specializationPage aside > div:hover,
+    #projectShowcaseBox:hover { box-shadow:0 12px 28px rgba(72,100,145,.10); }
+    html[data-theme="dark"] .materials-table { border-color:#465a78 !important; }
+    html[data-theme="dark"] .materials-table th { background:linear-gradient(120deg,#203c50,#303052) !important; color:#f5f7ff !important; }
+    html[data-theme="dark"] .materials-table td,
+    html[data-theme="dark"] .materials-table tr:nth-child(even) td { background:#17263b !important; color:#e8eef9 !important; border-color:#3b4e68 !important; }
+    html:not([data-theme="dark"]) .materials-table th { background:linear-gradient(120deg,#dff3ee,#e8eaff) !important; color:#172033 !important; }
+    html:not([data-theme="dark"]) .materials-table td { background:#ffffff !important; color:#263445 !important; }
+    html:not([data-theme="dark"]) .materials-table tr:nth-child(even) td { background:#f2f8fa !important; }
+    html[data-theme="dark"] .materials-note { background:linear-gradient(120deg,#3a3020,#3b2938) !important; color:#ffe7b0 !important; border-color:#d59b36 !important; }
+    html[data-theme="dark"] .materials-source { color:#c3d1e2 !important; }
+    html[data-theme="dark"] .materials-source a { color:#8ee7f0 !important; }
+    html[data-theme="dark"] .hours-chip { background:linear-gradient(120deg,#153b3b,#253657) !important; color:#d6fff5 !important; border-color:#397b77 !important; }
+    html[data-theme="dark"] .font-controls, html[data-theme="dark"] .theme-toggle { background:#17263b !important; border-color:#465a78 !important; color:#f5f7ff !important; }
+    html[data-theme="dark"] .font-controls button { background:#263b55 !important; color:#fff !important; border-color:#526782 !important; }
+    html[data-theme="dark"] .control-caption { color:#d3deed !important; }
+    html[data-theme="dark"] #sidebarChatContainer { background:#111d30 !important; border-color:#3b4e68 !important; }
+    html[data-theme="dark"] #chatMessages { background:#0f1929 !important; }
+    html[data-theme="dark"] #chatInput { background:#17263b !important; color:#f5f7ff !important; border-color:#526782 !important; }
+    html[data-theme="dark"] .chat-msg .bg-white { background:#1e2d43 !important; color:#f5f7ff !important; border-color:#465a78 !important; }
+    html[data-theme="dark"] .chat-msg [class*="text-slate-"] { color:#e8eef9 !important; }
+    html[data-theme="dark"] .grade-guide { background:linear-gradient(135deg,#142f3b,#202443) !important; border-color:#42657a !important; color:#e8eef9 !important; }
+    html[data-theme="dark"] .grade-guide h3, html[data-theme="dark"] .grade-guide h4, html[data-theme="dark"] .grade-guide strong, html[data-theme="dark"] .grade-guide b { color:#ffffff !important; }
+    html[data-theme="dark"] .grade-guide p, html[data-theme="dark"] .grade-guide li { color:#d1deed !important; }
+    html[data-theme="dark"] .grade-guide .guide-card { background:#1d344b !important; border-color:#49647d !important; }
+    html[data-theme="dark"] .grade-guide .guide-number, html[data-theme="dark"] .grade-guide a { color:#8ee7f0 !important; }
+    html[data-theme="dark"] #detailSkillsTags span { background:#20364b !important; color:#e5f5ff !important; border-color:#49647d !important; }
+    @media (prefers-reduced-motion: reduce) {
+      main section [class*="rounded-"]:not(button), #specializationPage aside > div, #projectShowcaseBox,
+      .theme-toggle, .font-controls button { transition:none !important; }
+    }
+
+
+    /* توازن نهائي للتباين: كل سطح يحتفظ بدرجته، والنص يتبع سطوع الخلفية. */
+    html:not([data-theme="dark"]) {
+      color-scheme: light;
+      --surface-main: #ffffff;
+      --surface-soft: #f4f8ff;
+      --ink-main: #172033;
+      --ink-muted: #475569;
+      --line-main: #d7e1ee;
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --surface-main: #17263b;
+      --surface-soft: #202d49;
+      --ink-main: #f5f7ff;
+      --ink-muted: #c4d1e2;
+      --line-main: #465a78;
+    }
+
+    /* خلفيات المحتوى العامة متدرجة وهادئة، دون المساس بتدرج عنوان التخصص. */
+    html:not([data-theme="dark"]) main .bg-white,
+    html:not([data-theme="dark"]) main .bg-slate-50,
+    html:not([data-theme="dark"]) #specializationPage .bg-white,
+    html:not([data-theme="dark"]) #specializationPage .bg-slate-50 {
+      background: linear-gradient(135deg,#ffffff 0%,#f0f9ff 52%,#f5f0ff 100%) !important;
+      color: #172033 !important;
+      border-color: #d8e4ef !important;
+    }
+    html[data-theme="dark"] main .bg-white,
+    html[data-theme="dark"] main .bg-slate-50,
+    html[data-theme="dark"] #specializationPage .bg-white,
+    html[data-theme="dark"] #specializationPage .bg-slate-50 {
+      background: linear-gradient(135deg,#17263b 0%,#202d49 58%,#292341 100%) !important;
+      color: #f5f7ff !important;
+      border-color: #465a78 !important;
+    }
+
+    /* البطاقات الملونة تبقى مبهجة، مع تعميق ألوانها في الوضع الداكن. */
+    html:not([data-theme="dark"]) main [class*="bg-indigo-50"],
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-indigo-50"] { background:linear-gradient(135deg,#f2efff,#e8eaff) !important; }
+    html:not([data-theme="dark"]) main [class*="bg-teal-50"],
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-teal-50"] { background:linear-gradient(135deg,#e8fbf7,#ddf5ef) !important; }
+    html:not([data-theme="dark"]) main [class*="bg-emerald-50"],
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-emerald-50"] { background:linear-gradient(135deg,#e9fbf0,#dcf5e5) !important; }
+    html:not([data-theme="dark"]) main [class*="bg-amber-50"],
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-amber-50"] { background:linear-gradient(135deg,#fff8e8,#fff0d5) !important; }
+    html:not([data-theme="dark"]) main [class*="bg-rose-50"],
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-rose-50"] { background:linear-gradient(135deg,#fff0f4,#ffe4ed) !important; }
+    html[data-theme="dark"] main [class*="bg-indigo-50"],
+    html[data-theme="dark"] #specializationPage [class*="bg-indigo-50"] { background:linear-gradient(135deg,#29264c,#302c59) !important; }
+    html[data-theme="dark"] main [class*="bg-teal-50"],
+    html[data-theme="dark"] #specializationPage [class*="bg-teal-50"] { background:linear-gradient(135deg,#153c3b,#194c4b) !important; }
+    html[data-theme="dark"] main [class*="bg-emerald-50"],
+    html[data-theme="dark"] #specializationPage [class*="bg-emerald-50"] { background:linear-gradient(135deg,#183e35,#205442) !important; }
+    html[data-theme="dark"] main [class*="bg-amber-50"],
+    html[data-theme="dark"] #specializationPage [class*="bg-amber-50"] { background:linear-gradient(135deg,#49371e,#574126) !important; }
+    html[data-theme="dark"] main [class*="bg-rose-50"],
+    html[data-theme="dark"] #specializationPage [class*="bg-rose-50"] { background:linear-gradient(135deg,#48283b,#5a3047) !important; }
+
+    /* تباين النصوص على البطاقات الملونة: داكن فوق الفاتح وفاتح فوق الداكن. */
+    html:not([data-theme="dark"]) main [class*="bg-indigo-50"] *,
+    html:not([data-theme="dark"]) main [class*="bg-teal-50"] *,
+    html:not([data-theme="dark"]) main [class*="bg-emerald-50"] *,
+    html:not([data-theme="dark"]) main [class*="bg-amber-50"] *,
+    html:not([data-theme="dark"]) main [class*="bg-rose-50"] *,
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-indigo-50"] *,
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-teal-50"] *,
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-emerald-50"] *,
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-amber-50"] *,
+    html:not([data-theme="dark"]) #specializationPage [class*="bg-rose-50"] * {
+      color:#182338 !important;
+      -webkit-text-fill-color:#182338 !important;
+    }
+    html[data-theme="dark"] main [class*="bg-indigo-50"] *,
+    html[data-theme="dark"] main [class*="bg-teal-50"] *,
+    html[data-theme="dark"] main [class*="bg-emerald-50"] *,
+    html[data-theme="dark"] main [class*="bg-amber-50"] *,
+    html[data-theme="dark"] main [class*="bg-rose-50"] *,
+    html[data-theme="dark"] #specializationPage [class*="bg-indigo-50"] *,
+    html[data-theme="dark"] #specializationPage [class*="bg-teal-50"] *,
+    html[data-theme="dark"] #specializationPage [class*="bg-emerald-50"] *,
+    html[data-theme="dark"] #specializationPage [class*="bg-amber-50"] *,
+    html[data-theme="dark"] #specializationPage [class*="bg-rose-50"] * {
+      color:#f8fbff !important;
+      -webkit-text-fill-color:#f8fbff !important;
+    }
+
+    /* شريط اسم التخصص يحتفظ بلونه الأصلي، والنصوص داخله بيضاء باستثناء الزر ذي الخلفية البيضاء */
+    #detailHero { 
+      isolation: isolate; 
+    }
+    #detailHero,
+    #detailHero h1,
+    #detailHero p,
+    #detailHero span:not(#detailAskAi span),
+    #detailHero button:last-of-type { 
+      color: #ffffff !important; 
+      -webkit-text-fill-color: #ffffff !important; 
+    }
+    #detailHero > div.absolute:first-child { background: rgba(255,255,255,0.10) !important; }
+    #detailHero > div.absolute:nth-child(2) { background: rgba(0,0,0,0.18) !important; }
+    #detailHero #detailDescription,
+    #detailHero #detailTitle,
+    #detailHero #detailEnglishTitle {
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+    #detailHero #detailIcon { background:rgba(255,255,255,.20) !important; }
+    #detailHero #detailBadge { background:rgba(255,255,255,.15) !important; }
+
+    /* تثبيت لون الزر الأبيض ("الاستفسارات عن التخصص") ليكون زر أبيض بالكامل ونصه داكن بدون أي مربع داخلي */
+    #detailHero #detailAskAi {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      -webkit-text-fill-color: #0f172a !important;
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25) !important;
+    }
+    #detailHero #detailAskAi * {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #0f172a !important;
+      -webkit-text-fill-color: #0f172a !important;
+    }
+    #detailHero #detailAskAi:hover {
+      background: #f1f5f9 !important;
+      background-color: #f1f5f9 !important;
+    }
+
+    /* زر العودة إلى الخريطة: شفافية أنيقة مع نص أبيض ناصع وواضح */
+    #detailHero button:last-of-type {
+      background: rgba(15, 23, 42, 0.45) !important;
+      background-color: rgba(15, 23, 42, 0.45) !important;
+      border: 1px solid rgba(255, 255, 255, 0.35) !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+    }
+    #detailHero button:last-of-type * {
+      background: transparent !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+    }
+    #detailHero button:last-of-type:hover {
+      background: rgba(15, 23, 42, 0.65) !important;
+    }
+
+    /* مخرجات المرحلة والمثال التطبيقي يلتزمان بتباين واضح في الوضعين. */
+    html:not([data-theme="dark"]) #journeyStageContent,
+    html:not([data-theme="dark"]) #projectShowcaseBox {
+      background:linear-gradient(135deg,#ffffff 0%,#edf9f6 55%,#f4efff 100%) !important;
+      color:#111827 !important; border-color:#d5e2ed !important;
+    }
+    html:not([data-theme="dark"]) #journeyStageContent *,
+    html:not([data-theme="dark"]) #projectShowcaseBox * {
+      color:#111827 !important; -webkit-text-fill-color:#111827 !important;
+    }
+    html[data-theme="dark"] #journeyStageContent,
+    html[data-theme="dark"] #projectShowcaseBox {
+      background:linear-gradient(135deg,#17263b 0%,#202d49 58%,#292341 100%) !important;
+      color:#f8fbff !important; border-color:#526783 !important;
+    }
+    html[data-theme="dark"] #journeyStageContent *,
+    html[data-theme="dark"] #projectShowcaseBox * {
+      color:#f8fbff !important; -webkit-text-fill-color:#f8fbff !important;
+    }
+    html:not([data-theme="dark"]) #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#ffffff,#edf5ff) !important; color:#111827 !important; }
+    html:not([data-theme="dark"]) #journeyStageContent .journey-outcome * { color:#111827 !important; -webkit-text-fill-color:#111827 !important; }
+    html[data-theme="dark"] #journeyStageContent .journey-outcome { background:linear-gradient(135deg,#203249,#292b49) !important; color:#ffffff !important; }
+    html[data-theme="dark"] #journeyStageContent .journey-outcome * { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+
+    /* عناصر الواجهة التفاعلية والروابط والحقول. */
+    html:not([data-theme="dark"]) main input,
+    html:not([data-theme="dark"]) main textarea,
+    html:not([data-theme="dark"]) main select { background:linear-gradient(135deg,#ffffff,#eef6ff) !important; color:#172033 !important; -webkit-text-fill-color:#172033 !important; border-color:#cbd8e5 !important; }
+    html[data-theme="dark"] main input,
+    html[data-theme="dark"] main textarea,
+    html[data-theme="dark"] main select { background:linear-gradient(135deg,#17263b,#202d43) !important; color:#f5f7ff !important; -webkit-text-fill-color:#f5f7ff !important; border-color:#526782 !important; }
+    html[data-theme="dark"] main input::placeholder,
+    html[data-theme="dark"] main textarea::placeholder { color:#bdcadd !important; }
+    html:not([data-theme="dark"]) main a,
+    html:not([data-theme="dark"]) #specializationPage a { color:#075e75 !important; -webkit-text-fill-color:#075e75 !important; }
+    html[data-theme="dark"] main a,
+    html[data-theme="dark"] #specializationPage a { color:#8ee7f0 !important; -webkit-text-fill-color:#8ee7f0 !important; }
+    html:not([data-theme="dark"]) main :is(button,[role="button"])[class*="bg-"],
+    html:not([data-theme="dark"]) #specializationPage :is(button,[role="button"])[class*="bg-"] { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+    html[data-theme="dark"] main :is(button,[role="button"])[class*="bg-"],
+    html[data-theme="dark"] #specializationPage :is(button,[role="button"])[class*="bg-"] { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+
+    /* بهجة خفيفة: لمسات لونية وحركة لطيفة دون تشتيت أو مبالغة. */
+    .materials-panel, .grade-guide, #projectShowcaseBox, #journeyStageContent,
+    #specializationPage aside > div {
+      transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .materials-panel:hover, .grade-guide:hover, #projectShowcaseBox:hover,
+    #journeyStageContent:hover, #specializationPage aside > div:hover {
+      transform:translateY(-2px);
+      box-shadow:0 16px 34px rgba(67,92,145,.13);
+    }
+    .materials-heading h2, #specializationPage h2 { text-wrap:balance; }
+    .hours-chip { background:linear-gradient(120deg,#e5faf4,#e9edff,#fff1df) !important; color:#174b52 !important; border-color:#b8dcd5 !important; }
+    html[data-theme="dark"] .hours-chip { background:linear-gradient(120deg,#153b3b,#253657,#45304c) !important; color:#e7fffb !important; border-color:#397b77 !important; }
+    .theme-toggle:hover, .font-controls button:hover { transform:translateY(-2px) scale(1.03); }
+    @keyframes cheerfulGlow {
+      0%,100% { box-shadow:0 10px 28px rgba(47,122,120,.08); }
+      50% { box-shadow:0 14px 34px rgba(91,92,230,.15); }
+    }
+    #projectShowcaseBox { animation:cheerfulGlow 7s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .materials-panel, .grade-guide, #projectShowcaseBox, #journeyStageContent,
+      #specializationPage aside > div, .theme-toggle, .font-controls button { transition:none !important; animation:none !important; }
+    }
+
+
+    /* تحسين إضافي شامل للتباين في الوضعين الفاتح والداكن */
+    html:not([data-theme="dark"]) .materials-table td { color: #0f172a !important; }
+    html:not([data-theme="dark"]) .materials-table th { color: #0f172a !important; }
+    html:not([data-theme="dark"]) #detailFacilities span:last-child { color: #0f172a !important; }
+    html[data-theme="dark"] .materials-table td,
+    html[data-theme="dark"] .materials-table tr:nth-child(even) td { color: #f8fafc !important; }
+    html[data-theme="dark"] .materials-table th { color: #ffffff !important; }
+    html[data-theme="dark"] #detailFacilities span:last-child { color: #f8fafc !important; }
   </style>
 </head>
 <body class="bg-waves text-slate-800 antialiased selection:bg-teal-600 selection:text-white">
@@ -1295,7 +1677,7 @@
                   <rect x="-35" y="-30" width="70" height="38" rx="3.5" fill="#312e81"/>
                   <text x="0" y="-6" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="900" font-family="monospace">&lt;/&gt;</text>
                   <circle cx="-54" cy="-16" r="11" fill="#4f46e5"/>
-                  <text x="-54" y="-12" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">AI</text>
+                  <text x="-54" y="-12" text-anchor="middle" fill="#ffffff" font-size="9.5" font-weight="bold">IT</text>
                   <circle cx="54" cy="-18" r="11" fill="#0ea5e9"/>
                   <text x="54" y="-14" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">01</text>
                 </g>
@@ -1982,7 +2364,7 @@
       projectBox.innerHTML = `
         <div class="flex flex-wrap items-center gap-2 mb-3">
           <span class="rounded-full px-3 py-1 text-xs font-black" style="background:${spec.theme.softBg};color:${spec.theme.badgeText}">تطبيق عملي</span>
-          <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">Project in Action</span>
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">تطبيق عملي</span>
         </div>
         <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white mb-3">${spec.projectShowcase.title}</h3>
         <p class="text-sm text-slate-700 dark:text-slate-200 leading-7 mb-5">${spec.projectShowcase.scenario}</p>
@@ -2343,15 +2725,33 @@
       return answer;
     }
 
+    function generateComprehensiveSpecReply(topic) {
+      const spec = SPECIALIZATION_KNOWLEDGE[topic];
+      const units = BTEC_UNITS[topic];
+      return `**الدليل الشامل لتخصص ${spec.title}:**\n\n` +
+        `📌 **نبذة عن التخصص:**\n${spec.overview}\n\n` +
+        `🎯 **أبرز المجالات والمحتوى:**\n${spec.topics}\n\n` +
+        `💡 **المهارات المكتسبة:**\n${spec.skills}\n\n` +
+        `🏢 **المرافق التعليمية المتوفرة في مدرسة البلقاء:**\n• ${spec.facility}\n\n` +
+        `📚 **الوحدات الدراسية المعتمدة (المستوى الثاني):**\n${formatUnitList(units.level2)}\n\n` +
+        `📖 **الوحدات الدراسية المعتمدة (المستوى الثالث):**\n${formatUnitList(units.level3)}\n\n` +
+        `💼 **المجالات المهنية والمستقبلية:**\n${spec.careers}`;
+    }
+
     function generateKnowledgeGroundedReply(userQuery) {
       const q = normalizeQuestion(userQuery);
       const explicitTopic = detectSpecialization(q);
       if (explicitTopic) lastDiscussedTopic = explicitTopic;
       const topic = explicitTopic || lastDiscussedTopic;
       const isMaterialsQuestion = /(مواد|المواد|وحدات|الوحدات|ماذا يدرس|شو بدرس|شو بيدرس|ماذا يتعلم|المقررات|المحتوى الدراسي)/.test(q);
+      const isComprehensiveRequest = /(تفاصيل|كل التفاصيل|معلومات كامله|شامل|اعرض تفاصيل|كل شي|كل شيء|نبذه شامله)/.test(q);
 
       if (/^(مرحبا|اهلا|السلام عليكم|سلام|هاي|هلا|صباح الخير|مساء الخير|كيفك|كيف حالك)/.test(q) && q.length < 35) {
         return `أهلا بك في **برنامج BTEC** في **مدرسة البلقاء الثانوية الشاملة**.\nالتخصصات المتاحة في الموقع: **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**.\nيمكنك السؤال عن الوحدات الدراسية، محتوى التخصص، المهارات، المجالات المهنية أو المرافق المسجلة.`;
+      }
+
+      if (topic && isComprehensiveRequest) {
+        return generateComprehensiveSpecReply(topic);
       }
 
       if (isMaterialsQuestion) {
@@ -2385,8 +2785,7 @@
       }
 
       if (topic) {
-        const spec = SPECIALIZATION_KNOWLEDGE[topic];
-        return `**${spec.title}:** ${spec.overview}\n\nيمكنني توضيح الوحدات الدراسية أو المهارات أو المجالات المهنية أو المرافق. اكتب سؤالك بشكل محدد.`;
+        return generateComprehensiveSpecReply(topic);
       }
 
       if (/(تخصصات|التخصصات|نبذه|المتاحه|الموجوده|اختار|اختيار)/.test(q)) {
