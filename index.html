@@ -46,6 +46,137 @@
         window.tailwind = { config: config };
       }
     })();
+
+    // BTEC PLAY LAB — CATCH THE GOOD, AVOID THE HARMFUL
+    const CATCH_GOOD = ["💻", "📚", "🔒", "💡", "⭐", "🧠", "🛡️", "🌱"];
+    const CATCH_BAD = ["🦠", "🎣", "🔓", "⚠️", "🗑️"];
+    let catchScore = 0, catchRunning = false, catchBasketX = 50, catchItems = [];
+    let catchSpawnTimer = null, catchFrame = null, catchLastTime = 0, catchPointerDown = false;
+    let catchLastSpawn = 0;
+
+    function startCatchGame(scrollToGame = false) {
+      document.getElementById("activeGameViewport").classList.add("hidden");
+      document.getElementById("catchGamePanel").classList.remove("hidden");
+      document.querySelectorAll(".game-selector-card").forEach(card => {
+        card.className = "game-selector-card group rounded-3xl border-2 border-slate-200 bg-white p-5 text-right shadow-sm transition hover:-translate-y-1 hover:shadow-xl";
+      });
+      const active = document.getElementById("tab-game_catch_items");
+      if (active) active.className = "game-selector-card group rounded-3xl border-2 border-cyan-500 bg-white p-5 text-right shadow-lg transition hover:-translate-y-1 hover:shadow-xl";
+      stopCatchLoop();
+      catchScore = 0; catchBasketX = 50; catchItems = [];
+      updateCatchHud();
+      document.getElementById("catchBasket").style.left = "50%";
+      document.getElementById("catchItemsLayer").replaceChildren();
+      document.getElementById("catchOverlay").classList.remove("hidden");
+      document.getElementById("catchOverlay").innerHTML = `<div class="text-5xl">🎮</div><div class="mt-3 text-2xl font-black">هل أنت مستعد؟</div><p class="mt-2 max-w-md text-sm leading-7 text-slate-100">الأخضر مفيد: 💻 📚 🔒 💡 ⭐ 🧠 🛡️ 🌱. الأحمر ضار: 🦠 🎣 🔓 ⚠️ 🗑️. التقط الأخضر وابتعد عن الأحمر. كل عنصر مفيد = 50 نقطة، والوصول إلى 1000 نقطة يعني الفوز.</p><button type="button" onclick="startCatchLoop()" class="mt-5 rounded-xl bg-white px-7 py-3 font-black text-sky-800 shadow-lg hover:bg-cyan-50">ابدأ اللعب</button>`;
+      document.getElementById("catchStatus").textContent = "اضغط «ابدأ اللعب» للبدء";
+      if (scrollToGame) setTimeout(() => document.getElementById("catchGamePanel").scrollIntoView({behavior:"smooth",block:"start"}), 80);
+    }
+
+    function updateCatchHud() {
+      document.getElementById("catchScore").textContent = catchScore;
+      document.getElementById("catchProgress").style.width = `${Math.min(100, catchScore / 10)}%`;
+    }
+
+    function moveCatchBasket(direction) {
+      if (!catchRunning) return;
+      catchBasketX = Math.max(7, Math.min(93, catchBasketX + direction * 8));
+      document.getElementById("catchBasket").style.left = `${catchBasketX}%`;
+    }
+
+    function setCatchBasketFromPointer(event) {
+      if (!catchRunning) return;
+      const arena = document.getElementById("catchArena");
+      const rect = arena.getBoundingClientRect();
+      catchBasketX = Math.max(7, Math.min(93, ((event.clientX - rect.left) / rect.width) * 100));
+      document.getElementById("catchBasket").style.left = `${catchBasketX}%`;
+    }
+
+    function spawnCatchItem() {
+      const harmful = Math.random() < 0.32;
+      const emoji = harmful ? CATCH_BAD[Math.floor(Math.random() * CATCH_BAD.length)] : CATCH_GOOD[Math.floor(Math.random() * CATCH_GOOD.length)];
+      const el = document.createElement("div");
+      el.className = "absolute flex h-11 w-11 items-center justify-center rounded-2xl border border-white/80 bg-white/90 text-3xl shadow-md";
+      el.textContent = emoji;
+      const x = 5 + Math.random() * 90;
+      el.style.left = `${x}%`; el.style.top = "-52px";
+      document.getElementById("catchItemsLayer").appendChild(el);
+      catchItems.push({el, x, y:-52, harmful, speed: 105 + Math.random() * 65});
+    }
+
+    function stopCatchLoop() {
+      catchRunning = false;
+      if (catchFrame) cancelAnimationFrame(catchFrame);
+      catchFrame = null;
+      if (catchSpawnTimer) clearInterval(catchSpawnTimer);
+      catchSpawnTimer = null;
+    }
+
+    function startCatchLoop() {
+      stopCatchLoop();
+      catchRunning = true;
+      catchLastTime = 0; catchLastSpawn = 0;
+      document.getElementById("catchOverlay").classList.add("hidden");
+      document.getElementById("catchStatus").textContent = "اللعب مستمر… انتبه للعناصر الضارة!";
+      catchFrame = requestAnimationFrame(catchGameFrame);
+    }
+
+    function catchGameFrame(timestamp) {
+      if (!catchRunning) return;
+      const delta = catchLastTime ? Math.min((timestamp - catchLastTime) / 1000, 0.04) : 0;
+      catchLastTime = timestamp;
+      catchLastSpawn += delta;
+      if (catchLastSpawn > 0.82) { spawnCatchItem(); catchLastSpawn = 0; }
+      const arena = document.getElementById("catchArena");
+      const basket = document.getElementById("catchBasket");
+      const arenaHeight = arena.clientHeight;
+      const basketCenter = (catchBasketX / 100) * arena.clientWidth;
+      const basketRect = {left: basketCenter - basket.offsetWidth / 2, top: arenaHeight - 65, right: basketCenter + basket.offsetWidth / 2, bottom: arenaHeight - 8};
+      for (let i = catchItems.length - 1; i >= 0; i--) {
+        const item = catchItems[i];
+        item.y += item.speed * delta;
+        item.el.style.top = `${item.y}px`;
+        const itemLeft = (item.x / 100) * arena.clientWidth;
+        const itemBottom = item.y + 42;
+        const overlaps = itemBottom >= basketRect.top && item.y <= basketRect.bottom &&
+          itemLeft + 40 >= basketRect.left && itemLeft <= basketRect.right;
+        if (overlaps) {
+          if (item.harmful) { endCatchGame(false); return; }
+          catchScore += 50; updateCatchHud();
+          item.el.remove(); catchItems.splice(i, 1);
+          if (catchScore >= 1000) { catchScore = 1000; updateCatchHud(); endCatchGame(true); return; }
+        } else if (item.y > arenaHeight + 10) {
+          item.el.remove(); catchItems.splice(i, 1);
+        }
+      }
+      catchFrame = requestAnimationFrame(catchGameFrame);
+    }
+
+    function endCatchGame(won) {
+      stopCatchLoop();
+      const overlay = document.getElementById("catchOverlay");
+      overlay.classList.remove("hidden");
+      overlay.innerHTML = won
+        ? `<div class="text-6xl">🏆</div><div class="mt-3 text-3xl font-black">أحسنت! لقد فزت!</div><p class="mt-2 text-sm leading-7 text-white">وصلت إلى 1000 نقطة وجمعت العناصر المفيدة دون لمس العناصر الضارة.</p><button type="button" onclick="startCatchGame(false)" class="mt-5 rounded-xl bg-white px-7 py-3 font-black text-emerald-800">العب مرة أخرى</button>`
+        : `<div class="text-6xl">⚠️</div><div class="mt-3 text-2xl font-black">انتهت الجولة!</div><p class="mt-2 text-sm leading-7 text-white">تم لمس عنصر ضار. نتيجتك ${catchScore} نقطة. حاول مرة أخرى وراقب العناصر جيدا.</p><button type="button" onclick="startCatchGame(false)" class="mt-5 rounded-xl bg-white px-7 py-3 font-black text-sky-800">حاول من جديد</button>`;
+      document.getElementById("catchStatus").textContent = won ? "فوز! تم الوصول إلى 1000 نقطة 🎉" : "انتهت الجولة بسبب لمس عنصر ضار";
+    }
+
+    function resetCatchGame() { startCatchGame(false); }
+
+    document.addEventListener("keydown", event => {
+      if (!catchRunning) return;
+      if (event.key === "ArrowLeft") { event.preventDefault(); moveCatchBasket(-1); }
+      if (event.key === "ArrowRight") { event.preventDefault(); moveCatchBasket(1); }
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+      const arena = document.getElementById("catchArena");
+      if (!arena) return;
+      arena.addEventListener("pointerdown", event => { catchPointerDown = true; setCatchBasketFromPointer(event); });
+      arena.addEventListener("pointermove", event => { if (catchPointerDown) setCatchBasketFromPointer(event); });
+      window.addEventListener("pointerup", () => { catchPointerDown = false; });
+    });
+
   </script>
 
   <style>
@@ -210,6 +341,16 @@
     #node-beauty:hover,
     #node-beauty.active-node {
       filter: drop-shadow(0 18px 26px rgba(225, 29, 72, 0.45)) drop-shadow(0 0 18px rgba(251, 113, 133, 0.55));
+    }
+
+    #node-game:hover,
+    #node-game.active-node {
+      filter: drop-shadow(0 18px 26px rgba(147, 51, 234, 0.45)) drop-shadow(0 0 18px rgba(192, 132, 252, 0.55));
+    }
+
+    #node-library:hover,
+    #node-library.active-node {
+      filter: drop-shadow(0 18px 26px rgba(2, 132, 199, 0.45)) drop-shadow(0 0 18px rgba(56, 189, 248, 0.55));
     }
 
     .spec-node.active-node {
@@ -1162,6 +1303,304 @@
     html[data-theme="dark"] .materials-table tr:nth-child(even) td { color: #f8fafc !important; }
     html[data-theme="dark"] .materials-table th { color: #ffffff !important; }
     html[data-theme="dark"] #detailFacilities span:last-child { color: #f8fafc !important; }
+  
+
+    /* High-contrast accessibility pass — light and dark themes */
+    html:not([data-theme="dark"]) {
+      --contrast-heading: #14243a;
+      --contrast-body: #26384d;
+      --contrast-muted: #42566d;
+      --contrast-border: #b9c9d8;
+      --contrast-surface: #ffffff;
+    }
+    html[data-theme="dark"] {
+      --contrast-heading: #f7f9ff;
+      --contrast-body: #e4ebf5;
+      --contrast-muted: #c3d0e0;
+      --contrast-border: #536780;
+      --contrast-surface: #17263b;
+    }
+
+    html:not([data-theme="dark"]) main,
+    html:not([data-theme="dark"]) #specializationPage,
+    html:not([data-theme="dark"]) header {
+      color: var(--contrast-body) !important;
+    }
+    html:not([data-theme="dark"]) main h1:not(#detailTitle),
+    html:not([data-theme="dark"]) main h2,
+    html:not([data-theme="dark"]) main h3,
+    html:not([data-theme="dark"]) #specializationPage h1:not(#detailTitle),
+    html:not([data-theme="dark"]) #specializationPage h2,
+    html:not([data-theme="dark"]) #specializationPage h3 {
+      color: var(--contrast-heading) !important;
+      -webkit-text-fill-color: var(--contrast-heading) !important;
+    }
+    html:not([data-theme="dark"]) main p,
+    html:not([data-theme="dark"]) main li,
+    html:not([data-theme="dark"]) main label,
+    html:not([data-theme="dark"]) #specializationPage p,
+    html:not([data-theme="dark"]) #specializationPage li,
+    html:not([data-theme="dark"]) #specializationPage label {
+      color: var(--contrast-body) !important;
+      -webkit-text-fill-color: var(--contrast-body) !important;
+    }
+    html:not([data-theme="dark"]) main .text-slate-500,
+    html:not([data-theme="dark"]) main .text-slate-600,
+    html:not([data-theme="dark"]) #specializationPage .text-slate-500,
+    html:not([data-theme="dark"]) #specializationPage .text-slate-600 {
+      color: var(--contrast-muted) !important;
+      -webkit-text-fill-color: var(--contrast-muted) !important;
+    }
+
+    html[data-theme="dark"] main h1:not(#detailTitle),
+    html[data-theme="dark"] main h2,
+    html[data-theme="dark"] main h3,
+    html[data-theme="dark"] #specializationPage h1:not(#detailTitle),
+    html[data-theme="dark"] #specializationPage h2,
+    html[data-theme="dark"] #specializationPage h3 {
+      color: var(--contrast-heading) !important;
+      -webkit-text-fill-color: var(--contrast-heading) !important;
+    }
+    html[data-theme="dark"] main p,
+    html[data-theme="dark"] main li,
+    html[data-theme="dark"] main label,
+    html[data-theme="dark"] #specializationPage p,
+    html[data-theme="dark"] #specializationPage li,
+    html[data-theme="dark"] #specializationPage label {
+      color: var(--contrast-body) !important;
+      -webkit-text-fill-color: var(--contrast-body) !important;
+    }
+    html[data-theme="dark"] main .text-slate-500,
+    html[data-theme="dark"] main .text-slate-600,
+    html[data-theme="dark"] #specializationPage .text-slate-500,
+    html[data-theme="dark"] #specializationPage .text-slate-600 {
+      color: var(--contrast-muted) !important;
+      -webkit-text-fill-color: var(--contrast-muted) !important;
+    }
+
+    /* The specialization's large Arabic title stays light in BOTH themes. */
+    #detailHero #detailTitle,
+    html:not([data-theme="dark"]) #detailHero #detailTitle,
+    html[data-theme="dark"] #detailHero #detailTitle {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      text-shadow: 0 2px 5px rgba(0,0,0,.48) !important;
+      opacity: 1 !important;
+    }
+    #detailHero #detailEnglishTitle,
+    #detailHero #detailDescription,
+    #detailHero #detailBadge {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+    }
+
+    /* Clearer borders and readable controls in both modes. */
+    html:not([data-theme="dark"]) main [class*="border-"],
+    html:not([data-theme="dark"]) #specializationPage [class*="border-"] {
+      border-color: var(--contrast-border);
+    }
+    html[data-theme="dark"] main [class*="border-"],
+    html[data-theme="dark"] #specializationPage [class*="border-"] {
+      border-color: var(--contrast-border);
+    }
+    html:not([data-theme="dark"]) main input,
+    html:not([data-theme="dark"]) main textarea,
+    html:not([data-theme="dark"]) main select {
+      color: #14243a !important;
+      -webkit-text-fill-color: #14243a !important;
+      border-color: #8da3b8 !important;
+    }
+    html[data-theme="dark"] main input,
+    html[data-theme="dark"] main textarea,
+    html[data-theme="dark"] main select {
+      color: #f7f9ff !important;
+      -webkit-text-fill-color: #f7f9ff !important;
+      border-color: #7187a1 !important;
+    }
+    html:not([data-theme="dark"]) main input::placeholder,
+    html:not([data-theme="dark"]) main textarea::placeholder {
+      color: #53677d !important;
+      opacity: 1 !important;
+    }
+    html[data-theme="dark"] main input::placeholder,
+    html[data-theme="dark"] main textarea::placeholder {
+      color: #c3d0e0 !important;
+      opacity: 1 !important;
+    }
+    html:not([data-theme="dark"]) main a,
+    html:not([data-theme="dark"]) #specializationPage a {
+      color: #07566b !important;
+      -webkit-text-fill-color: #07566b !important;
+    }
+    html[data-theme="dark"] main a,
+    html[data-theme="dark"] #specializationPage a {
+      color: #9cecf2 !important;
+      -webkit-text-fill-color: #9cecf2 !important;
+    }
+
+  
+
+    /* Dark-mode header contrast: BTEC pill + rounded logo tile */
+    html[data-theme="dark"] #headerBtecBadge {
+      background: linear-gradient(135deg, #344b78 0%, #394078 100%) !important;
+      background-color: #344b78 !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      border: 1px solid #a9c4f4 !important;
+      box-shadow: 0 0 0 1px rgba(169,196,244,.12), 0 3px 10px rgba(0,0,0,.28) !important;
+    }
+    html[data-theme="dark"] #headerBtecBadge:hover {
+      background: #526da8 !important;
+      border-color: #d2e2ff !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+    }
+    html[data-theme="dark"] #headerLogoTile {
+      background: linear-gradient(135deg, #087f83 0%, #176d91 48%, #5146a8 100%) !important;
+      border: 1px solid #80d9df !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,.38), 0 0 0 2px rgba(128,217,223,.12) !important;
+    }
+    html[data-theme="dark"] #headerLogoTile img {
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.35));
+    }
+
+  
+
+    /* PDF Library — readable in both themes */
+    #librarySection .library-intro {
+      background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 58%, #f5f3ff 100%);
+      border-color: #b8c9dc;
+      color: #172b45;
+    }
+    #librarySection .library-kicker {
+      background: #dbeafe;
+      color: #123e72;
+      border: 1px solid #9bbce8;
+    }
+    #librarySection .library-count {
+      background: #e0f2fe;
+      color: #123e72;
+      border: 1px solid #9bc9e6;
+      min-width: 112px;
+    }
+    #librarySection .library-search {
+      background: #ffffff;
+      color: #172b45;
+      border-color: #9aafc5;
+    }
+    #librarySection .library-search::placeholder { color: #53677d; opacity: 1; }
+    #librarySection .library-specialty {
+      background: #ffffff;
+      border: 1px solid #b9c9d8;
+      box-shadow: 0 8px 24px rgba(15, 35, 60, .06);
+    }
+    #librarySection .library-specialty-title { color: #172b45; }
+    #librarySection .library-book-card {
+      background: #f8fafc;
+      border: 1px solid #c5d2df;
+      color: #1e3047;
+    }
+    #librarySection .library-book-title { color: #172b45; }
+    #librarySection .library-book-meta { color: #42566d; }
+    #librarySection .library-open {
+      background: #075985;
+      color: #ffffff;
+      border: 1px solid #075985;
+    }
+    #librarySection .library-download {
+      background: #ffffff;
+      color: #075985;
+      border: 1px solid #7ba8c8;
+    }
+    #librarySection .library-help {
+      background: #eff6ff;
+      color: #23415f;
+      border-color: #b6cce3;
+    }
+    html[data-theme="dark"] #librarySection .library-intro {
+      background: linear-gradient(135deg, #172b46 0%, #202b4a 58%, #30264d 100%) !important;
+      border-color: #647d9d !important;
+      color: #f4f7ff !important;
+    }
+    html[data-theme="dark"] #librarySection .library-intro h2,
+    html[data-theme="dark"] #librarySection .library-intro p,
+    html[data-theme="dark"] #librarySection .library-intro label {
+      color: #f4f7ff !important;
+      -webkit-text-fill-color: #f4f7ff !important;
+    }
+    html[data-theme="dark"] #librarySection .library-kicker {
+      background: #263f68 !important;
+      color: #eaf2ff !important;
+      border-color: #8daed8 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-count {
+      background: #263f68 !important;
+      color: #ffffff !important;
+      border-color: #8daed8 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-search {
+      background: #111d30 !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      border-color: #8299b6 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-search::placeholder {
+      color: #c3d0e0 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-specialty {
+      background: #17263b !important;
+      border-color: #536b89 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-specialty-title,
+    html[data-theme="dark"] #librarySection .library-book-title {
+      color: #f7f9ff !important;
+      -webkit-text-fill-color: #f7f9ff !important;
+    }
+    html[data-theme="dark"] #librarySection .library-book-card {
+      background: #202f46 !important;
+      border-color: #607995 !important;
+      color: #eaf0fa !important;
+    }
+    html[data-theme="dark"] #librarySection .library-book-meta {
+      color: #c7d5e7 !important;
+      -webkit-text-fill-color: #c7d5e7 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-open {
+      background: #087f9b !important;
+      color: #ffffff !important;
+      border-color: #63c6dc !important;
+    }
+    html[data-theme="dark"] #librarySection .library-download {
+      background: #263f5e !important;
+      color: #ffffff !important;
+      border-color: #91b4d9 !important;
+    }
+    html[data-theme="dark"] #librarySection .library-help {
+      background: #1b304a !important;
+      color: #e6effb !important;
+      border-color: #617b9b !important;
+    }
+
+  
+    /* Compact library search-only header */
+    #librarySection .library-search-panel {
+      background: #ffffff;
+      border-color: #9aafc5;
+      color: #172b45;
+    }
+    #librarySection .library-search-panel label {
+      color: #172b45;
+    }
+    html[data-theme="dark"] #librarySection .library-search-panel {
+      background: #17263b !important;
+      border-color: #647d9d !important;
+      color: #f4f7ff !important;
+    }
+    html[data-theme="dark"] #librarySection .library-search-panel label {
+      color: #f4f7ff !important;
+      -webkit-text-fill-color: #f4f7ff !important;
+    }
+
   </style>
 </head>
 <body class="bg-waves text-slate-800 antialiased selection:bg-teal-600 selection:text-white">
@@ -1180,7 +1619,7 @@
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
       
       <div class="flex items-center gap-3.5">
-        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-teal-700 via-teal-600 to-indigo-600 p-2.5 shadow-md shadow-teal-900/15 flex items-center justify-center shrink-0">
+        <div id="headerLogoTile" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-teal-700 via-teal-600 to-indigo-600 p-2.5 shadow-md shadow-teal-900/15 flex items-center justify-center shrink-0">
           <img src="logo.png" alt="شعار مدرسة البلقاء" class="w-full h-full object-contain">
         </div>
 
@@ -1190,7 +1629,7 @@
               مدرسة البلقاء الثانوية الشاملة
             </h1>
             <button type="button" onclick="returnToCampus()" title="العودة إلى الخريطة التفاعلية" aria-label="العودة إلى الخريطة التفاعلية عبر BTEC"
-              class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition cursor-pointer">
+              id="headerBtecBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition cursor-pointer">
               برنامج BTEC
             </button>
           </div>
@@ -1591,17 +2030,46 @@
                 </g>
               </g>
 
-              <g id="centralHub" class="animate-center-hub" filter="url(#softShadow)">
+              <path d="M 242 400 C 235 455, 248 490, 242 525" fill="none" stroke="#d5c7af" stroke-width="26" stroke-linecap="round"/>
+              <path d="M 242 400 C 235 455, 248 490, 242 525" fill="none" stroke="url(#pathGrad)" stroke-width="20" stroke-linecap="round"/>
+              <path d="M 242 400 C 235 455, 248 490, 242 525" fill="none" stroke="#c5b69d" stroke-width="1.8" stroke-dasharray="6 8" stroke-linecap="round"/>
+
+              <g id="node-game" class="spec-node animate-float-delayed-2" onclick="selectSpecialization('game')" role="button" tabindex="0" aria-label="منطقة اللعب">
+                <ellipse class="hover-glow-ring" cx="242" cy="555" rx="118" ry="68" fill="none" stroke="#c084fc" stroke-width="5.5" opacity="0.8"/>
+                <ellipse class="hover-glow-ring" cx="242" cy="555" rx="106" ry="60" fill="#9333ea" fill-opacity="0.16"/>
+                <ellipse cx="242" cy="575" rx="98" ry="54" fill="#581c87" opacity="0.22"/>
+                <path d="M 144 553 L 144 577 A 98 54 0 0 0 340 577 L 340 553 Z" fill="#6b21a8"/>
+                <ellipse cx="242" cy="553" rx="98" ry="54" fill="url(#itTopGrad)" stroke="#d8b4fe" stroke-width="3"/>
+                <g transform="translate(242, 523)">
+                  <rect x="-26" y="-14" width="52" height="28" rx="8" fill="#581c87" stroke="#e9d5ff" stroke-width="2"/>
+                  <circle cx="-11" cy="0" r="3.5" fill="#facc15"/>
+                  <circle cx="11" cy="0" r="3.5" fill="#38bdf8"/>
+                  <path d="M -2 -5 L -2 5 M -7 0 L 3 0" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                </g>
+                <g transform="translate(242, 567)">
+                  <rect x="-64" y="-13" width="128" height="26" rx="13" fill="#581c87"/>
+                  <text x="0" y="4.5" text-anchor="middle" fill="#ffffff" font-size="13.5" font-weight="800">منطقة اللعب</text>
+                </g>
+                <g class="spec-tooltip" transform="translate(242, 469)">
+                  <rect x="-68" y="-14" width="136" height="24" rx="12" fill="#0f172a"/>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">اضغط للتوجه لمنطقة اللعب</text>
+                </g>
+              </g>
+
+              <g id="node-library" class="spec-node animate-center-hub" onclick="selectSpecialization('library')" role="button" tabindex="0" aria-label="مكتبة المواد" filter="url(#softShadow)">
+                <ellipse class="hover-glow-ring" cx="620" cy="392" rx="142" ry="86" fill="none" stroke="#0ea5e9" stroke-width="5" opacity="0.8"/>
                 <path d="M 488 392 L 488 424 A 132 78 0 0 0 752 424 L 752 392 Z" fill="url(#centerSideGrad)"/>
                 <ellipse cx="620" cy="392" rx="132" ry="78" fill="url(#centerBaseGrad)" stroke="#ffffff" stroke-width="4"/>
-                <ellipse cx="620" cy="392" rx="114" ry="66" fill="none" stroke="#2f7a78" stroke-width="2.2" stroke-opacity="0.28"/>
-                <g transform="translate(620, 358)">
-                  <path d="M -2 0 C -16 -19, -32 -14, -30 2 C -16 7, -5 5, -2 0 Z" fill="#2f7a78"/>
-                  <path d="M 2 0 C 16 -19, 32 -14, 30 2 C 16 7, 5 5, 2 0 Z" fill="#5b5ce6"/>
-                  <circle cx="0" cy="-14" r="5" fill="#f59e0b"/>
+                <ellipse cx="620" cy="392" rx="114" ry="66" fill="none" stroke="#0ea5e9" stroke-width="2.2" stroke-opacity="0.28"/>
+                <g transform="translate(620, 355)">
+                  <rect x="-18" y="-12" width="36" height="24" rx="4" fill="#0284c7" stroke="#bae6fd" stroke-width="1.5"/>
+                  <path d="M -18 -6 L 0 -12 L 18 -6" fill="none" stroke="#ffffff" stroke-width="1.5"/>
                 </g>
-                <text x="620" y="394" text-anchor="middle" fill="#1e293b" font-size="29" font-weight="900">BTEC</text>
-                <text x="620" y="420" text-anchor="middle" fill="#2f7a78" font-size="15" font-weight="800">في مدرسة البلقاء</text>
+                <text x="620" y="404" text-anchor="middle" fill="#1e293b" font-size="25" font-weight="900">مكتبة المواد</text>
+                <g class="spec-tooltip" transform="translate(620, 300)">
+                  <rect x="-70" y="-14" width="140" height="24" rx="12" fill="#0f172a"/>
+                  <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">استعرض مكتبة المواد</text>
+                </g>
               </g>
 
               <g id="node-it" class="spec-node animate-float-it" onclick="selectSpecialization('it')" role="button" tabindex="0" aria-label="تخصص تكنولوجيا المعلومات">
@@ -1787,7 +2255,7 @@
             <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
               أهلا وسهلا في <strong>التعرف على التخصصات المتوفرة ببرنامج BTEC</strong> بمدرسة البلقاء الثانوية الشاملة! 
               <br/>
-              يمكنني تقديم معلومات عن برنامج BTEC والتخصصات الأربعة المتوفرة (<strong>تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل</strong>) ومرافقها التعليمية. ما الاستفسار الذي يمكنني المساعدة فيه؟
+              يمكنني الإجابة عن الاستفسارات المتعلقة بالتخصصات الأربعة، وكذلك الاستفسارات عن منطقة اللعب ومكتبة المواد والخريطة التفاعلية. اختر القسم الذي تريد الاستفسار عنه أو اكتب سؤالك مباشرة.
             </p>
           </div>
         </div>
@@ -1821,7 +2289,7 @@
           >
             <span>إرسال</span>
             <svg viewBox="0 0 24 24" class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5">
-              عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها.
+              عذرا، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها.
               <path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>
           </button>
@@ -1881,13 +2349,170 @@
       <p id="detailDescription" class="relative z-10 mt-6 max-w-4xl text-sm sm:text-base leading-relaxed text-white/95 font-medium"></p>
     </div>
 
+
+    <section id="librarySection" class="hidden mt-6 space-y-6" aria-label="مكتبة المواد">
+      <div class="library-search-panel rounded-2xl border p-4 sm:p-5">
+        <label for="librarySearch" class="block text-sm font-extrabold mb-2">البحث عن كتاب</label>
+        <input id="librarySearch" type="search" placeholder="مثال: تكنولوجيا المعلومات عاشر فصل أول"
+          class="library-search w-full rounded-2xl border px-4 py-3 text-sm font-semibold outline-none transition"
+          oninput="filterLibraryBooks(this.value)">
+      </div>
+      <div id="libraryBooksGrid" class="space-y-6"></div>
+    </section>
+
+    <div id="gamesHubSection" class="hidden mt-6 space-y-6">
+      <section class="relative overflow-hidden rounded-[28px] border border-violet-200 bg-gradient-to-br from-[#171b3b] via-[#29366d] to-[#553b82] p-6 sm:p-8 text-white shadow-2xl">
+        <div class="absolute -left-12 -top-16 h-56 w-56 rounded-full bg-fuchsia-400/15 blur-3xl"></div>
+        <div class="absolute -right-10 -bottom-20 h-64 w-64 rounded-full bg-cyan-300/15 blur-3xl"></div>
+        <div class="relative flex flex-wrap items-end justify-between gap-5">
+          <div class="max-w-2xl">
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-black tracking-wide">🎮 BTEC PLAY LAB · مختبر التجربة</span>
+            <h2 class="mt-4 text-2xl sm:text-4xl font-black leading-tight">اللعب هون إله معنى! <span class="text-cyan-200">اختبر مهاراتك</span></h2>
+            <p class="mt-3 max-w-xl text-sm leading-7 text-indigo-100">خمس تجارب تفاعلية، أسئلة أكثر، وقرارات بتتيح لك تجربة التخصص بدل الاكتفاء بقراءة وصفه. اختر لعبة وابدأ التحدي.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            
+            <div class="min-w-[150px] rounded-2xl border border-white/20 bg-white/10 px-5 py-4 backdrop-blur">
+              <div class="text-xs font-bold text-indigo-100">مجموع نقاطك</div>
+              <div id="hubTotalScore" class="mt-1 text-3xl font-black tabular-nums">0</div>
+              <div class="text-[11px] text-indigo-100">نقطة إنجاز 🏆</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="gamesSelectorGrid">
+        <button type="button" onclick="switchActiveGame('it_defender',true)" id="tab-game-it_defender" class="game-selector-card group rounded-3xl border-2 border-indigo-500 bg-white p-5 text-right shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
+          <div class="flex items-center justify-between"><span class="text-3xl">🛡️</span><span class="rounded-full bg-indigo-50 px-3 py-1 text-[10px] font-black text-indigo-700">تقنية المعلومات</span></div>
+          <h3 class="mt-4 text-lg font-black text-slate-900">مهمة الأمن السيبراني</h3>
+          <p class="mt-2 text-xs leading-6 text-slate-600">حلل بلاغات رقمية واكتشف التهديد والتصرف الأمني الصحيح.</p>
+          <div class="mt-4 text-xs font-black text-indigo-700">ابدأ التحقيق ←</div>
+        </button>
+        <button type="button" onclick="switchActiveGame('biz_tycoon',true)" id="tab-game-biz_tycoon" class="game-selector-card group rounded-3xl border-2 border-slate-200 bg-white p-5 text-right shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <div class="flex items-center justify-between"><span class="text-3xl">🚀</span><span class="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black text-emerald-700">إدارة الأعمال</span></div>
+          <h3 class="mt-4 text-lg font-black text-slate-900">قرارك يصنع المشروع</h3>
+          <p class="mt-2 text-xs leading-6 text-slate-600">وازن بين الميزانية والجودة ورضا العملاء في مشروع ناشئ.</p>
+          <div class="mt-4 text-xs font-black text-emerald-700">ابدأ الإدارة ←</div>
+        </button>
+        <button type="button" onclick="switchActiveGame('art_studio',true)" id="tab-game-art_studio" class="game-selector-card group rounded-3xl border-2 border-slate-200 bg-white p-5 text-right shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <div class="flex items-center justify-between"><span class="text-3xl">🎨</span><span class="rounded-full bg-amber-50 px-3 py-1 text-[10px] font-black text-amber-700">فن وتصميم</span></div>
+          <h3 class="mt-4 text-lg font-black text-slate-900">استوديو التصميم</h3>
+          <p class="mt-2 text-xs leading-6 text-slate-600">اختر التكوين والألوان والخطوط المناسبة لهوية بصرية ناجحة.</p>
+          <div class="mt-4 text-xs font-black text-amber-700">ابدأ التصميم ←</div>
+        </button>
+        <button type="button" onclick="switchActiveGame('beauty_spa',true)" id="tab-game-beauty_spa" class="game-selector-card group rounded-3xl border-2 border-slate-200 bg-white p-5 text-right shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <div class="flex items-center justify-between"><span class="text-3xl">✨</span><span class="rounded-full bg-rose-50 px-3 py-1 text-[10px] font-black text-rose-700">التجميل</span></div>
+          <h3 class="mt-4 text-lg font-black text-slate-900">تحدي الصالون الاحترافي</h3>
+          <p class="mt-2 text-xs leading-6 text-slate-600">رتب خطوات الخدمة، وطبق قواعد النظافة وسلامة العملاء.</p>
+          <div class="mt-4 text-xs font-black text-rose-700">ابدأ التجربة ←</div>
+        </button>
+        <button type="button" onclick="startCatchGame(true)" id="tab-game_catch_items" class="game-selector-card group rounded-3xl border-2 border-slate-200 bg-white p-5 text-right shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <div class="flex items-center justify-between"><span class="text-3xl">🧺</span><span class="rounded-full bg-cyan-50 px-3 py-1 text-[10px] font-black text-cyan-700">تحدي تفاعلي</span></div>
+          <h3 class="mt-4 text-lg font-black text-slate-900">اجمع المفيد وتجنب الضار</h3>
+          <p class="mt-2 text-xs leading-6 text-slate-600">حرك السلة لالتقاط العناصر المفيدة وابتعد عن العناصر الضارة. اجمع 1000 نقطة للفوز!</p>
+          <div class="mt-4 text-xs font-black text-cyan-700">ابدأ التحدي ←</div>
+        </button>
+      </div>
+
+      <section id="activeGameViewport" class="scroll-mt-24 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-xl">
+        <div class="border-b border-slate-100 bg-gradient-to-l from-slate-50 to-white px-5 py-4 sm:px-7">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div><div id="gameEyebrow" class="text-[11px] font-black text-indigo-600">التحدي الأول</div><h3 id="gameTitle" class="mt-1 text-xl font-black text-slate-900">مهمة الأمن السيبراني</h3></div>
+            <div class="flex items-center gap-2"><span id="gameProgress" class="rounded-xl bg-slate-100 px-3 py-2 text-xs font-black text-slate-700">السؤال 1 / 6</span><span id="gameScore" class="rounded-xl bg-amber-50 px-3 py-2 text-xs font-black text-amber-800">0 نقطة</span></div>
+          </div>
+          <div class="mt-4 h-2 overflow-hidden rounded-full bg-slate-100"><div id="gameProgressBar" class="h-full w-0 rounded-full bg-gradient-to-l from-indigo-500 to-cyan-400 transition-all duration-500"></div></div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px]">
+          <div class="p-5 sm:p-7">
+            <div id="gameScenario" class="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4 text-sm font-bold leading-7 text-slate-700">اختر إحدى الألعاب بالأعلى للبدء.</div>
+            <h4 id="gameQuestion" class="mt-6 text-lg font-black leading-8 text-slate-900">هل أنت مستعد للتحدي؟</h4>
+            <div id="gameOptions" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            <div id="gameFeedback" class="mt-4 hidden rounded-2xl border p-4 text-sm font-bold leading-7" aria-live="polite"></div>
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+              <span id="gameHint" class="text-xs text-slate-500">اختر إجابة واحدة. كل إجابة صحيحة تساوي 20 نقطة.</span>
+              <button id="gameNextBtn" type="button" onclick="advanceGame()" disabled class="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-black text-white opacity-40 transition hover:bg-indigo-700 disabled:cursor-not-allowed">التالي ←</button>
+            </div>
+          </div>
+          <aside class="border-t border-slate-100 bg-slate-50/80 p-5 lg:border-r lg:border-t-0 sm:p-6">
+            <div class="text-3xl">💡</div><h4 class="mt-3 font-black text-slate-900">فكر مثل المتخصص</h4>
+            <p id="gameSkill" class="mt-2 text-sm leading-7 text-slate-600">كل سؤال يحاكي موقفا بسيطا من بيئة العمل، والهدف فهم سبب القرار لا حفظ الإجابة.</p>
+            <div class="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+              <div class="text-[11px] font-bold text-slate-500">إنجازك في هذه اللعبة</div><div id="gameMiniScore" class="mt-1 text-2xl font-black text-slate-900">0 / 120</div>
+              <div class="mt-3 text-[11px] leading-5 text-slate-500">يمكن إعادة اللعبة لتحسين النتيجة. أعلى نتيجة تحتسب في الرصيد الكلي.</div>
+            </div>
+            <button type="button" onclick="restartCurrentGame()" class="mt-4 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs font-black text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700">↻ إعادة اللعبة</button>
+          </aside>
+        </div>
+      </section>
+    </div>
+
+      <section id="catchGamePanel" class="hidden overflow-hidden rounded-[28px] border border-cyan-200 bg-white shadow-xl">
+        <div class="bg-gradient-to-l from-cyan-700 via-sky-700 to-indigo-700 p-5 sm:p-7 text-white">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div><div class="text-xs font-black text-cyan-100">تحدي السرعة والانتباه</div><h3 class="mt-1 text-2xl font-black">🧺 اجمع المفيد وتجنب الضار</h3><p class="mt-2 text-sm leading-6 text-cyan-50">التقط العناصر المفيدة لتحصل على 50 نقطة لكل عنصر. لمس عنصر ضار ينهي الجولة. هدفك الوصول إلى 1000 نقطة.</p></div>
+            <div class="rounded-2xl border border-white/20 bg-white/10 px-5 py-3"><div class="text-xs text-cyan-100">النقاط</div><div id="catchScore" class="text-3xl font-black tabular-nums">0</div></div>
+          </div>
+        </div>
+        <div class="p-4 sm:p-6">
+          <div class="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-slate-600"><span>🎯 الهدف: 1000 نقطة</span><span id="catchStatus">اضغط «ابدأ اللعب» للبدء</span></div>
+          <div class="h-3 overflow-hidden rounded-full bg-slate-100"><div id="catchProgress" class="h-full w-0 rounded-full bg-gradient-to-l from-emerald-500 to-cyan-400 transition-all"></div></div>
+
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+              <div class="mb-2 flex items-center gap-2 font-black text-emerald-800"><span class="text-xl">✅</span> عناصر مفيدة - التقطها</div>
+              <div class="flex flex-wrap gap-2 text-sm font-bold text-emerald-950">
+                <span class="rounded-lg bg-white px-2 py-1">💻 جهاز آمن</span>
+                <span class="rounded-lg bg-white px-2 py-1">📚 تعلم ومعرفة</span>
+                <span class="rounded-lg bg-white px-2 py-1">🔒 حماية الحساب</span>
+                <span class="rounded-lg bg-white px-2 py-1">💡 فكرة أو حل</span>
+                <span class="rounded-lg bg-white px-2 py-1">⭐ إنجاز</span>
+                <span class="rounded-lg bg-white px-2 py-1">🧠 وعي ومعرفة</span>
+                <span class="rounded-lg bg-white px-2 py-1">🛡️ حماية رقمية</span>
+                <span class="rounded-lg bg-white px-2 py-1">🌱 نمو وتطور</span>
+              </div>
+              <p class="mt-2 text-xs leading-5 text-emerald-800">كل عنصر مفيد تلتقطه يضيف 50 نقطة إلى رصيدك.</p>
+            </div>
+            <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
+              <div class="mb-2 flex items-center gap-2 font-black text-rose-800"><span class="text-xl">⛔</span> عناصر ضارة - ابتعد عنها</div>
+              <div class="flex flex-wrap gap-2 text-sm font-bold text-rose-950">
+                <span class="rounded-lg bg-white px-2 py-1">🦠 فيروس أو برمجية خبيثة</span>
+                <span class="rounded-lg bg-white px-2 py-1">🎣 تصيد احتيالي</span>
+                <span class="rounded-lg bg-white px-2 py-1">🔓 حساب غير محمي</span>
+                <span class="rounded-lg bg-white px-2 py-1">⚠️ رابط أو ملف مشبوه</span>
+                <span class="rounded-lg bg-white px-2 py-1">🗑️ تنزيل غير موثوق</span>
+              </div>
+              <p class="mt-2 text-xs leading-5 text-rose-800">لمس أي عنصر ضار ينهي الجولة مباشرة، لذلك راقب الرموز قبل تحريك السلة.</p>
+            </div>
+          </div>
+
+          <div id="catchArena" class="relative mt-4 h-[390px] overflow-hidden rounded-2xl border-2 border-sky-100 bg-gradient-to-b from-sky-50 via-cyan-50 to-emerald-50 select-none touch-none" aria-label="ساحة لعبة جمع العناصر">
+            <div class="pointer-events-none absolute inset-x-0 top-3 text-center text-xs font-black text-slate-400">⬇️ التقط العناصر المفيدة وتجنب الضارة ⬇️</div>
+            <div id="catchItemsLayer" class="absolute inset-0"></div>
+            <div id="catchBasket" class="absolute bottom-3 left-1/2 -translate-x-1/2 text-5xl transition-none" style="left:50%">🧺</div>
+            <div id="catchOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/65 p-6 text-center text-white">
+              <div class="text-5xl">🎮</div><div class="mt-3 text-2xl font-black">هل أنت مستعد؟</div><p class="mt-2 max-w-md text-sm leading-7 text-slate-100">التقط 💻 📚 🔒 💡 ⭐ وتجنب 🦠 🎣 🔓 ⚠️. كل عنصر مفيد = 50 نقطة.</p>
+              <button type="button" onclick="startCatchLoop()" class="mt-5 rounded-xl bg-white px-7 py-3 font-black text-sky-800 shadow-lg hover:bg-cyan-50">ابدأ اللعب</button>
+            </div>
+          </div>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <button type="button" onpointerdown="moveCatchBasket(-1)" class="rounded-xl border border-slate-200 bg-white px-7 py-3 text-xl font-black text-slate-700">←</button>
+            <span class="text-xs font-bold text-slate-500">استخدم الأسهم ← → أو اسحب السلة داخل الساحة</span>
+            <button type="button" onpointerdown="moveCatchBasket(1)" class="rounded-xl border border-slate-200 bg-white px-7 py-3 text-xl font-black text-slate-700">→</button>
+          </div>
+          <div class="mt-4 flex justify-end"><button type="button" onclick="resetCatchGame()" class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:bg-slate-50">إعادة اللعبة</button></div>
+        </div>
+      </section>
+
     <section id="materialsSection" class="materials-panel mt-6 rounded-3xl border border-slate-200/90 bg-white/95 p-5 sm:p-7 shadow-xl shadow-slate-900/5" aria-labelledby="materialsTitle">
       <div class="materials-heading">
         <div>
           <h2 id="materialsTitle" class="text-lg sm:text-xl font-black text-slate-900">المواد والوحدات الدراسية</h2>
           <p id="materialsIntro" class="text-sm text-slate-600 mt-1">الوحدات المعتمدة لكل مستوى دراسي.</p>
         </div>
-        <div id="qualificationHours" class="qualification-hours" aria-live="polite"></div>
+        <div class="flex flex-wrap items-center gap-3">
+          
+          <div id="qualificationHours" class="qualification-hours" aria-live="polite"></div>
+        </div>
       </div>
       <div id="materialsTableWrap" class="overflow-x-auto mt-5"></div>
       <p class="materials-note">تعرض الجداول إجمالي ساعات البرنامج المعتمد، وتوضح ساعات الوحدة (GLH) عندما تتوفر مطابقة مع مواصفات Pearson الرسمية.</p>
@@ -1902,7 +2527,7 @@
           <div class="guide-card"><div class="guide-number">720 GLH</div><strong class="block text-sm text-slate-800">المستوى الثالث – Level 3</strong><p class="mt-1">إجمالي ساعات التعلم الموجه للبرنامج، ويتوسع في المهارات التطبيقية والتخصصية.</p></div>
         </div>
         <div class="grid lg:grid-cols-2 gap-4">
-          <div><h4 class="font-black text-sm text-slate-900 mb-2">ما المقصود بـ GLH؟</h4><p>اختصار <b>Guided Learning Hours</b> ويعني ساعات التعلم الموجه: الوقت الذي يكون فيه المعلم أو المدرب أو المقيّم مشاركا في توجيه تعلم الطالب، مثل الدروس والتدريب العملي والدراسة بإشراف والتقييم. لذلك لا تعني GLH مجموع كل الوقت الذي تقضيه الطالبة في الدراسة الفردية.</p><p class="mt-2">توضح الساعات حجم الوحدة والوقت التعليمي الموجه المتوقع لها، وتساعد على فهم وزنها ضمن البرنامج. وهي ليست علامة أو نسبة مئوية بحد ذاتها.</p></div>
+          <div><h4 class="font-black text-sm text-slate-900 mb-2">ما المقصود بـ GLH؟</h4><p>اختصار <b>Guided Learning Hours</b> ويعني ساعات التعلم الموجه: الوقت الذي يكون فيه المعلم أو المدرب أو المقيم مشاركا في توجيه تعلم الطالب، مثل الدروس والتدريب العملي والدراسة بإشراف والتقييم. لذلك لا تعني GLH مجموع كل الوقت الذي يقضيه المتعلم في الدراسة الفردية.</p><p class="mt-2">توضح الساعات حجم الوحدة والوقت التعليمي الموجه المتوقع لها، وتساعد على فهم وزنها ضمن البرنامج. وهي ليست علامة أو نسبة مئوية بحد ذاتها.</p></div>
           <div><h4 class="font-black text-sm text-slate-900 mb-2">كيف يتم احتساب المعدل في المسار المهني التقني؟</h4>
             <div class="guide-card mb-2"><div class="flex items-center justify-between gap-2"><b class="text-sm text-slate-800">تقييمات برنامج BTEC – المستوى الثالث</b><span class="guide-number">70%</span></div><p class="mt-1">تدخل تقييمات المستوى الثالث في الجزء الأكبر من معدل الثانوية العامة للمسار المهني التقني.</p></div>
             <div class="guide-card"><div class="flex items-center justify-between gap-2"><b class="text-sm text-slate-800">مباحث الثقافة العامة المشتركة الأربعة</b><span class="guide-number">30%</span></div><p class="mt-1">اللغة العربية، واللغة الإنجليزية، والتربية الإسلامية، وتاريخ الأردن من خلال الامتحان العام.</p></div>
@@ -1980,6 +2605,36 @@
       schoolName: "مدرسة البلقاء الثانوية الشاملة",
       eventName: "برنامج BTEC التعليمي ",
       specializations: {
+        library: {
+          id: "library",
+          title: "مكتبة المواد التعليمية",
+          englishTitle: "Material Library",
+          shortTitle: "مكتبة المواد",
+          badge: "مكتبة المواد التعليمية",
+          isFeatured: false,
+          icon: "📚",
+          theme: { border: "#0284c7", softBg: "#e0f2fe", badgeText: "#0369a1" },
+          description: "صفحة مخصصة لمكتبة المواد التعليمية والوحدات الدراسية المعتمدة لبرنامج BTEC.",
+          facilities: [],
+          journeyStages: [],
+          projectShowcase: { title: "", scenario: "", steps: [], deliverables: [] },
+          skills: []
+        },
+        game: {
+          id: "game",
+          title: "منطقة اللعب",
+          englishTitle: "BTEC Fun & Games Zone",
+          shortTitle: "منطقة اللعب",
+          badge: "ترفيه وتدريب تفاعلي",
+          isFeatured: false,
+          icon: "🎮",
+          theme: { border: "#9333ea", softBg: "#f3e8ff", badgeText: "#6b21a8" },
+          description: "صفحة مخصصة للألعاب والأنشطة الترفيهية التفاعلية.",
+          facilities: [],
+          journeyStages: [],
+          projectShowcase: { title: "", scenario: "", steps: [], deliverables: [] },
+          skills: []
+        },
         it: {
           id: "IT",
           title: "تكنولوجيا المعلومات (Information Technology)",
@@ -1998,7 +2653,7 @@
           ],
           projectShowcase: {
             title: "مشروع تطبيقي: إنشاء منصة إلكترونية لخدمات المدرسة",
-            scenario: "تخيّل أن المدرسة تريد تسهيل وصول الطلبة إلى معلومات الأنشطة والإعلانات والخدمات. يبدأ المتعلم بجمع احتياجات المستخدمين، ثم يخطط لمنصة سهلة الاستخدام ويطور نموذجاً أولياً لها.",
+            scenario: "تخيل أن المدرسة تريد تسهيل وصول الطلبة إلى معلومات الأنشطة والإعلانات والخدمات. يبدأ المتعلم بجمع احتياجات المستخدمين، ثم يخطط لمنصة سهلة الاستخدام ويطور نموذجا أوليا لها.",
             steps: ["تحديد المشكلة وجمع متطلبات المستخدمين", "رسم مخطط الصفحات وتصميم الواجهة (UI/UX)", "بناء صفحات تفاعلية باستخدام HTML وCSS وJavaScript", "اختبار الروابط والنماذج وسهولة الاستخدام على الهاتف والحاسوب", "عرض الحل وتوثيق الملاحظات والتحسينات"],
             deliverables: ["وثيقة متطلبات", "مخطط وتصميم واجهات", "نموذج موقع قابل للتجربة", "نتائج اختبار وتقييم", "عرض المشروع"]
           },
@@ -2022,7 +2677,7 @@
           ],
           projectShowcase: {
             title: "مشروع تطبيقي: إعداد خطة لمشروع تجاري طلابي",
-            scenario: "تعمل مجموعة كفريق تأسيس لمشروع صغير يقدم منتجاً أو خدمة داخل المجتمع المدرسي. تدرس الفكرة والجمهور المستهدف، وتضع تصوراً للتكاليف والتسعير والترويج قبل تقديم الخطة.",
+            scenario: "تعمل مجموعة كفريق تأسيس لمشروع صغير يقدم منتجا أو خدمة داخل المجتمع المدرسي. تدرس الفكرة والجمهور المستهدف، وتضع تصورا للتكاليف والتسعير والترويج قبل تقديم الخطة.",
             steps: ["اختيار فكرة المشروع وتحديد حاجات العملاء", "إجراء استبيان مبسط وتحليل المنافسين", "تقدير التكاليف ووضع سعر مناسب وتوقع المبيعات", "إعداد خطة تسويق وهوية ورسائل ترويجية", "تقديم الخطة ومناقشة نقاط القوة وفرص التطوير"],
             deliverables: ["وصف فكرة المشروع", "ملخص بحث السوق", "جدول تكاليف وتسعير", "خطة تسويقية", "عرض خطة العمل"]
           },
@@ -2050,7 +2705,7 @@
             steps: ["فهم هدف الفعالية والجمهور والرسالة المطلوبة", "جمع مراجع بصرية وإعداد لوحة إلهام (Moodboard)", "تجربة الاسكتشات والألوان والخطوط والتكوين", "تنفيذ الشعار والملصق وتصميم منشور رقمي متناسق", "عرض الأعمال وتلقي الملاحظات وتطوير النسخة النهائية"],
             deliverables: ["بحث ومراجع بصرية", "لوحة إلهام واسكتشات", "شعار وهوية بصرية", "ملصق ومنشور رقمي", "ملف أعمال (Portfolio)"]
           },
-          skills: ["الرسم ", "التصوير الفوتوغرافي", "تصميم الأزياء والخياطة", "التصميم الرقمي", "الابتكار البصري"]
+          skills: ["الرسم", "التصميم الجرافيكي", "التصوير الفوتوغرافي", "تصميم الأزياء والخياطة", "التصميم الرقمي", "الابتكار البصري"]
         },
         beauty: {
           id: "beauty",
@@ -2070,7 +2725,7 @@
           ],
           projectShowcase: {
             title: "مشروع تطبيقي: إعداد وتنفيذ خدمة تجميل ضمن سيناريو صالون",
-            scenario: "يتعامل المتعلم مع حالة تدريبية لعميل يطلب خدمة مناسبة من الخدمات التي درسها. يبدأ بالتواصل وفهم الطلب، ثم يجهز مساحة العمل والأدوات وفق تعليمات النظافة والسلامة، وينفذ التطبيق التدريبي ويقيّم جودة الخدمة.",
+            scenario: "يتعامل المتعلم مع حالة تدريبية لعميل يطلب خدمة مناسبة من الخدمات التي درسها. يبدأ بالتواصل وفهم الطلب، ثم يجهز مساحة العمل والأدوات وفق تعليمات النظافة والسلامة، وينفذ التطبيق التدريبي ويقيم جودة الخدمة.",
             steps: ["استقبال العميل وتحديد الخدمة المطلوبة وفهم التوقعات", "تجهيز مكان العمل والأدوات واتباع تعليمات النظافة والسلامة", "اختيار خطوات الخدمة المناسبة ضمن نطاق التدريب والوحدة", "تنفيذ الخدمة العملية مع مراعاة التواصل وراحة العميل", "تقييم النتيجة وتسجيل الملاحظات واقتراح العناية اللاحقة المناسبة"],
             deliverables: ["بطاقة استشارة عميل", "قائمة تجهيز ونظافة", "تطبيق عملي موثق", "تقييم جودة الخدمة", "سجل ملاحظات وانعكاس مهني"]
           },
@@ -2154,6 +2809,87 @@
       },
       beauty: null
     };
+
+    /*
+     * أسماء الكتب وروابط ملفات PDF:
+     * توضع ملفات PDF داخل مجلد pdfs بجانب ملف HTML.
+     * تُعدّل قيمة file فقط لتطابق اسم ملف الكتاب الحقيقي مع الامتداد .pdf.
+     * مثال: file: "pdfs/IT_Grade10_Term1.pdf"
+     */
+    const LIBRARY_BOOKS = [
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "tec10.pdf" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "tec10.2.pdf" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات كتاب الأول الثانوي", level: "الأول الثانوي", file: "tec11.pdf" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات كتاب التوجيهي", level: "التوجيهي", file: "tec12.pdf" },
+
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "biss10.pdf" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "biss10.2.pdf" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال كتاب الأول الثانوي", level: "الأول الثانوي", file: "biss11.pdf" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال كتاب التوجيهي", level: "التوجيهي", file: "biss12" },
+
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "art10.pdf" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "art10.2.pdf" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم كتاب الأول الثانوي", level: "الأول الثانوي", file: "art11.pdf" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم كتاب التوجيهي", level: "التوجيهي", file: "art12.pdf" },
+
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "hair10.pdf" },
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "hair10.2.pdf" },
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل كتاب الأول الثانوي", level: "الأول الثانوي", file: "hair11.pdf" },
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل كتاب التوجيهي", level: "التوجيهي", file: "hair12.pdf" }
+    ];
+
+    function renderLibraryBooks(filterText = "") {
+      const grid = document.getElementById("libraryBooksGrid");
+      if (!grid) return;
+      const query = String(filterText || "").trim().toLocaleLowerCase("ar");
+      const specialties = [...new Set(LIBRARY_BOOKS.map(book => book.specialization))];
+      let visibleCount = 0;
+
+      grid.innerHTML = specialties.map(specialty => {
+        const books = LIBRARY_BOOKS.filter(book =>
+          book.specialization === specialty &&
+          (!query || `${book.title} ${book.level} ${book.specialization}`.toLocaleLowerCase("ar").includes(query))
+        );
+        if (!books.length) return "";
+        visibleCount += books.length;
+        const first = books[0];
+        return `
+          <section class="library-specialty rounded-3xl p-4 sm:p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="flex h-11 w-11 items-center justify-center rounded-2xl text-2xl" style="background:${first.accent}18">${first.icon}</span>
+              <div>
+                <h3 class="library-specialty-title text-lg font-black">${specialty}</h3>
+                <p class="library-book-meta text-xs font-semibold">${books.length} كتب متاحة ضمن هذا التخصص</p>
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
+              ${books.map(book => `
+                <article class="library-book-card flex flex-col rounded-2xl p-4">
+                  <div class="text-2xl mb-3">📕</div>
+                  <h4 class="library-book-title text-sm font-black leading-6">${book.title}</h4>
+                  <p class="library-book-meta mt-1 text-xs font-semibold">${book.level}</p>
+                  <div class="mt-auto pt-4 grid grid-cols-2 gap-2">
+                    <a class="library-open rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-110"
+                       href="${book.file}" target="_blank" rel="noopener noreferrer">فتح PDF</a>
+                    <a class="library-download rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-95"
+                       href="${book.file}" download>تحميل</a>
+                  </div>
+                </article>
+              `).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      if (!visibleCount) {
+        grid.innerHTML = '<div class="library-specialty rounded-2xl p-6 text-center font-bold">لا توجد كتب تطابق كلمة البحث.</div>';
+      }
+    }
+
+    function filterLibraryBooks(value) {
+      renderLibraryBooks(value);
+    }
+
     const VERIFIED_UNIT_HOURS = {
       it: {
         level2: [60, 60, 60, 60, 60, 60, 60, 60],
@@ -2274,6 +3010,38 @@
       const hero = document.getElementById("detailHero");
       hero.style.background = `linear-gradient(125deg, ${spec.theme.border} 0%, #0f172a 95%)`;
 
+      const materialsSec = document.getElementById("materialsSection");
+      const contentGrid = materialsSec ? materialsSec.nextElementSibling : null;
+      const gamesHubSec = document.getElementById("gamesHubSection");
+      const isGamePage = (specId === "game");
+      const isLibraryPage = (specId === "library");
+      const librarySec = document.getElementById("librarySection");
+      if (librarySec) librarySec.classList.toggle("hidden", !isLibraryPage);
+      const hideSpecPanels = (isGamePage || isLibraryPage);
+      const detailAskAiButton = document.getElementById("detailAskAi");
+      if (detailAskAiButton) detailAskAiButton.style.display = hideSpecPanels ? "none" : "flex";
+
+      if (materialsSec) materialsSec.style.display = hideSpecPanels ? "none" : "";
+      if (contentGrid) contentGrid.style.display = hideSpecPanels ? "none" : "";
+      if (gamesHubSec) {
+        if (isGamePage) {
+          gamesHubSec.classList.remove("hidden");
+          initGamesHub();
+        } else {
+          gamesHubSec.classList.add("hidden");
+          stopRunnerGame();
+        }
+      }
+
+      if (hideSpecPanels) {
+        if (isLibraryPage) renderLibraryBooks(document.getElementById("librarySearch")?.value || "");
+        document.getElementById("detailAskAi").onclick = () => {
+          toggleAssistantChat(`أريد الاستفسار عن ${spec.shortTitle}`);
+        };
+        document.title = `${spec.shortTitle} | برنامج BTEC - مدرسة البلقاء`;
+        return;
+      }
+
       renderJourneyStage(spec, 0);
       renderMaterials(specId);
 
@@ -2382,6 +3150,7 @@
     }
 
     function returnToCampus() {
+      stopRunnerGame();
       activeSpecId = null;
       specializationPage.classList.add("hidden");
       mainContent.classList.remove("hidden");
@@ -2412,7 +3181,14 @@
       });
     });
 
+
+    // ==========================================================
+    // BTEC GUIDE — LOCAL KNOWLEDGE ENGINE
+    // يعتمد على معلومات الموقع، ويميز بين السؤال الجديد والمتابعة.
+    // لا يخترع بيانات غير موجودة في قاعدة المعرفة.
+    // ==========================================================
     let lastDiscussedTopic = null;
+    let lastDiscussedIntent = null;
 
     const chatMessagesEl = document.getElementById("chatMessages");
     const chatInputEl = document.getElementById("chatInput");
@@ -2422,28 +3198,16 @@
     function appendMessageBubble(role, text, isError = false) {
       const wrapper = document.createElement("div");
       wrapper.className = `chat-msg flex items-start gap-2.5 ${role === "user" ? "flex-row-reverse" : ""}`;
-
       const avatar = document.createElement("div");
-      avatar.className = `w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs ${
-        role === "user"
-          ? "bg-indigo-600 text-white"
-          : isError
-          ? "bg-rose-600 text-white"
-          : "bg-teal-600 text-white"
-      }`;
+      avatar.className = `w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 shadow-xs ${role === "user" ? "bg-indigo-600 text-white" : isError ? "bg-rose-600 text-white" : "bg-teal-600 text-white"}`;
       avatar.textContent = role === "user" ? "👤" : isError ? "⚠" : "📘";
-
       const bubble = document.createElement("div");
-      bubble.className =
-        role === "user"
-          ? "bg-indigo-600 text-white rounded-2xl rounded-tl-sm px-3.5 py-2.5 shadow-sm max-w-[84%]"
-          : isError
-          ? "bg-rose-50 border border-rose-200 text-rose-900 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]"
-          : "bg-white border border-slate-200/90 text-slate-800 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]";
-
-      const formattedHtml = formatMessageText(text);
-      bubble.innerHTML = `<div class="text-xs sm:text-sm leading-relaxed font-medium space-y-1.5">${formattedHtml}</div>`;
-
+      bubble.className = role === "user"
+        ? "bg-indigo-600 text-white rounded-2xl rounded-tl-sm px-3.5 py-2.5 shadow-sm max-w-[84%]"
+        : isError
+        ? "bg-rose-50 border border-rose-200 text-rose-900 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]"
+        : "bg-white border border-slate-200/90 text-slate-800 rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-2xs max-w-[86%]";
+      bubble.innerHTML = `<div class="text-xs sm:text-sm leading-relaxed font-medium space-y-1.5">${formatMessageText(text)}</div>`;
       wrapper.appendChild(avatar);
       wrapper.appendChild(bubble);
       chatMessagesEl.appendChild(wrapper);
@@ -2451,275 +3215,456 @@
     }
 
     function formatMessageText(raw) {
-      const escaped = raw
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
-      const bolded = escaped.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-      return bolded
-        .split("\n")
-        .filter(line => line.trim() !== "")
-        .map(line => `<p>${line}</p>`)
-        .join("");
+      const escaped = String(raw).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      return escaped.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .split("\n").filter(line => line.trim())
+        .map(line => `<p>${line}</p>`).join("");
     }
 
     const BTEC_UNITS = {
       it: {
         level2: [
           "استخدام تكنولوجيا المعلومات لدعم المعلومات والاتصالات في المؤسسات",
-          "نمذجة البيانات وجداول البيانات",
-          "مقدمة في شبكات الحاسوب",
-          "مقدمة في البرمجة",
-          "مقدمة في الرسوم الرقمية والرسوم المتحركة",
-          "مقدمة في تطوير مواقع الويب",
-          "مقدمة في التطبيقات",
-          "مقدمة في تصميم الألعاب"
+          "نمذجة البيانات وجداول البيانات", "مقدمة في شبكات الحاسوب", "مقدمة في البرمجة",
+          "مقدمة في الرسوم الرقمية والرسوم المتحركة", "مقدمة في تطوير مواقع الويب",
+          "مقدمة في التطبيقات", "مقدمة في تصميم الألعاب"
         ],
         level3: [
-          "نظم تكنولوجيا المعلومات – الاستراتيجية والإدارة والبنية التحتية",
-          "تطوير المواقع الإلكترونية",
-          "الأمن السيبراني وإدارة الحوادث",
-          "تطوير ألعاب الحاسوب",
-          "الدعم الفني والإدارة لتكنولوجيا المعلومات",
-          "البرمجة",
-          "إدارة مشاريع تكنولوجيا المعلومات",
-          "مقدمة في الذكاء الاصطناعي (AI)",
+          "نظم تكنولوجيا المعلومات – الاستراتيجية والإدارة والبنية التحتية", "تطوير المواقع الإلكترونية",
+          "الأمن السيبراني وإدارة الحوادث", "تطوير ألعاب الحاسوب", "الدعم الفني والإدارة لتكنولوجيا المعلومات",
+          "البرمجة", "إدارة مشاريع تكنولوجيا المعلومات", "مقدمة في الذكاء الاصطناعي (AI)",
           "تطوير تطبيقات الهاتف المحمول"
         ]
       },
       business: {
         level2: [
-          "أغراض إنشاء الشركات",
-          "المؤسسات التجارية",
-          "التنبؤ بالأداء المالي للشركة",
-          "خطة التسويق",
-          "الأشخاص في المنظمات",
-          "الأعمال عبر الإنترنت",
-          "أخلاقيات العمل",
-          "إنشاء شركة صغيرة",
-          "العمل ضمن فرق",
-          "إدارة الشؤون المالية الشخصية",
-          "تقنيات الترويج والعرض المرئية لأعمال البيع بالتجزئة",
-          "إدارة شركة صغيرة"
+          "أغراض إنشاء الشركات", "المؤسسات التجارية", "التنبؤ بالأداء المالي للشركة", "خطة التسويق",
+          "الأشخاص في المنظمات", "الأعمال عبر الإنترنت", "أخلاقيات العمل", "إنشاء شركة صغيرة",
+          "العمل ضمن فرق", "إدارة الشؤون المالية الشخصية",
+          "تقنيات الترويج والعرض المرئية لأعمال البيع بالتجزئة", "إدارة شركة صغيرة"
         ],
         level3: [
-          "البحث والتخطيط لحملة تسويقية",
-          "مبادئ الإدارة",
-          "اتخاذ القرارات الخاصة بالأعمال",
-          "استكشاف الأعمال",
-          "تمويل الأعمال",
-          "إدارة إحدى الفعاليات",
-          "الموارد البشرية",
-          "دراسة خدمة العملاء",
-          "أخلاقيات العمل"
+          "البحث والتخطيط لحملة تسويقية", "مبادئ الإدارة", "اتخاذ القرارات الخاصة بالأعمال",
+          "استكشاف الأعمال", "تمويل الأعمال", "إدارة إحدى الفعاليات", "الموارد البشرية",
+          "دراسة خدمة العملاء", "أخلاقيات العمل"
         ]
       },
       art: {
         level2: [
-          "تطوير الفن والتصميم استجابة لأحد المواضيع",
-          "التواصل المرئي",
-          "تكوين محفظة للفن والتصميم",
-          "مشروع بحث عملي",
-          "العمل على موجز التصميم الجرافيكي",
-          "العمل باستخدام موجز تصوير فوتوغرافي",
-          "العمل باستخدام المنسوجات",
-          "العمل باستخدام تصميم الأزياء"
+          "تطوير الفن والتصميم استجابة لأحد المواضيع", "التواصل المرئي", "تكوين محفظة للفن والتصميم",
+          "مشروع بحث عملي", "العمل على موجز التصميم الجرافيكي", "العمل باستخدام موجز تصوير فوتوغرافي",
+          "العمل باستخدام المنسوجات", "العمل باستخدام تصميم الأزياء"
         ],
-        level3: [
-          "تطوير المهارات",
-          "الاستجابة لأحد الموجزات",
-          "التقدم الشخصي",
-          "استجابة المجال الإبداعي"
-        ]
+        level3: ["تطوير المهارات", "الاستجابة لأحد الموجزات", "التقدم الشخصي", "استجابة المجال الإبداعي"]
       },
       beauty: {
         level2: [
-          "استكشاف قطاع الشعر والجمال",
-          "مهام الاستقبال في الصالون",
-          "ترويج المنتجات والخدمات وبيعها للعملاء في الصالون",
-          "الشعر والبشرة والأظافر",
-          "تقديم خدمات العناية ببشرة الوجه",
-          "وضع مستحضرات التجميل",
-          "تطبيق تقنيات المانيكير والباديكير",
-          "تقنيات إزالة الشعر",
-          "شامبو وبلسم الشعر",
-          "فن تصفيف الشعر",
-          "فن العناية بالأظافر",
-          "المؤسسة التجارية"
+          "استكشاف قطاع الشعر والجمال", "مهام الاستقبال في الصالون",
+          "ترويج المنتجات والخدمات وبيعها للعملاء في الصالون", "الشعر والبشرة والأظافر",
+          "تقديم خدمات العناية ببشرة الوجه", "وضع مستحضرات التجميل", "تطبيق تقنيات المانيكير والباديكير",
+          "تقنيات إزالة الشعر", "شامبو وبلسم الشعر", "فن تصفيف الشعر", "فن العناية بالأظافر", "المؤسسة التجارية"
         ],
         level3: [
-          "الصالون الاحترافي",
-          "الصحة والعافية",
-          "المكياج الإبداعي وفن الحناء",
-          "تقنيات الأظافر المتقدمة",
-          "علاجات الجلد المتقدمة",
-          "صبغ الشعر وتبييضه",
-          "التدليك والعلاج بالروائح العطرية",
-          "قص الشعر والتصفيف",
-          "تقنيات المساج المتقدمة",
+          "الصالون الاحترافي", "الصحة والعافية", "المكياج الإبداعي وفن الحناء",
+          "تقنيات الأظافر المتقدمة", "علاجات الجلد المتقدمة", "صبغ الشعر وتبييضه",
+          "التدليك والعلاج بالروائح العطرية", "قص الشعر والتصفيف", "تقنيات المساج المتقدمة",
           "بدء مشروع وإدارته"
+        ]
+      }
+    };
+
+    const BTEC_UNITS_EN = {
+      it: {
+        level2: [
+          "Using IT to Support Information and Communication in Organizations",
+          "Data Modelling and Spreadsheets", "Introduction to Computer Networks", "Introduction to Programming",
+          "Introduction to Digital Graphics and Animation", "Introduction to Website Development",
+          "Introduction to Applications", "Introduction to Game Design"
+        ],
+        level3: [
+          "IT Systems: Strategy, Management and Infrastructure", "Website Development",
+          "Cybersecurity and Incident Management", "Computer Game Development", "IT Technical Support and Administration",
+          "Programming", "IT Project Management", "Introduction to Artificial Intelligence (AI)",
+          "Mobile Application Development"
+        ]
+      },
+      business: {
+        level2: [
+          "Purposes of Setting Up Businesses", "Business Organizations", "Forecasting Business Financial Performance",
+          "Marketing Plan", "People in Organizations", "Online Business", "Business Ethics", "Starting a Small Business",
+          "Working in Teams", "Managing Personal Finances", "Visual Promotion and Display Techniques for Retail",
+          "Managing a Small Business"
+        ],
+        level3: [
+          "Researching and Planning a Marketing Campaign", "Principles of Management", "Business Decision-Making",
+          "Exploring Business", "Business Finance", "Managing an Event", "Human Resources",
+          "Customer Service Study", "Business Ethics"
+        ]
+      },
+      art: {
+        level2: [
+          "Developing Art and Design in Response to a Theme", "Visual Communication", "Creating an Art and Design Portfolio",
+          "Practical Research Project", "Working to a Graphic Design Brief", "Working to a Photography Brief",
+          "Working with Textiles", "Working with Fashion Design"
+        ],
+        level3: ["Skills Development", "Responding to a Brief", "Personal Progress", "Creative Industry Response"]
+      },
+      beauty: {
+        level2: [
+          "Exploring the Hair and Beauty Sector", "Salon Reception Duties",
+          "Promoting and Selling Salon Products and Services to Clients", "Hair, Skin and Nails",
+          "Providing Facial Skincare Services", "Applying Makeup", "Manicure and Pedicure Techniques",
+          "Hair Removal Techniques", "Shampoo and Conditioner", "The Art of Hairstyling", "The Art of Nail Care",
+          "The Business Organization"
+        ],
+        level3: [
+          "The Professional Salon", "Health and Wellbeing", "Creative Makeup and Henna Art",
+          "Advanced Nail Techniques", "Advanced Skin Treatments", "Hair Coloring and Bleaching",
+          "Massage and Aromatherapy", "Hair Cutting and Styling", "Advanced Massage Techniques",
+          "Starting and Managing a Business"
         ]
       }
     };
 
     const SPECIALIZATION_KNOWLEDGE = {
       it: {
-        title: "تكنولوجيا المعلومات",
-        aliases: ["تكنولوجيا المعلومات", "تقنية المعلومات", "it", "حاسوب", "الحاسوب", "البرمجة", "شبكات", "امن سيبراني", "امن المعلومات"],
+        title: "تكنولوجيا المعلومات", english: "Information Technology",
+        aliases: ["تكنولوجيا المعلومات", "تقنية المعلومات", "تكنولوجيا", "تقنية", "معلوماتية", "it", "information technology", "computer science", "computing", "حاسوب", "الحاسوب", "كمبيوتر", "الكمبيوتر", "برمجة", "البرمجة", "شبكات", "امن سيبراني", "الامن السيبراني", "امن المعلومات", "cyber security", "cybersecurity", "programming", "networking", "software", "تطوير التطبيقات", "database", "databases", "data", "artificial intelligence", "ذكاء اصطناعي", "الذكاء الاصطناعي", "ai"],
         overview: "يركز على استخدام أنظمة وتقنيات الحاسوب لحل المشكلات، وإدارة البيانات، وتطوير البرمجيات والخدمات الرقمية.",
+        overviewEn: "This specialization focuses on using computer systems and digital technologies to solve problems, manage data, and develop software and digital services.",
         topics: "البرمجة، قواعد البيانات ونمذجة البيانات، الشبكات، تطوير المواقع والتطبيقات والألعاب، الدعم الفني، الأمن السيبراني، إدارة المشاريع التقنية والذكاء الاصطناعي.",
+        topicsEn: "Programming, databases and data modelling, computer networks, website and app development, game development, technical support, cybersecurity, IT project management, and introductory artificial intelligence.",
         skills: "التفكير المنطقي، حل المشكلات، كتابة البرامج، تحليل البيانات، اختبار الحلول، إدارة الأنظمة والعمل ضمن فريق.",
+        skillsEn: "Logical thinking, problem-solving, programming, data analysis, testing solutions, system administration, and teamwork.",
         careers: "من المجالات المهنية المرتبطة به: تطوير البرمجيات والمواقع والتطبيقات، الدعم الفني، إدارة الشبكات، قواعد البيانات، الأمن السيبراني وتحليل الأنظمة. بعض الوظائف تتطلب دراسة جامعية أو شهادات وخبرة إضافية.",
-        facility: "مختبر حاسوب"
+        careersEn: "Related career areas include software, website and app development, technical support, network administration, database work, cybersecurity, and systems analysis. Some roles require further study, certifications, or experience.",
+        facility: "مختبر حاسوب", facilityEn: "Computer laboratory"
       },
       business: {
-        title: "إدارة الأعمال",
-        aliases: ["ادارة الاعمال", "الأعمال", "اعمال", "business", "ادارة", "التسويق", "الموارد البشرية", "تمويل"],
+        title: "إدارة الأعمال", english: "Business",
+        aliases: ["ادارة الاعمال", "الادارة والاعمال", "الأعمال", "اعمال", "business", "business management", "management", "marketing", "entrepreneurship", "accounting", "human resources", "ريادة الاعمال", "التسويق", "الموارد البشرية", "تمويل", "التمويل", "مشاريع"],
         overview: "يدرس كيفية عمل المؤسسات وتنظيم مواردها وأنشطتها، وكيفية التخطيط والتسويق وإدارة المال والموظفين وخدمة العملاء.",
+        overviewEn: "This specialization explores how organizations operate and manage their resources, including planning, marketing, finance, people management, and customer service.",
         topics: "استكشاف الأعمال، التسويق والحملات التسويقية، التمويل، مبادئ الإدارة، اتخاذ القرارات، إدارة الفعاليات، الموارد البشرية، خدمة العملاء وأخلاقيات العمل.",
+        topicsEn: "Business exploration, marketing and campaigns, finance, management principles, business decision-making, event management, human resources, customer service, and business ethics.",
         skills: "التواصل، التخطيط والتنظيم، العمل الجماعي، إعداد الميزانيات، خدمة العملاء، البحث التسويقي، حل المشكلات واتخاذ القرارات.",
+        skillsEn: "Communication, planning and organization, teamwork, budgeting, customer service, market research, problem-solving, and decision-making.",
         careers: "من المجالات المرتبطة به: المبيعات، التسويق، خدمة العملاء، المساندة الإدارية، تنظيم الفعاليات، الموارد البشرية والمشروعات الصغيرة. بعض الوظائف تتطلب دراسة أو تدريبا إضافيا.",
-        facility: "مختبر حاسوب"
+        careersEn: "Related career areas include sales, marketing, customer service, administrative support, event coordination, human resources, and small-business operations. Some roles require further study or training.",
+        facility: "مختبر حاسوب", facilityEn: "Computer laboratory"
       },
       art: {
-        title: "فن وتصميم",
-        aliases: ["فن وتصميم", "الفن والتصميم", "فن", "تصميم", "جرافيك", "تصميم جرافيكي", "تصوير", "ازياء", "منسوجات", "رسم"],
+        title: "فن وتصميم", english: "Art and Design",
+        aliases: ["فن وتصميم", "الفن والتصميم", "الفن", "فن و تصميم", "art and design", "art design", "تصميم", "التصميم", "جرافيك", "تصميم جرافيكي", "graphic design", "photography", "تصوير", "تصوير فوتوغرافي", "ازياء", "الأزياء", "fashion", "منسوجات", "textiles", "رسم", "الوسائط الابداعية", "creative media", "visual communication"],
         overview: "يركز على تطوير الأفكار الإبداعية وتحويلها إلى أعمال فنية وتصميمية باستخدام خامات وتقنيات يدوية ورقمية.",
+        overviewEn: "This specialization develops creative ideas and turns them into art and design outcomes using practical materials, traditional techniques, and digital tools.",
         topics: "التواصل المرئي، التصميم الجرافيكي، التصوير الفوتوغرافي، الأزياء والمنسوجات، البحث والتجريب، تطوير المهارات، إعداد ملف الأعمال والاستجابة للموجزات والمشروعات الإبداعية.",
+        topicsEn: "Visual communication, graphic design, photography, fashion and textiles, research and experimentation, skills development, portfolio creation, and responding to creative briefs and projects.",
         skills: "الرسم والتكوين، توليد الأفكار، البحث البصري، استخدام الخامات والتقنيات، التصميم الرقمي، عرض الأعمال وتطوير ملف أعمال.",
+        skillsEn: "Drawing and composition, idea generation, visual research, working with materials and techniques, digital design, presenting work, and building a portfolio.",
         careers: "من المجالات المرتبطة به: التصميم الجرافيكي والرقمي، التصوير، تصميم الأزياء والمنسوجات، تصميم المنتجات والديكور والوسائط الإبداعية. قد تتطلب بعض المسارات تخصصا جامعيا أو ملف أعمال قويا.",
-        facility: "مشغل الحاسوب، غرفة التصوير، مرسم، غرفة أزياء، غرفة حرف"
+        careersEn: "Related career areas include graphic and digital design, photography, fashion and textile design, product design, interior design, and creative media. Some pathways may require further study or a strong portfolio.",
+        facility: "مشغل الحاسوب، غرفة التصوير، مرسم، غرفة أزياء، غرفة حرف",
+        facilityEn: "Computer workshop, photography room, art studio, fashion room, and crafts room"
       },
       beauty: {
-        title: "التجميل",
-        aliases: ["التجميل", "الشعر والتجميل", "الشعر والجمال", "beauty", "شعر", "بشرة", "مكياج", "اظافر", "صالون"],
+        title: "التجميل", english: "Beauty",
+        aliases: ["التجميل", "تجميل", "الشعر والتجميل", "الشعر والجمال", "beauty", "hair and beauty", "beauty therapy", "hair", "بشرة", "البشرة", "مكياج", "المكياج", "اظافر", "الاظافر", "صالون", "صالونات", "العناية بالبشرة", "مستحضرات التجميل", "makeup", "nails", "skincare", "manicure", "pedicure", "henna"],
         overview: "يركز على أساسيات وممارسات خدمات الشعر والبشرة والأظافر والمكياج، مع الاهتمام بالتعامل المهني مع العملاء والصحة والسلامة.",
+        overviewEn: "This specialization covers the foundations and practice of hair, skin, nail, and makeup services, with an emphasis on professional client care, health, and safety.",
         topics: "استكشاف قطاع الشعر والجمال، الاستقبال وخدمة العملاء، الشعر والبشرة والأظافر، العناية بالوجه، مستحضرات التجميل، المانيكير والباديكير، إزالة الشعر، تصفيف الشعر، الحناء، العلاجات المتقدمة وإدارة مشروع تجميلي.",
+        topicsEn: "The hair and beauty sector, salon reception and customer service, hair, skin and nails, facial care, cosmetics, manicure and pedicure, hair removal, hairstyling, henna, advanced treatments, and running a beauty business.",
         skills: "التواصل مع العملاء، تطبيق إجراءات النظافة والسلامة، اختيار المنتجات المناسبة للخدمة، مهارات الشعر والبشرة والأظافر، تنظيم العمل وإدارة مشروع صغير.",
+        skillsEn: "Client communication, hygiene and safety procedures, selecting products appropriate to a service, hair/skin/nail techniques, work organization, and small-business management.",
         careers: "من المجالات المرتبطة به: خدمات الصالونات والعناية بالشعر والبشرة والأظافر والمكياج، والاستقبال وبيع منتجات وخدمات التجميل. ممارسة بعض الخدمات قد تخضع لمتطلبات تدريب أو ترخيص محلية.",
-        facility: "حاسوب واحد، مشغل شعر، مشغل بشرة"
+        careersEn: "Related career areas include salon services, hair, skin and nail care, makeup, reception, and beauty-product or service sales. Some services may be subject to local training or licensing requirements.",
+        facility: "حاسوب واحد، مشغل شعر، مشغل بشرة", facilityEn: "One computer, a hair workshop, and a skincare workshop"
       }
     };
 
+    const TOPIC_ORDER = ["it", "business", "art", "beauty"];
+    const SITE_KNOWLEDGE = {
+      school: "الموقع يعرض برنامج BTEC في مدرسة البلقاء الثانوية الشاملة للبنات، ويجمع معلومات التخصصات الأربعة ومرافقها ووحداتها الدراسية، مع خريطة تفاعلية ومكتبة مواد ومنطقة ألعاب تعليمية.",
+      map: "الخريطة الرئيسية تفاعلية. اضغط على الجزيرة أو المنطقة التي تريد استكشافها: تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، التجميل، مكتبة المواد، أو منطقة اللعب. بعد اختيار منطقة تظهر الصفحة أو التفاصيل المرتبطة بها.",
+      library: "مكتبة المواد مخصصة للوصول إلى المواد والوحدات والملفات التعليمية المتاحة في الموقع. اختر التخصص أو المستوى المطلوب ثم افتح المادة أو الملف المتاح. إذا لم يظهر ملف لمادة معينة فهذا يعني أن الملف غير متوفر ضمن المحتوى الحالي للموقع.",
+      games: "منطقة اللعب تضم أربع ألعاب أسئلة مرتبطة بالتخصصات: مهمة الأمن السيبراني، قرارك يصنع المشروع، استوديو التصميم، وتحدي الصالون الاحترافي. كل لعبة تحتوي على 6 أسئلة، والإجابة الصحيحة تساوي 20 نقطة، وتظهر ملاحظات تشرح سبب صحة الإجابة أو خطأ الاختيار. وتوجد لعبة خامسة هي جمع العناصر المفيدة وتجنب الضارة: كل عنصر مفيد يساوي 50 نقطة، ولمس عنصر ضار ينهي الجولة، والوصول إلى 1000 نقطة يعني الفوز. للوصول إليها اضغط جزيرة منطقة اللعب في الخريطة.",
+      catch: "في لعبة جمع العناصر: التقط 💻 📚 🔒 💡 ⭐ 🧠 🛡️ 🌱؛ وابتعد عن 🦠 🎣 🔓 ⚠️ 🗑️. تظهر قائمة توضيحية داخل اللعبة لتعرف معنى كل رمز. كل عنصر مفيد يضيف 50 نقطة، ولمس عنصر ضار ينهي الجولة، والهدف 1000 نقطة. تحرك بالأسهم أو اسحب السلة بالماوس أو اللمس.",
+      assistant: "افتح مرشد BTEC من زر المساعد، ثم اكتب السؤال باللغة العربية أو الإنجليزية. يمكن السؤال عن تخصص واحد أو عدة تخصصات أو كل التخصصات، وعن المواد والمستويات والمهارات والمرافق ومنطقة اللعب والمكتبة والخريطة.",
+      levels: "الموقع يعرض وحدات المستوى الثاني والمستوى الثالث لكل تخصص. أسماء الوحدات مدرجة في قاعدة معلومات المساعد كما تظهر في جداول الموقع، وقد تختلف تفاصيل التقييم أو التطبيق حسب الخطة المعتمدة.",
+      contact: "بيانات التواصل أو الرسوم أو شروط القبول التفصيلية لا تظهر ضمن قاعدة المعلومات الحالية للمساعد؛ لذلك لا أستطيع تأكيدها من هذا الموقع."
+    };
+
+    const SITE_KNOWLEDGE_EN = {
+      school: "This website presents the BTEC program at Al-Balqa Secondary Comprehensive School for Girls. It brings together information about four specializations, their facilities and listed study units, an interactive map, a learning library, and educational games.",
+      map: "The main map is interactive. Select an island or area to explore: Information Technology, Business, Art and Design, Beauty, the learning library, or the play area. The relevant page or details will open.",
+      library: "The learning library is intended to provide access to available learning materials, unit information, and files. Choose the relevant specialization or level, then open an available resource. If a file is not shown, it is not currently available in the website content.",
+      games: "The play area contains four specialization quiz games: Cybersecurity Mission, Your Decisions Build the Business, Design Studio, and Professional Salon Challenge. Each quiz has 6 questions; each correct answer earns 20 points, and feedback explains why an answer is correct or why a selected answer is wrong. A fifth game asks players to collect useful items and avoid harmful ones: each useful item is worth 50 points, touching a harmful item ends the round, and reaching 1,000 points wins. Select the Play Area island on the map to open it.",
+      catch: "In the collection game, collect 💻 📚 🔒 💡 ⭐ 🧠 🛡️ 🌱 and avoid 🦠 🎣 🔓 ⚠️ 🗑️. An in-game guide explains what each symbol means. Each useful item is worth 50 points. Touching a harmful item ends the round. Reach 1,000 points to win. Move with the arrow keys or drag the basket with a mouse or touch screen.",
+      assistant: "Open the BTEC guide using the assistant button, then type a question in Arabic or English. You can ask about one, several, or all specializations, study units, levels, skills, facilities, the map, library, or games."
+    };
+
     function normalizeQuestion(value) {
-      return value.trim().toLowerCase()
-        .replace(/[أإآ]/g, "ا")
-        .replace(/ة/g, "ه")
-        .replace(/[ـ]/g, "")
-        .replace(/[؟?!،,.]/g, " ")
-        .replace(/\s+/g, " ");
+      return String(value || "").toLowerCase()
+        .normalize("NFKD")
+        .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
+        .replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
+        .replace(/[ؤئ]/g, "ء")
+        .replace(/تكنلوجيا|تكنولجيا/g, "تكنولوجيا")
+        .replace(/معلوات|معلومت/g, "معلومات")
+        .replace(/ادراه/g, "اداره")
+        .replace(/buisness/g, "business")
+        .replace(/tecnology|technlogy/g, "technology")
+        .replace(/desgin/g, "design")
+        .replace(/[ًٌٍَُِّْ]/g, "")
+        .replace(/[؟?!،,.;:()[\]{}"'`~_\-]/g, " ")
+        .replace(/([a-z])\1{2,}/g, "$1$1")
+        .replace(/([ا-ي])\1{2,}/g, "$1$1")
+        .replace(/\s+/g, " ").trim();
     }
 
-    function detectSpecialization(q) {
-      const ordered = ["it", "business", "art", "beauty"];
-      for (const key of ordered) {
+    function containsAny(q, patterns) {
+      return patterns.some(pattern => q.includes(normalizeQuestion(pattern)));
+    }
+
+    function detectSpecializations(q) {
+      const found = [];
+      for (const key of TOPIC_ORDER) {
         const aliases = SPECIALIZATION_KNOWLEDGE[key].aliases;
-        if (aliases.some(alias => q.includes(normalizeQuestion(alias)))) return key;
+        if (aliases.some(alias => {
+          const a = normalizeQuestion(alias);
+          if (!a) return false;
+          if (a.length <= 3 && /^[a-z]+$/.test(a)) return new RegExp(`(^|\\s)${a}(\\s|$)`).test(q);
+          return q.includes(a);
+        })) found.push(key);
       }
-      return null;
+      return found;
+    }
+
+    function isEnglishQuestion(q) {
+      const latin = (String(q).match(/[a-z]/gi) || []).length;
+      const arabic = (String(q).match(/[\u0600-\u06FF]/g) || []).length;
+      return latin > arabic;
     }
 
     function formatUnitList(units) {
       return units.map((unit, index) => `${index + 1}. ${unit}`).join("\n");
     }
 
-    function getMaterialsReply(key, q) {
-      const units = BTEC_UNITS[key];
-      const asksLevel2 = /الثاني(?! عشر)|مستوى ثاني|level ?2|\bl2\b|الصف العاشر/.test(q);
-      const asksLevel3 = /الثالث|مستوى ثالث|level ?3|\bl3\b|الحادي عشر|الثاني عشر/.test(q);
-      const spec = SPECIALIZATION_KNOWLEDGE[key];
-      let answer = `**الوحدات الدراسية لتخصص ${spec.title}:**\n`;
-      if (asksLevel2) {
-        answer += `\n**المستوى الثاني:**\n${formatUnitList(units.level2)}`;
-      } else if (asksLevel3) {
-        answer += `\n**المستوى الثالث:**\n${formatUnitList(units.level3)}`;
-      } else {
-        answer += `\n**المستوى الثاني:**\n${formatUnitList(units.level2)}`;
-        answer += `\n\n**المستوى الثالث:**\n${formatUnitList(units.level3)}`;
-      }
-      answer += `\n\nهذه أسماء الوحدات المنشورة لمسار BTEC في موقع وزارة التربية والتعليم الأردنية. وقد تختلف تفاصيل التنفيذ والتوزيع بحسب الخطة المعتمدة والمدرسة.`;
-      return answer;
+    function getRequestedLevels(q) {
+      const level2 = /(المستوى الثاني|مستوى ثاني|الثاني|صف عاشر|الصف العاشر|level ?2|level two|\bl2\b|year 10)/.test(q);
+      const level3 = /(المستوى الثالث|مستوى ثالث|الثالث|حادي عشر|الحادي عشر|ثاني عشر|الثاني عشر|level ?3|level three|\bl3\b|year 11|year 12)/.test(q);
+      if (level2 && level3) return ["level2", "level3"];
+      if (level2) return ["level2"];
+      if (level3) return ["level3"];
+      return ["level2", "level3"];
     }
 
-    function generateComprehensiveSpecReply(topic) {
-      const spec = SPECIALIZATION_KNOWLEDGE[topic];
-      const units = BTEC_UNITS[topic];
-      return `**الدليل الشامل لتخصص ${spec.title}:**\n\n` +
-        `📌 **نبذة عن التخصص:**\n${spec.overview}\n\n` +
-        `🎯 **أبرز المجالات والمحتوى:**\n${spec.topics}\n\n` +
-        `💡 **المهارات المكتسبة:**\n${spec.skills}\n\n` +
-        `🏢 **المرافق التعليمية المتوفرة في مدرسة البلقاء:**\n• ${spec.facility}\n\n` +
-        `📚 **الوحدات الدراسية المعتمدة (المستوى الثاني):**\n${formatUnitList(units.level2)}\n\n` +
-        `📖 **الوحدات الدراسية المعتمدة (المستوى الثالث):**\n${formatUnitList(units.level3)}\n\n` +
-        `💼 **المجالات المهنية والمستقبلية:**\n${spec.careers}`;
+    function getMaterialsReply(key, q, english = false) {
+      const spec = SPECIALIZATION_KNOWLEDGE[key];
+      const levels = getRequestedLevels(q);
+      if (english) {
+        const units = BTEC_UNITS_EN[key];
+        let out = `**${spec.english} — study units**`;
+        if (levels.includes("level2")) out += `\n\n**Level 2:**\n${formatUnitList(units.level2)}`;
+        if (levels.includes("level3")) out += `\n\n**Level 3:**\n${formatUnitList(units.level3)}`;
+        return out + "\n\nThese are English renderings of the Arabic unit titles listed in the website, not a claim that they are the official English Pearson titles.";
+      }
+      const units = BTEC_UNITS[key];
+      let out = `**الوحدات الدراسية لتخصص ${spec.title}:**`;
+      if (levels.includes("level2")) out += `\n\n**المستوى الثاني:**\n${formatUnitList(units.level2)}`;
+      if (levels.includes("level3")) out += `\n\n**المستوى الثالث:**\n${formatUnitList(units.level3)}`;
+      return out + "\n\nهذه أسماء الوحدات المدرجة في بيانات الموقع الحالية.";
+    }
+
+    function getSpecReply(key, q, english = false) {
+      const spec = SPECIALIZATION_KNOWLEDGE[key];
+      const askMaterials = containsAny(q, ["مواد", "المواد", "وحدات", "الوحدات", "مقررات", "المستوى الثاني", "المستوى الثالث", "level 2", "level 3", "curriculum", "units", "subjects", "courses", "study units"]);
+      const askSkills = containsAny(q, ["مهارات", "مهاره", "skills", "what can i learn", "learn"]);
+      const askCareers = containsAny(q, ["وظائف", "وظيفه", "مهن", "مستقبل", "اشتغل", "سوق العمل", "careers", "jobs", "career", "work opportunities"]);
+      const askFacility = containsAny(q, ["مرافق", "مختبر", "مشغل", "غرفه", "غرفة", "مرسم", "وين بتدرس", "facilities", "labs", "workshops", "rooms"]);
+      const askOverview = containsAny(q, ["تفاصيل", "كل التفاصيل", "شامل", "كل شيء", "كل شي", "نبذه", "عن التخصص", "احكيلي", "اشرح", "شو هو", "ما هو", "ماهو", "تعريف", "overview", "about", "explain", "tell me", "what is", "describe"]);
+      const askTopics = containsAny(q, ["مجالات", "يشمل", "يتضمن", "محتوى", "بتعلم", "بدرس", "يدرس", "topics", "includes", "study", "learn"]);
+      const parts = [];
+
+      if (askOverview || askTopics || (!askMaterials && !askSkills && !askCareers && !askFacility)) {
+        parts.push(english
+          ? `**${spec.english}**\n${spec.overviewEn}\n\n**Main areas:** ${spec.topicsEn}`
+          : `**تخصص ${spec.title}:**\n${spec.overview}\n\n**أبرز المجالات:** ${spec.topics}`);
+      }
+      if (askSkills) parts.push(english ? `**Skills developed:**\n${spec.skillsEn}` : `**المهارات:**\n${spec.skills}`);
+      if (askCareers) parts.push(english ? `**Related career areas:**\n${spec.careersEn}` : `**المجالات المهنية المرتبطة:**\n${spec.careers}`);
+      if (askFacility) parts.push(english ? `**Facilities listed by the school:**\n${spec.facilityEn}` : `**المرافق المسجلة في المدرسة:**\n${spec.facility}`);
+      if (askMaterials) parts.push(getMaterialsReply(key, q, english));
+      if (askOverview || askTopics || (!askMaterials && !askSkills && !askCareers && !askFacility)) {
+        parts.push(english
+          ? "Ask about Level 2 or Level 3 units, skills, facilities, or career areas for more detail."
+          : "يمكنك أيضا السؤال عن وحدات المستوى الثاني أو الثالث أو المهارات أو المرافق أو المجالات المهنية.");
+      }
+      return parts.join("\n\n");
+    }
+
+    function getAllSpecializationsReply(q, english = false) {
+      const keys = TOPIC_ORDER;
+      const askMaterials = containsAny(q, ["مواد", "المواد", "وحدات", "الوحدات", "curriculum", "units", "subjects"]);
+      const askFacilities = containsAny(q, ["مرافق", "مختبر", "مشغل", "غرفه", "غرفة", "facilities", "labs"]);
+      const askSkills = containsAny(q, ["مهارات", "skills"]);
+      const askCareers = containsAny(q, ["وظائف", "مهن", "careers", "jobs"]);
+      if (english) {
+        return keys.map(key => {
+          const sp = SPECIALIZATION_KNOWLEDGE[key];
+          let text = `**${sp.english}**\n${sp.overviewEn}\nMain areas: ${sp.topicsEn}`;
+          if (askSkills) text += `\nSkills: ${sp.skillsEn}`;
+          if (askCareers) text += `\nCareer areas: ${sp.careersEn}`;
+          if (askFacilities) text += `\nSchool facilities: ${sp.facilityEn}`;
+          if (askMaterials) text += `\nLevel 2 units: ${BTEC_UNITS_EN[key].level2.join(", ")}\nLevel 3 units: ${BTEC_UNITS_EN[key].level3.join(", ")}`;
+          return text;
+        }).join("\n\n");
+      }
+      return keys.map(key => {
+        const sp = SPECIALIZATION_KNOWLEDGE[key];
+        let text = `**${sp.title}**\n${sp.overview}\nأبرز المجالات: ${sp.topics}`;
+        if (askSkills) text += `\nالمهارات: ${sp.skills}`;
+        if (askCareers) text += `\nالمجالات المهنية: ${sp.careers}`;
+        if (askFacilities) text += `\nالمرافق: ${sp.facility}`;
+        if (askMaterials) text += `\nالمستوى الثاني: ${BTEC_UNITS[key].level2.join("، ")}\nالمستوى الثالث: ${BTEC_UNITS[key].level3.join("، ")}`;
+        return text;
+      }).join("\n\n");
     }
 
     function generateKnowledgeGroundedReply(userQuery) {
       const q = normalizeQuestion(userQuery);
-      const explicitTopic = detectSpecialization(q);
-      if (explicitTopic) lastDiscussedTopic = explicitTopic;
-      const topic = explicitTopic || lastDiscussedTopic;
-      const isMaterialsQuestion = /(مواد|المواد|وحدات|الوحدات|ماذا يدرس|شو بدرس|شو بيدرس|ماذا يتعلم|المقررات|المحتوى الدراسي)/.test(q);
-      const isComprehensiveRequest = /(تفاصيل|كل التفاصيل|معلومات كامله|شامل|اعرض تفاصيل|كل شي|كل شيء|نبذه شامله)/.test(q);
+      const english = isEnglishQuestion(userQuery);
+      if (!q) return english ? "Please type a question about the BTEC website." : "اكتب سؤالك، وسأحاول مساعدتك بالمعلومات الموجودة في الموقع.";
 
-      if (/^(مرحبا|اهلا|السلام عليكم|سلام|هاي|هلا|صباح الخير|مساء الخير|كيفك|كيف حالك)/.test(q) && q.length < 35) {
-        return `أهلا بك في **برنامج BTEC** في **مدرسة البلقاء الثانوية الشاملة**.\nالتخصصات المتاحة في الموقع: **تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل**.\nيمكنك السؤال عن الوحدات الدراسية، محتوى التخصص، المهارات، المجالات المهنية أو المرافق المسجلة.`;
+      const greetings = ["مرحبا", "اهلا", "السلام عليكم", "سلام", "هاي", "هلا", "صباح الخير", "مساء الخير", "كيفك", "كيف حالك", "hello", "hi", "hey", "good morning", "good evening"];
+      if (q.length < 35 && containsAny(q, greetings)) {
+        return english
+          ? "Hello! I can help with the four BTEC specializations on this website: Information Technology, Business, Art and Design, and Beauty. You can also ask about the interactive map, learning library, games, study units, skills, and school facilities."
+          : "أهلا بك في مرشد BTEC. أستطيع مساعدتك بمعلومات التخصصات الأربعة: تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل. ويمكنك السؤال عن الخريطة التفاعلية والمكتبة التعليمية ومنطقة اللعب والوحدات والمهارات والمرافق.";
       }
 
-      if (topic && isComprehensiveRequest) {
-        return generateComprehensiveSpecReply(topic);
+      // أقسام الموقع (منطقة اللعب ومكتبة المواد) ليست تخصصات؛ نعالجها قبل اكتشاف التخصصات.
+      const explicitGamesArea = containsAny(q, ["منطقة الالعاب", "منطقه الالعاب", "منطقة اللعب", "منطقه اللعب", "قسم الالعاب", "قسم اللعب", "الالعاب في الموقع", "العاب الموقع", "play area", "games area", "gaming area"]);
+      const explicitLibraryArea = containsAny(q, ["مكتبة المواد", "المكتبه التعليميه", "المكتبة التعليمية", "مكتبه المواد", "قسم المواد", "صفحة المواد", "صفحه المواد", "صفحة الوحدات", "صفحه الوحدات", "المواد والوحدات الدراسية", "منطقة المواد", "منطقه المواد", "منطقة المكتبة", "منطقه المكتبه", "library area", "materials page", "study units page", "learning library", "materials library", "study library"]);
+      const explicitUnitRequest = containsAny(q, ["وحدات", "الوحدات", "الوحدات الدراسية", "مقررات", "المستوى الثاني", "المستوى الثالث", "level 2", "level 3", "study units", "curriculum", "subjects", "courses"]);
+      const topics = detectSpecializations(q);
+      const asksAll = containsAny(q, ["كل التخصصات", "جميع التخصصات", "التخصصات كلها", "التخصصات الاربعة", "كل الاقسام", "جميع الاقسام", "مواد كل التخصصات", "كل مواد التخصصات", "المستوى الثاني لكل التخصصات", "المستوى الثالث لكل التخصصات", "all specializations", "all specialties", "all departments", "every specialization", "all four"]);
+      const asksOther = containsAny(q, ["تخصص اخر", "تخصص ثاني", "تخصص غيره", "تخصص غير", "غير التخصص", "التخصص الثاني", "التخصص اللي بعده", "التخصص الذي بعده", "احكيلي عن غيره", "احكيلي عن تخصص غير", "another specialization", "another specialty", "another one", "different specialization", "other specialty", "other specialization", "the next one", "the other one"]);
+      const asksCompare = containsAny(q, ["قارن", "مقارنه", "الفرق بين", "ايش الفرق", "شو الفرق", "compare", "comparison", "difference between", "differences"]);
+      const asksSite = containsAny(q, ["الموقع", "الموقع الالكتروني", "الموقع نفسه", "المدرسة", "عن المدرسة", "website", "the site", "this website", "about this site", "school", "about the school"]);
+      const asksMap = containsAny(q, ["خريطه", "الخريطة", "الجزيره", "الجزيرة", "الخريطة التفاعلية", "كيف اوصل", "كيف انتقل", "how to navigate", "where do i click", "map", "interactive map", "island"]);
+      const asksLibrary = explicitLibraryArea || containsAny(q, ["مكتبه", "المكتبة", "مكتبة المواد", "المكتبة التعليمية", "المواد", "مواد", "ملفات pdf", "pdf", "كتب", "كتاب", "تنزيل الكتب", "تحميل الكتب", "library", "learning resources", "study files", "materials", "books", "download materials"]);
+      const asksGames = explicitGamesArea || containsAny(q, ["لعبه", "اللعبه", "العاب", "الألعاب", "الالعاب", "منطقة اللعب", "التحدي", "كيف العب", "كيف نلعب", "game", "games", "play area", "gaming", "how to play", "play lab", "play"]);
+      const asksCatch = containsAny(q, ["اجمع", "التقط", "العناصر المفيده", "العناصر الضاره", "الاشياء المفيده", "الاشياء الضاره", "مفيد وضار", "مفيده وضاره", "كم نقطه للفوز", "نقاط الفوز", "لماذا اخسر", "ليش بخسر", "خسرت", "اخسر", "1000", "الف نقطه", "الفوز", "catch", "basket", "harmful", "useful items", "good and bad items", "points to win", "why did i lose"]);
+      const asksAssistant = containsAny(q, ["المساعد", "الذكاء الاصطناعي", "مرشد", "اسالك", "اسأل", "كيف تشتغل", "كيف تعمل", "كيف تفهم السؤال", "كيف تجاوب", "كيف بتجاوب", "كيف بتفهم", "what are you", "how do you work", "how do you answer", "assistant", "ai assistant", "chatbot", "ask you"]);
+      const asksGreetingOnly = q.length < 22 && containsAny(q, ["شكرا", "يسلمو", "مشكور", "تمام", "thanks", "thank you", "ok", "okay"]);
+
+      // الاستفسار عن منطقة الألعاب يجيب عن المنطقة نفسها، حتى لو احتوى السؤال كلمة قد تتشابه مع اسم تخصص.
+      if (asksCatch) { lastDiscussedTopic = null; return english ? SITE_KNOWLEDGE_EN.catch : SITE_KNOWLEDGE.catch; }
+      if (asksGames) { lastDiscussedTopic = null; return english ? SITE_KNOWLEDGE_EN.games : SITE_KNOWLEDGE.games; }
+      // الاستفسار العام عن المواد/المكتبة يخص منطقة المكتبة، أما الوحدات فتُربط بالتخصص عند تسميته.
+      if (asksLibrary && (explicitLibraryArea || (!explicitUnitRequest && topics.length === 0))) {
+        lastDiscussedTopic = null;
+        return english ? SITE_KNOWLEDGE_EN.library : SITE_KNOWLEDGE.library;
       }
 
-      if (isMaterialsQuestion) {
-        if (topic) return getMaterialsReply(topic, q);
-        return `عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها. يرجى ذكر اسم التخصص المرتبط بالوحدات (تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، أو التجميل).`;
+      if (asksGreetingOnly) return english ? "You're welcome! Ask me anything about the BTEC website and its listed content." : "العفو! اسألني عن أي جزء من محتوى موقع BTEC، وسأجيبك حسب المعلومات المتاحة.";
+
+      // سؤال يطلب تخصصا آخر دون تسميته: لا نعيد الموضوع السابق ولا نخمن.
+      if (asksOther && topics.length === 0) {
+        lastDiscussedTopic = null;
+        return english
+          ? "Which specialization do you mean? Please name Information Technology, Business, Art and Design, or Beauty."
+          : "أكيد. أي تخصص تقصد؟ اكتب اسمه: تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، أو التجميل.";
       }
 
-      if ((q.includes("فرق") || q.includes("مقارنه") || q.includes("الاختلاف")) && (q.includes("تكنولوجيا") || q.includes("حاسوب")) && (q.includes("اعمال") || q.includes("اداره"))) {
-        return `**الفرق بين التخصصين:**\n• **تكنولوجيا المعلومات:** يركز على الأنظمة والبرمجة والشبكات والبيانات والأمن السيبراني.\n• **إدارة الأعمال:** يركز على المؤسسات والتسويق والتمويل والإدارة والموارد البشرية وخدمة العملاء.\n\nكلاهما يتضمن وحدات عملية ومشروعات، لكن طبيعة المهارات والمحتوى مختلفة.`;
+      // معالجة سؤال يتضمن أكثر من تخصص أو جميع التخصصات.
+      if (asksAll) {
+        lastDiscussedTopic = null;
+        return getAllSpecializationsReply(q, english);
+      }
+      if (topics.length > 1) {
+        lastDiscussedTopic = null;
+        if (asksCompare) {
+          const comparison = topics.map(key => `**${SPECIALIZATION_KNOWLEDGE[key].title}:**\n${getSpecReply(key, q, english)}`).join("\n\n");
+          return comparison + (english
+            ? "\n\n**Summary:** The specializations differ in content and skills. The best fit depends on the subjects and type of work that interest you."
+            : "\n\n**الخلاصة:** تختلف التخصصات في المحتوى والمهارات وطبيعة العمل؛ والاختيار يعتمد على المجالات التي تهمك.");
+        }
+        return topics.map(key => getSpecReply(key, q, english)).join("\n\n---\n\n");
       }
 
-      if (topic && /(وظائف|وظيفه|اعمال|مهن|مستقبل|اشتغل|سوق العمل|فرص العمل)/.test(q)) {
-        return `**المجالات المهنية المرتبطة بتخصص ${SPECIALIZATION_KNOWLEDGE[topic].title}:**\n${SPECIALIZATION_KNOWLEDGE[topic].careers}\n\nالشهادة وحدها لا تعني ضمان وظيفة محددة؛ وقد تحتاج بعض الوظائف إلى دراسة جامعية أو تدريب أو ترخيص إضافي.`;
+      // متابعة واضحة فقط: نستخدم التخصص السابق إذا كانت صياغة السؤال تشير إليه.
+      const isExplicitFollowUp = containsAny(q, [
+        "هذا التخصص", "هاذ التخصص", "هالتخصص", "نفس التخصص", "التخصص نفسه", "هذا", "هاذ", "هاي", "هي", "هو",
+        "عنه", "عنها", "له", "لها", "مواده", "موادها", "وحداته", "وحداتها", "مهاراته", "مهاراتها", "مرافقه", "مرافقها",
+        "طيب والوظائف", "طيب والمواد", "طيب المهارات", "والوظائف", "والمواد", "والمهارات",
+        "كمل", "كمللي", "تابع", "زيد", "تفاصيل اكثر", "اشرح اكثر", "وضح اكثر",
+         "its units", "its skills", "its facilities", "what about its jobs", "what about its units", "this specialization", "this one", "tell me more", "more details", "continue", "go on"
+      ]);
+      let topic = topics[0] || null;
+      if (!topic && isExplicitFollowUp && lastDiscussedTopic) topic = lastDiscussedTopic;
+      if (topic) lastDiscussedTopic = topic;
+
+      // طلبات صريحة خارج نطاق الموقع لا تتحول إلى إجابة عن الموقع لمجرد ورود كلمة website.
+      const asksOutside = containsAny(q, ["خارج نطاق الموقع", "خارج الموقع", "موضوع اخر", "موضوع ثاني", "شيء اخر", "شي ثاني", "outside the website", "outside the scope", "unrelated to btec", "not related to btec"]);
+      if (asksOutside) {
+        lastDiscussedTopic = null;
+        return english
+          ? "I can only provide verified information about this BTEC website, its four specializations, study units, facilities, interactive map, learning library, and games. Your request is outside that scope."
+          : "أستطيع تقديم معلومات مؤكدة عن موقع BTEC وتخصصاته الأربعة ووحداته ومرافقه والخريطة والمكتبة والألعاب فقط. طلبك الحالي خارج نطاق الموقع.";
       }
 
-      if (topic && /(مهارات|مهاره|اتعلم|تعلم|اكتسب|قدرات)/.test(q)) {
-        return `**المهارات التي يطورها تخصص ${SPECIALIZATION_KNOWLEDGE[topic].title}:**\n${SPECIALIZATION_KNOWLEDGE[topic].skills}\n\nوتتحدد المهارات التفصيلية بحسب الوحدات والمشروعات التي يدرسها المتعلم.`;
+      // معلومات الموقع ومكوناته.
+      if (asksMap) { lastDiscussedTopic = null; return english ? SITE_KNOWLEDGE_EN.map : SITE_KNOWLEDGE.map; }
+      if (asksAssistant) {
+        lastDiscussedTopic = null;
+        if (containsAny(q, ["كيف تشتغل", "كيف تعمل", "كيف تفهم السؤال", "كيف تجاوب", "كيف بتجاوب", "كيف بتفهم", "how do you work", "how do you answer", "what are you"])) {
+          return english
+            ? "I am the website's built-in BTEC knowledge guide. I normalize common spelling variations, identify the specialization or website section mentioned, detect whether you are asking about units, skills, facilities, careers, games, or navigation, and then use the matching information stored in the website. I only carry the previous specialization forward when your wording clearly refers to it. If you say 'another specialization' without naming it, I ask which one. If a fact is not in the website data, I say that it is not confirmed instead of inventing an answer. This is a local knowledge-based assistant, not a live connection to an external generative AI model."
+            : "أنا مرشد BTEC مدمج داخل الموقع. أتعامل مع اختلافات الإملاء والصياغة، وأحدد التخصص أو القسم المذكور، ثم أميز نوع السؤال: وحدات أو مهارات أو مرافق أو مجالات مهنية أو ألعاب أو طريقة استخدام الموقع. أستخدم موضوع المحادثة السابق فقط عندما تشير إليه صياغة السؤال بوضوح. وإذا قلت «تخصص آخر» دون تحديده، أسألك أي تخصص تقصد. وإذا كانت المعلومة غير موجودة في بيانات الموقع، أوضح أنها غير مؤكدة بدلا من اختراع إجابة. هذا مساعد معرفي محلي وليس اتصالا مباشرا بنموذج ذكاء اصطناعي توليدي خارجي.";
+        }
+        return english ? SITE_KNOWLEDGE_EN.assistant : SITE_KNOWLEDGE.assistant;
+      }
+      if (asksSite && !topic) { lastDiscussedTopic = null; return english
+        ? SITE_KNOWLEDGE_EN.school + "\n\n" + SITE_KNOWLEDGE_EN.map + "\n\n" + SITE_KNOWLEDGE_EN.library + "\n\n" + SITE_KNOWLEDGE_EN.games
+        : SITE_KNOWLEDGE.school + "\n\n" + SITE_KNOWLEDGE.map + "\n\n" + SITE_KNOWLEDGE.library + "\n\n" + SITE_KNOWLEDGE.games;
       }
 
-      if (topic && /(مجالات|يشمل|يتضمن|محتوى|عن التخصص|احكيلي|اشرح|شو هو|ما هو|ماهو|تعريف)/.test(q)) {
-        const spec = SPECIALIZATION_KNOWLEDGE[topic];
-        return `**تخصص ${spec.title}:**\n${spec.overview}\n\n**أبرز مجالاته:** ${spec.topics}\n\n**المهارات:** ${spec.skills}\n\nللاطلاع على أسماء الوحدات الدراسية، اسأل: ما المواد الموجودة في هذا التخصص؟`;
+      if (topic) return getSpecReply(topic, q, english);
+
+      const asksUnitsWithoutTopic = explicitUnitRequest;
+      if (asksUnitsWithoutTopic) {
+        lastDiscussedTopic = null;
+        return english
+          ? "Which specialization do you mean? Please choose Information Technology, Business, Art and Design, or Beauty so I can give you the correct unit list."
+          : "أي تخصص تقصد؟ حدد تكنولوجيا المعلومات أو إدارة الأعمال أو فن وتصميم أو التجميل، حتى أعطيك قائمة الوحدات الصحيحة.";
       }
 
-      if (topic && /(مرافق|مختبر|مشغل|غرفه|غرفة)/.test(q)) {
-        return `**المرافق المسجلة لتخصص ${SPECIALIZATION_KNOWLEDGE[topic].title} في المدرسة:**\n• ${SPECIALIZATION_KNOWLEDGE[topic].facility}`;
+      // الأسئلة العامة عن التخصصات.
+      if (containsAny(q, ["تخصصات", "التخصصات", "شو التخصصات", "ما هي التخصصات", "available specializations", "what specializations", "which specialties"])) {
+        return english
+          ? `The website includes four BTEC specializations:\n1. **Information Technology:** ${SPECIALIZATION_KNOWLEDGE.it.overviewEn}\n2. **Business:** ${SPECIALIZATION_KNOWLEDGE.business.overviewEn}\n3. **Art and Design:** ${SPECIALIZATION_KNOWLEDGE.art.overviewEn}\n4. **Beauty:** ${SPECIALIZATION_KNOWLEDGE.beauty.overviewEn}`
+          : "يضم الموقع أربعة تخصصات ضمن BTEC:\n1. **تكنولوجيا المعلومات:** البرمجة والبيانات والشبكات وتطوير المواقع والتطبيقات والألعاب والأمن السيبراني.\n2. **إدارة الأعمال:** التسويق والتمويل والإدارة والموارد البشرية وخدمة العملاء.\n3. **فن وتصميم:** التواصل المرئي والتصميم الجرافيكي والتصوير والأزياء والمنسوجات.\n4. **التجميل:** الشعر والبشرة والأظافر والمكياج وخدمات الصالون.";
       }
 
-      if (/(المستوى الثاني|المستوى الثالث|level 2|level 3|الصف العاشر|الحادي عشر|الثاني عشر)/.test(q) && topic) {
-        return getMaterialsReply(topic, q);
+      if (containsAny(q, ["btec", "بيتك", "بيرسون", "pearson", "دبلوم", "الدبلوم", "vocational", "technical education"])) {
+        return english
+          ? "BTEC is a career-focused technical and vocational qualification framework. This website presents four BTEC specializations and their listed study units, facilities and learning activities. For exact admission, grading or qualification regulations, check the official school or ministry guidance because those details are not fully provided in this site's assistant data."
+          : "BTEC مسار للتعليم المهني والتقني يعتمد على وحدات دراسية وتطبيقات ومشروعات وتقييمات مرتبطة بالتخصص. يعرض هذا الموقع أربعة تخصصات ووحداتها ومرافقها وأنشطة تعليمية. أما شروط القبول أو تفاصيل العلامات والأنظمة الرسمية فيجب التأكد منها من المدرسة أو الجهات الرسمية؛ لأنها غير موضحة بالكامل في بيانات المساعد الحالية.";
       }
 
-      if (topic) {
-        return generateComprehensiveSpecReply(topic);
+      if (containsAny(q, ["قبول", "التسجيل", "رسوم", "قسط", "معدل القبول", "علامات", "معدل", "شهادة", "معادلة", "جامعه", "جامعة", "الجامعات", "رواتب", "راتب", "موقع المدرسة", "عنوان المدرسة", "رقم المدرسة", "admission", "enrollment", "fees", "tuition", "salary", "salaries", "university", "grades", "address", "phone number"])) {
+        return english
+          ? "That detail is not confirmed in the website information available to me. I don't want to guess. Please check directly with the school or the relevant official Jordanian education authority for the current requirements."
+          : "هذه المعلومة غير مؤكدة ضمن البيانات الموجودة في الموقع، وما بدي أعطيك جوابا من عندي. الأفضل التأكد منها مباشرة من المدرسة أو الجهة الرسمية المختصة في الأردن.";
       }
 
-      if (/(تخصصات|التخصصات|نبذه|المتاحه|الموجوده|اختار|اختيار)/.test(q)) {
-        return `تتوفر في الموقع أربعة تخصصات ضمن برنامج BTEC:\n1. **تكنولوجيا المعلومات:** البرمجة، البيانات، الشبكات، تطوير المواقع والتطبيقات والأمن السيبراني.\n2. **إدارة الأعمال:** التسويق، التمويل، الإدارة، الموارد البشرية وخدمة العملاء.\n3. **فن وتصميم:** التواصل المرئي والتصميم الجرافيكي والتصوير والأزياء والمنسوجات.\n4. **التجميل:** الشعر والبشرة والأظافر والمكياج وخدمات الصالون.\n\nاذكر اسم التخصص لمعرفة وحداته الدراسية ومهاراته ومجالاته المهنية.`;
-      }
-
-      if (/(btec|بيتك|برنامج|دبلوم|شهاده|شهادة)/.test(q)) {
-        return `**برنامج BTEC** هو مسار للتعليم المهني والتقني يعتمد على وحدات دراسية وتطبيقات ومشروعات وتقييمات مرتبطة بالتخصص. يهدف إلى تنمية المعرفة والمهارات العملية، ويدعم مواصلة التعليم أو الانتقال إلى مجالات العمل.\n\nتختلف الوحدات بحسب التخصص والمستوى. يمكنك أن تسألني عن تخصص محدد أو عن مواده الدراسية.`;
-      }
-
-      // الفحص الشامل للأسئلة الخارجية والغريبة
-      const allowedKeywords = /(تكنولوجيا|المعلومات|حاسوب|إدارة|الأعمال|إدارة الأعمال|فن وتصميم|تصميم|التجميل|شعر|بشرة|مرافق|مختبر|مشغل|مرسم|وحدات|مواد|مهارات|وظائف|btec|بيتك|مدرسة|البلقاء)/;
-      if (!allowedKeywords.test(q)) {
-        return `عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها. يمكنك سؤالي عن تخصصات برنامج BTEC (تكنولوجيا المعلومات، إدارة الأعمال، فن وتصميم، والتجميل) ومرافقها وموادها الدراسية في مدرسة البلقاء الثانوية الشاملة.`;
-      }
-
-      return `عذراً، هذا السؤال خارج إطار البيانات التي استطيع إجابتك عليها. أستطيع الإجابة فقط عن تخصصات ومرافق ووحدات برنامج BTEC في مدرسة البلقاء الثانوية الشاملة.`;
+      // أسئلة عامة خارج نطاق الموقع.
+      lastDiscussedTopic = null;
+      return english
+        ? "I'm the BTEC website guide, so I can answer questions about the four specializations, their listed Level 2 and Level 3 units, skills, school facilities, the interactive map, learning library and games. This question appears to be outside that scope. If you meant something on the website, please mention the related section or specialization."
+        : "أنا مرشد موقع BTEC، واختصاصي الإجابة عن التخصصات الأربعة ووحداتها في المستوى الثاني والثالث ومهاراتها ومرافقها، إضافة إلى الخريطة التفاعلية والمكتبة التعليمية ومنطقة اللعب. يبدو أن سؤالك خارج نطاق الموقع. إذا كنت تقصد جزءا من الموقع، اذكر اسم القسم أو التخصص وسأساعدك.";
     }
 
     async function sendMessage(userText) {
@@ -2768,6 +3713,200 @@
       `;
       chatInputEl.value = "";
       chatInputEl.focus();
+    }
+
+    // ==========================================
+    // BTEC PLAY LAB — INTERACTIVE DECISION GAMES
+    // ==========================================
+    const PLAY_GAMES = {
+      it_defender: {
+        title: "مهمة الأمن السيبراني", eyebrow: "تكنولوجيا المعلومات · التحقيق الرقمي", accent: "indigo",
+        skill: "تمييز التصيد والهندسة الاجتماعية، حماية الحسابات، والتعامل الصحيح مع الحوادث الرقمية.",
+        rounds: [
+          { scenario: "وصل إلى أحد الموظفين بريد إلكتروني يدعي أنه من البنك، ويطلب الضغط على رابط لتحديث كلمة المرور خلال عشر دقائق.", question: "ما أول تصرف آمن؟", options: ["الضغط على الرابط للتأكد", "فتح الموقع الرسمي للبنك يدويا والتحقق من الرسالة", "إعادة إرسال الرسالة إلى الزملاء"], answer: 1, explain: "ممتاز! لا نستخدم الرابط المشبوه. ندخل إلى الموقع الرسمي أو نتواصل مع البنك من قناة موثوقة، ونبلغ عن الرسالة.", wrong: "الضغط على الرابط قد يقود إلى صفحة مزيفة تسرق بيانات الدخول، وإعادة إرسال الرسالة قد تعرض زملاءك للخطر. التحقق يجب أن يتم من قناة رسمية مستقلة." },
+          { scenario: "لاحظ فريق التقنية أن حساب موظف سابق ما زال يستطيع الدخول إلى ملفات الشركة بعد انتهاء عمله.", question: "أي إجراء يعالج المشكلة مباشرة؟", options: ["تعطيل الحساب وسحب صلاحياته ضمن إجراءات مغادرة الموظف", "تغيير خلفية أجهزة الشركة", "ترك الحساب حتى يحتاجه أحد"], answer: 0, explain: "صحيح. هذه خطوة من Offboarding، ويجب إلغاء الحسابات والجلسات ومراجعة الصلاحيات فور انتهاء الحاجة إليها.", wrong: "تغيير خلفية الأجهزة لا يؤثر في صلاحية الحساب، وترك حساب الموظف السابق نشطا يبقي الوصول إلى ملفات الشركة ممكنا." },
+          { scenario: "تعمل شركة على حماية بيانات العملاء، وبعض الموظفين يحتاجون إلى الملفات المالية بينما لا يحتاجها الجميع.", question: "أي مبدأ أمني هو الأنسب؟", options: ["منح الجميع صلاحية المدير", "مشاركة كلمة مرور واحدة", "مبدأ أقل صلاحية ومنح كل موظف ما يحتاجه فقط"], answer: 2, explain: "بالضبط. مبدأ Least Privilege يقلل الوصول غير الضروري ويحد من أثر الخطأ أو اختراق حساب موظف.", wrong: "منح الجميع صلاحية المدير أو مشاركة كلمة مرور واحدة يوسع الوصول ويصعب تتبع المسؤولية، ولا يطبق مبدأ أقل صلاحية." },
+          { scenario: "ظهر تنبيه من برنامج الحماية يفيد بوجود ملف مشبوه على جهاز موظف.", question: "ما التصرف الأنسب؟", options: ["تجاهل التنبيه ومتابعة العمل", "اتباع إجراء العزل والفحص وإبلاغ مسؤول التقنية", "نسخ الملف وإرساله للزملاء"], answer: 1, explain: "الإجراء الصحيح هو عزل الجهاز أو الملف حسب سياسة المؤسسة، ثم فحصه وإبلاغ الفريق المختص حتى لا ينتشر التهديد.", wrong: "تجاهل التنبيه قد يسمح باستمرار نشاط الملف، ونسخه أو مشاركته قد ينشر التهديد إلى أجهزة أخرى." },
+          { scenario: "يستخدم فريق العمل كلمة مرور واحدة مشتركة للدخول إلى لوحة إدارة النظام.", question: "ما الخطر الأوضح في هذا الأسلوب؟", options: ["يصعب تحديد من نفذ الإجراء، ويزداد أثر تسرب كلمة المرور", "تصبح البيانات مشفرة تلقائيا", "تتحسن مراقبة الحسابات"], answer: 0, explain: "الحسابات الفردية تتيح تتبع النشاط وتحديد المسؤوليات، ويجب أن يمتلك كل مستخدم بيانات دخول خاصة به.", wrong: "مشاركة كلمة المرور لا تشفر البيانات ولا تحسن المراقبة؛ بل تجعل معرفة من نفذ العملية أصعب وتوسع أثر التسريب." },
+          { scenario: "وصلت رسالة تطلب من الموظف إرسال رمز التحقق الذي وصله على هاتفه بحجة أن الدعم الفني يحتاجه.", question: "كيف يجب التعامل مع الطلب؟", options: ["إرسال الرمز بسرعة", "إرساله إذا كان اسم المرسل مألوفا", "عدم مشاركة الرمز والتحقق من الطلب عبر قناة الدعم الرسمية"], answer: 2, explain: "رمز التحقق سري مثل كلمة المرور، ولا ينبغي مشاركته مع أي شخص. يجب التواصل مع الدعم عبر القنوات المعتمدة.", wrong: "معرفة اسم المرسل أو ادعاؤه أنه من الدعم لا يثبت هويته. مشاركة الرمز قد تمنح شخصا آخر إمكانية الدخول إلى الحساب." },
+        ]
+      },
+      biz_tycoon: {
+        title: "قرارك يصنع المشروع", eyebrow: "إدارة الأعمال · قرارات المشروع", accent: "emerald",
+        skill: "التخطيط، إدارة الموارد، فهم العميل، واتخاذ قرارات متوازنة بدل التركيز على الربح السريع فقط.",
+        rounds: [
+          { scenario: "معك ميزانية محدودة لإطلاق متجر إلكتروني. أمامك خياران: تصميم جميل جدا لكنه لا يعمل جيدا على الهاتف، أو تصميم أبسط وسهل الاستخدام على كل الأجهزة.", question: "أي قرار يخدم المشروع على المدى الطويل؟", options: ["اختيار التصميم الجميل حتى لو تعطلت بعض الوظائف", "اختيار التصميم المتجاوب واختباره قبل الإطلاق", "صرف الميزانية كلها على إعلان واحد"], answer: 1, explain: "قرار موفق. تجربة المستخدم وسهولة الوصول للموقع أساس نجاح المتجر، وبعدها يمكن تطوير الشكل والحملات تدريجيا.", wrong: "التصميم الذي لا يعمل جيدا على الهاتف يبعد جزءا من العملاء، والإعلان وحده لا يصلح تجربة شراء معطلة." },
+          { scenario: "انخفضت المبيعات هذا الشهر، وأظهرت آراء العملاء أن سببا رئيسيا هو تأخر التوصيل.", question: "ما الخطوة الإدارية الأفضل؟", options: ["تجاهل الآراء وزيادة السعر", "إيقاف المشروع فورا", "تحليل سبب التأخير وتحسين عملية التوصيل ثم قياس النتائج"], answer: 2, explain: "صحيح. القرار الجيد يبدأ بفهم المشكلة من البيانات وآراء العملاء، ثم تنفيذ تحسين قابل للقياس.", wrong: "تجاهل آراء العملاء أو رفع السعر لا يعالج تأخر التوصيل، وإيقاف المشروع فورا قرار متسرع قبل تحليل السبب." },
+          { scenario: "طلب مورد منك شراء كمية كبيرة بسعر أقل، لكن الطلب المتوقع من العملاء غير واضح.", question: "كيف يمكن تقليل المخاطرة؟", options: ["تقدير الطلب ومراجعة المخزون والبدء بكمية مدروسة", "شراء أكبر كمية فورا", "إنفاق ميزانية التسويق على ديكور المكتب"], answer: 0, explain: "ممتاز. إدارة المخزون تعتمد على توقع الطلب وتجنب تجميد رأس المال في منتجات قد لا تباع.", wrong: "شراء كمية كبيرة دون تقدير الطلب قد يترك مخزونا غير مباع ويجمد الميزانية، وديكور المكتب لا يحل مشكلة تقدير المخزون." },
+          { scenario: "لاحظ المشروع أن كثيرا من الزوار يضيفون منتجات إلى سلة الشراء ثم يغادرون دون إكمال الطلب.", question: "ما الخطوة الأفضل قبل تغيير المتجر؟", options: ["إلغاء المنتجات الأقل سعرا", "تحليل خطوات الدفع وجمع ملاحظات المستخدمين", "زيادة الأسعار مباشرة"], answer: 1, explain: "تحليل رحلة المستخدم وملاحظاته يساعد على اكتشاف العائق الحقيقي، مثل تعقيد الدفع أو تكاليف التوصيل غير الواضحة.", wrong: "تغيير الأسعار أو حذف المنتجات لا يعالج بالضرورة سبب مغادرة السلة؛ المطلوب أولا تحديد موضع المشكلة بالبيانات." },
+          { scenario: "يريد المشروع إطلاق منتج جديد، لكن الوقت والميزانية محدودان.", question: "كيف ينظم العمل بصورة واقعية؟", options: ["تحديد الأولويات والمهام والموارد والجدول الزمني", "بدء جميع المهام في الوقت نفسه دون خطة", "تأجيل تحديد المسؤوليات إلى آخر يوم"], answer: 0, explain: "الخطة الواضحة توزع المسؤوليات وتحدد الأولويات والموعد والموارد، وتساعد على متابعة التقدم.", wrong: "العمل دون ترتيب أو مسؤوليات واضحة يسبب تكرار الجهد والتأخير، ولا يضمن إنجاز المتطلبات المهمة." },
+          { scenario: "أعلن المشروع عن خدمة جديدة، ثم اكتشف أن الإعلان وصل إلى جمهور غير مهتم بها.", question: "ما التحسين الأنسب للحملة القادمة؟", options: ["زيادة عدد المنشورات عشوائيا", "إيقاف التواصل مع العملاء نهائيا", "تحديد الجمهور المستهدف واختيار القنوات المناسبة وقياس النتائج"], answer: 2, explain: "تحديد الجمهور والقناة والهدف ومؤشرات القياس يجعل الحملة أكثر تركيزا ويساعد على تحسينها.", wrong: "النشر العشوائي أو التوقف الكامل لا يعالج ضعف الاستهداف. الأفضل فهم الجمهور وقياس أداء الحملة." },
+        ]
+      },
+      art_studio: {
+        title: "استوديو التصميم", eyebrow: "فن وتصميم · الهوية البصرية", accent: "amber",
+        skill: "اختيار الألوان والخطوط والتكوين البصري بما يخدم الرسالة والجمهور وسهولة القراءة.",
+        rounds: [
+          { scenario: "يصمم ملصق لفعالية مدرسية، والخلفية بنفسجية داكنة والنص أيضا بنفسجي غامق.", question: "ما التعديل الأهم لتحسين قابلية القراءة؟", options: ["تصغير الخط أكثر", "اختيار لون نص فاتح عالي التباين", "إضافة نصوص كثيرة"], answer: 1, explain: "صحيح! التباين الواضح بين النص والخلفية يجعل المحتوى مقروءا، خصوصا على الشاشات.", wrong: "تصغير الخط يجعل القراءة أصعب، وإضافة نصوص تزيد الازدحام. المشكلة الأساسية هي ضعف التباين بين النص والخلفية." },
+          { scenario: "طلب عميل شعارا لمقهى هادئ بطابع طبيعي، ويريد أن يكون واضحا حتى عند تصغيره.", question: "أي مبدأ تصميم يجب إعطاؤه الأولوية؟", options: ["إضافة تفاصيل دقيقة كثيرة", "استخدام خمسة أنواع خطوط", "البساطة والوضوح وقابلية الاستخدام بأحجام مختلفة"], answer: 2, explain: "رائع. الشعار الناجح يظل واضحا في الحجم الصغير والكبير، لذلك البساطة والتوازن أهم من ازدحام التفاصيل.", wrong: "التفاصيل الدقيقة والخطوط الكثيرة قد تختفي أو تتداخل عند تصغير الشعار، لذلك لا تحقق الوضوح المطلوب." },
+          { scenario: "تجهز منشورا إعلانيا فيه عنوان وصورة وتفاصيل وموعد ومكان.", question: "كيف ترتبين العناصر ليعرف المشاهد أين يبدأ؟", options: ["تحديد تسلسل بصري: عنوان بارز ثم الصورة ثم التفاصيل", "جعل كل النص بالحجم والوزن نفسه", "وضع كل العناصر في زاوية واحدة"], answer: 0, explain: "تمام. التسلسل الهرمي البصري يوجه عين المشاهد ويظهر المعلومات حسب أهميتها.", wrong: "جعل كل النص بالحجم نفسه يلغي ترتيب الأهمية، ووضع كل العناصر في زاوية واحدة يسبب ازدحاما ويصعب تتبع المعلومات." },
+          { scenario: "يحتوي تصميم صفحة على أزرار وروابط كثيرة بألوان متقاربة جدا.", question: "ما الذي يحسن وضوح العناصر التفاعلية؟", options: ["جعل جميع العناصر باللون نفسه", "استخدام تباين واضح وحالات مرئية للأزرار والروابط", "إخفاء تسميات الأزرار"], answer: 1, explain: "التباين والحالات المرئية تساعد المستخدم على تمييز العناصر التفاعلية وفهم ما يمكن الضغط عليه.", wrong: "توحيد الألوان أو حذف التسميات يجعل التمييز أصعب، ولا يوضح وظيفة كل عنصر." },
+          { scenario: "طلب تصميم منشور لمنصة اجتماعية، لكن النص طويل والصورة مزدحمة.", question: "ما الحل التصميمي الأفضل؟", options: ["تقسيم المعلومات واختصار النص وإبراز أهم رسالة", "تصغير كل العناصر حتى تتسع", "إضافة زخارف أكثر"], answer: 0, explain: "ترتيب المحتوى واختصار الرسالة مع مساحة بيضاء مناسبة يجعل التصميم أسهل للفهم على شاشة صغيرة.", wrong: "تصغير كل شيء أو إضافة الزخارف يزيد الازدحام ويضعف القراءة بدلا من معالجة المشكلة." },
+          { scenario: "يستخدم فريق التصميم صورا من الإنترنت في إعلان تجاري.", question: "ما الإجراء الصحيح قبل نشر الإعلان؟", options: ["استخدام أي صورة ما دامت متاحة للعرض", "إزالة اسم المصور فقط", "التحقق من الترخيص وحقوق الاستخدام أو اختيار مادة مسموحا بها"], answer: 2, explain: "يجب احترام حقوق الملكية الفكرية والتأكد من أن الترخيص يسمح بالاستخدام المطلوب، خصوصا في الأعمال التجارية.", wrong: "وجود الصورة على الإنترنت لا يعني أنها مجانية أو متاحة تجاريا، وإزالة اسم صاحبها لا تمنح إذنا باستخدامها." },
+        ]
+      },
+      beauty_spa: {
+        title: "تحدي الصالون الاحترافي", eyebrow: "التجميل · جودة الخدمة وسلامتها", accent: "rose",
+        skill: "اتباع النظافة المهنية، الاستشارة، التحقق من الحساسية، واحترام حدود الخدمة وعدم تقديم تشخيص طبي.",
+        rounds: [
+          { scenario: "حضر عميل لجلسة عناية، ولوحظ وجود أدوات استخدمت مع عميل سابق.", question: "ما الإجراء المهني الصحيح قبل بدء الخدمة؟", options: ["استخدام الأدوات بسرعة", "تنظيف وتعقيم الأدوات وفق تعليمات المنتج والإجراءات المعتمدة", "مسح الأدوات بمنديل جاف فقط"], answer: 1, explain: "صحيح. نظافة الأدوات واليدين خطوة أساسية لمنع انتقال التلوث، ويجب الالتزام بتعليمات التعقيم.", wrong: "استخدام أدوات سبق استعمالها أو مسحها بمنديل جاف لا يضمن تنظيفها وتعقيمها بالشكل المطلوب، وقد ينقل التلوث بين العملاء." },
+          { scenario: "أخبر أحد العملاء أنه يعاني من حساسية تجاه بعض المنتجات، وطلب تجربة منتج جديد.", question: "ما التصرف الأكثر مسؤولية؟", options: ["استخدام كمية كبيرة للتأكد", "تجاهل المعلومة لأن المنتج مشهور", "مراجعة المكونات واتباع تعليمات اختبار الحساسية، وتأجيل الاستخدام عند وجود شك"], answer: 2, explain: "ممتاز. يجب أخذ الحساسية بجدية، واتباع تعليمات المنتج وسياسة الصالون، وعدم استخدام منتج عند وجود خطر أو شك.", wrong: "استخدام كمية كبيرة أو تجاهل معلومة الحساسية قد يسبب تفاعلا غير مرغوب. شهرة المنتج لا تعني أنه مناسب لكل شخص." },
+          { scenario: "أثناء الخدمة، ذكر العميل أنه يشعر بانزعاج أو تهيج من المنتج.", question: "ما الخطوة المناسبة؟", options: ["إيقاف الخدمة واتباع تعليمات السلامة وإحالة الأمر لمختص عند الحاجة", "إكمال الجلسة حتى تنتهي", "إضافة منتج آخر لإخفاء الانزعاج"], answer: 0, explain: "بالضبط. سلامة العميل أولا. نوقف الخدمة ولا نشخص الحالة طبيا، ونوجه العميل إلى مختص صحي عند الحاجة.", wrong: "إكمال الخدمة أو إضافة منتج آخر قد يزيد الانزعاج. يجب إيقاف الخدمة أولا واتباع تعليمات السلامة." },
+          { scenario: "وصل منتج جديد إلى مكان العمل، لكن ملصقه لا يوضح طريقة الاستخدام أو تاريخ الصلاحية.", question: "ما القرار المهني السليم؟", options: ["تجربته على العميل لمعرفة النتيجة", "عدم استخدامه والتحقق من بياناته من مصدر موثوق", "خلطه مع منتج آخر"], answer: 1, explain: "لا يستخدم منتج مجهول البيانات. يجب التأكد من الملصق والتعليمات والصلاحية ومصدر المنتج قبل الاستخدام.", wrong: "التجربة أو الخلط دون معرفة المكونات والتعليمات قد يعرض العميل لمخاطر غير معروفة." },
+          { scenario: "طلب عميل خدمة مختلفة عن الخدمة التي تم الاتفاق عليها، ولم يتأكد مقدم الخدمة من قدرته على تنفيذها.", question: "ما التصرف الأفضل؟", options: ["توضيح حدود الخبرة والخدمة والرجوع إلى مسؤول مختص", "الموافقة فورا مهما كانت المتطلبات", "تنفيذ الخدمة دون استشارة"], answer: 0, explain: "المهنية تعني الوضوح ضمن حدود التدريب والخبرة، وطلب المساعدة أو الإحالة عند الحاجة.", wrong: "الموافقة دون امتلاك المهارة أو تنفيذ خدمة غير مفهومة قد تؤثر في الجودة والسلامة." },
+          { scenario: "انسكب سائل على أرضية مكان العمل أثناء استقبال العملاء.", question: "ما الإجراء المناسب؟", options: ["تركه حتى نهاية اليوم", "تغطيته بورقة ومتابعة العمل", "تأمين المنطقة وتنظيف الانسكاب وفق إجراءات السلامة"], answer: 2, explain: "تأمين المنطقة والتنظيف الفوري وفق الإجراءات يقلل احتمال الانزلاق ويحافظ على بيئة عمل آمنة.", wrong: "ترك الانسكاب أو تغطيته بشكل غير آمن لا يزيل الخطر وقد يسبب تعثرا أو انزلاقا." },
+        ]
+      }
+    };
+
+    let currentPlayGame = "it_defender";
+    let playRound = 0;
+    let playScore = 0;
+    let playAnswered = false;
+    const playBestScores = { it_defender: 0, biz_tycoon: 0, art_studio: 0, beauty_spa: 0 };
+    const playGameScores = { it_defender: 0, biz_tycoon: 0, art_studio: 0, beauty_spa: 0 };
+
+    function updateHubTotalScore() {
+      const total = Object.values(playBestScores).reduce((sum, value) => sum + value, 0);
+      const el = document.getElementById("hubTotalScore");
+      if (el) el.textContent = total;
+    }
+
+    function initGamesHub() {
+      switchActiveGame(currentPlayGame, false);
+    }
+
+    function stopRunnerGame() {
+      // Kept as a compatibility hook for the site's existing navigation.
+    }
+
+    function switchActiveGame(gameKey, autoScroll = true) {
+      if (!PLAY_GAMES[gameKey]) return;
+      document.getElementById("catchGamePanel").classList.add("hidden");
+      document.getElementById("activeGameViewport").classList.remove("hidden");
+      stopCatchLoop();
+      currentPlayGame = gameKey;
+      playRound = 0;
+      playScore = 0;
+      playAnswered = false;
+      document.querySelectorAll(".game-selector-card").forEach(card => {
+        card.className = "game-selector-card group rounded-3xl border-2 border-slate-200 bg-white p-5 text-right shadow-sm transition hover:-translate-y-1 hover:shadow-xl";
+      });
+      const active = document.getElementById(`tab-game-${gameKey}`);
+      if (active) {
+        const color = { it_defender:"indigo", biz_tycoon:"emerald", art_studio:"amber", beauty_spa:"rose" }[gameKey];
+        active.className = `game-selector-card group rounded-3xl border-2 border-${color}-500 bg-white p-5 text-right shadow-lg transition hover:-translate-y-1 hover:shadow-xl`;
+      }
+      renderPlayRound();
+      if (autoScroll) {
+        const target = document.getElementById("activeGameViewport");
+        if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+      }
+    }
+
+    function renderPlayRound() {
+      const game = PLAY_GAMES[currentPlayGame];
+      const finished = playRound >= game.rounds.length;
+      document.getElementById("gameEyebrow").textContent = game.eyebrow;
+      document.getElementById("gameTitle").textContent = game.title;
+      document.getElementById("gameSkill").textContent = game.skill;
+      document.getElementById("gameScore").textContent = `${playScore} نقطة`;
+      document.getElementById("gameMiniScore").textContent = `${playBestScores[currentPlayGame]} / 120`;
+      document.getElementById("gameProgress").textContent = finished ? "اكتمل التحدي" : `السؤال ${playRound + 1} / ${game.rounds.length}`;
+      document.getElementById("gameProgressBar").style.width = `${finished ? 100 : (playRound / game.rounds.length) * 100}%`;
+      const scenario = document.getElementById("gameScenario");
+      const question = document.getElementById("gameQuestion");
+      const options = document.getElementById("gameOptions");
+      const feedback = document.getElementById("gameFeedback");
+      const next = document.getElementById("gameNextBtn");
+      const hint = document.getElementById("gameHint");
+      options.replaceChildren();
+      feedback.classList.add("hidden");
+      next.disabled = true;
+      next.classList.add("opacity-40");
+      if (finished) {
+        scenario.textContent = "اكتملت جميع مواقف هذه اللعبة. راجع النتيجة، ويمكن إعادة التحدي لتحسينها.";
+        question.textContent = playScore >= 100 ? "🏆 أداء ممتاز! لديك حس احترافي." : "👏 انتهى التحدي! كل جولة فرصة للتعلم.";
+        options.innerHTML = `<div class="sm:col-span-2 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center"><div class="text-4xl">🏅</div><div class="mt-2 text-2xl font-black text-emerald-800">${playScore} / 120 نقطة</div><p class="mt-2 text-sm font-bold text-emerald-700">أفضل نتيجة لهذه اللعبة: ${playBestScores[currentPlayGame]} نقطة</p></div>`;
+        next.textContent = "↻ أعد التحدي";
+        next.disabled = false;
+        next.classList.remove("opacity-40");
+        next.onclick = restartCurrentGame;
+        hint.textContent = "نتيجتك محفوظة خلال جلسة التصفح الحالية.";
+        return;
+      }
+      next.onclick = advanceGame;
+      next.textContent = "التالي ←";
+      const round = game.rounds[playRound];
+      scenario.textContent = round.scenario;
+      question.textContent = round.question;
+      hint.textContent = "اختر إجابة واحدة. كل إجابة صحيحة تساوي 20 نقطة.";
+      round.options.forEach((label, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "rounded-2xl border-2 border-slate-200 bg-white p-4 text-right text-sm font-bold leading-6 text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50";
+        button.textContent = label;
+        button.addEventListener("click", () => choosePlayAnswer(index, button));
+        options.appendChild(button);
+      });
+    }
+
+    function choosePlayAnswer(index, chosenButton) {
+      if (playAnswered) return;
+      playAnswered = true;
+      const round = PLAY_GAMES[currentPlayGame].rounds[playRound];
+      const buttons = [...document.querySelectorAll("#gameOptions button")];
+      buttons.forEach((button, i) => {
+        button.disabled = true;
+        button.classList.remove("hover:border-indigo-300", "hover:bg-indigo-50");
+        if (i === round.answer) button.className = "rounded-2xl border-2 border-emerald-400 bg-emerald-50 p-4 text-right text-sm font-black leading-6 text-emerald-900";
+        else if (i === index) button.className = "rounded-2xl border-2 border-rose-300 bg-rose-50 p-4 text-right text-sm font-bold leading-6 text-rose-900";
+        else button.classList.add("opacity-60");
+      });
+      const correct = index === round.answer;
+      if (correct) playScore += 20;
+      playGameScores[currentPlayGame] = playScore;
+      playBestScores[currentPlayGame] = Math.max(playBestScores[currentPlayGame], playScore);
+      updateHubTotalScore();
+      document.getElementById("gameScore").textContent = `${playScore} نقطة`;
+      document.getElementById("gameMiniScore").textContent = `${playBestScores[currentPlayGame]} / 120`;
+      const feedback = document.getElementById("gameFeedback");
+      feedback.className = `mt-4 rounded-2xl border p-4 text-sm font-bold leading-7 ${correct ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-amber-200 bg-amber-50 text-amber-950"}`;
+      const chosenText = round.options[index];
+      const correctText = round.options[round.answer];
+      feedback.textContent = correct
+        ? `✓ إجابة صحيحة! ${round.explain}`
+        : `✗ إجابتك: «${chosenText}». لماذا ليست صحيحة؟ ${round.wrong || "هذا الخيار لا يعالج المشكلة الأساسية وقد يسبب مخاطر إضافية."} الإجابة الصحيحة هي: «${correctText}». لماذا هي الصحيحة؟ ${round.explain}`;
+      feedback.classList.remove("hidden");
+      const next = document.getElementById("gameNextBtn");
+      next.disabled = false;
+      next.classList.remove("opacity-40");
+      next.textContent = playRound === PLAY_GAMES[currentPlayGame].rounds.length - 1 ? "عرض النتيجة 🏆" : "السؤال التالي ←";
+      document.getElementById("gameProgressBar").style.width = `${((playRound + 1) / PLAY_GAMES[currentPlayGame].rounds.length) * 100}%`;
+    }
+
+    function advanceGame() {
+      if (!playAnswered) return;
+      playRound++;
+      playAnswered = false;
+      renderPlayRound();
+    }
+
+    function restartCurrentGame() {
+      playRound = 0;
+      playScore = 0;
+      playAnswered = false;
+      renderPlayRound();
     }
   </script>
 </body>
