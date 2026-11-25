@@ -2811,32 +2811,61 @@
     };
 
     /*
-     * أسماء الكتب وروابط ملفات PDF:
-     * توضع ملفات PDF داخل مجلد pdfs بجانب ملف HTML.
-     * تُعدّل قيمة file فقط لتطابق اسم ملف الكتاب الحقيقي مع الامتداد .pdf.
-     * مثال: file: "pdfs/IT_Grade10_Term1.pdf"
+     * روابط كتب PDF من Google Drive:
+     * 1) اجعل إعداد المشاركة: "أي شخص لديه الرابط" — "مشاهد".
+     * 2) الصق رابط مشاركة Google Drive داخل قيمة file لكل كتاب.
+     * 3) لا تحذف علامات الاقتباس.
+     * مثال:
+     * file: "https://drive.google.com/file/d/FILE_ID/view?usp=sharing"
      */
     const LIBRARY_BOOKS = [
-      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "tec10.pdf" },
-      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "tec10.2.pdf" },
-      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات كتاب الأول الثانوي", level: "الأول الثانوي", file: "tec11.pdf" },
-      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات كتاب التوجيهي", level: "التوجيهي", file: "tec12.pdf" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "https://drive.google.com/file/d/1ArfbGlT6z0fdtz0EoWmcSGZMSJigoFrt/view?usp=sharing" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "https://drive.google.com/file/d/15dHefpAYrbakeGfACy98Nqwitk7wPknN/view?usp=sharing" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات كتاب الأول الثانوي", level: "الأول الثانوي", file: "https://drive.google.com/file/d/1w_sK-JjqkOTXVzW4SQ7UO0cAxTFxlluv/view?usp=sharing" },
+      { specialization: "تكنولوجيا المعلومات", icon: "💻", accent: "#0284c7", title: "تكنولوجيا المعلومات كتاب التوجيهي", level: "التوجيهي", file: "https://drive.google.com/file/d/14bkU_85IXxJfGmWbTv8TuPy9jB_7qeh-/view?usp=sharing" },
 
-      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "biss10.pdf" },
-      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "biss10.2.pdf" },
-      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال كتاب الأول الثانوي", level: "الأول الثانوي", file: "biss11.pdf" },
-      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال كتاب التوجيهي", level: "التوجيهي", file: "biss12" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "https://drive.google.com/file/d/1iY09dYp3wVazgwQ9ocKCM5eH2eZViJJ1/view?usp=sharing" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "https://drive.google.com/file/d/1b5XUtr0gr1UBytrilNTE8Csv7auRhJKs/view?usp=sharing" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال كتاب الأول الثانوي", level: "الأول الثانوي", file: "https://drive.google.com/file/d/1QJveRcVhPfM1HjTD9JIjvYq2m3DmVh1g/view?usp=sharing" },
+      { specialization: "إدارة الأعمال", icon: "📊", accent: "#059669", title: "إدارة الأعمال كتاب التوجيهي", level: "التوجيهي", file: "https://drive.google.com/file/d/1WTsOFKGQycXedkn8ByNStqMuiYzVQGB0/view?usp=sharing" },
 
-      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "art10.pdf" },
-      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "art10.2.pdf" },
-      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم كتاب الأول الثانوي", level: "الأول الثانوي", file: "art11.pdf" },
-      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم كتاب التوجيهي", level: "التوجيهي", file: "art12.pdf" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "https://drive.google.com/file/d/15-Qbn9m2yrlijGtdcwfff-9EEL6ME-jj/view?usp=sharing" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "https://drive.google.com/file/d/1y_Buv03Q5xeZf0xiHqTVpZ5GlOlgm8r9/view?usp=sharing" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم كتاب الأول الثانوي", level: "الأول الثانوي", file: "https://drive.google.com/file/d/1UNdxiczjPAOq1yzqkU4K-cF8eFEdejvk/view?usp=sharing" },
+      { specialization: "فن وتصميم", icon: "🎨", accent: "#d97706", title: "فن وتصميم كتاب التوجيهي", level: "التوجيهي", file: "https://drive.google.com/file/d/1WVSeMuOCptvICF57YDPviyNYa0tfxSdF/view?usp=sharing" },
 
-      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "hair10.pdf" },
-      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "hair10.2.pdf" },
-      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل كتاب الأول الثانوي", level: "الأول الثانوي", file: "hair11.pdf" },
-      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل كتاب التوجيهي", level: "التوجيهي", file: "hair12.pdf" }
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل عاشر فصل أول", level: "الصف العاشر · الفصل الأول", file: "https://drive.google.com/file/d/1xn5bFz63SK_FBv0Jvn-wkNZcTXRe3ABj/view?usp=sharing" },
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل عاشر فصل ثاني", level: "الصف العاشر · الفصل الثاني", file: "https://drive.google.com/file/d/12obGdgIEnKfh2Dz3iqtLVyvY3hJ5fKHW/view?usp=sharing" },
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل كتاب الأول الثانوي", level: "الأول الثانوي", file: "https://drive.google.com/file/d/1Edowc4j0daCabCwVbmgGd6wAPWOGja6W/view?usp=sharing" },
+      { specialization: "التجميل", icon: "✨", accent: "#e11d48", title: "التجميل كتاب التوجيهي", level: "التوجيهي", file: "https://drive.google.com/file/d/1YdpxUQZ48_3r5kdaTWcvmiwD3gtDbOVV/view?usp=sharing" }
     ];
+
+    // يحوّل رابط مشاركة Google Drive إلى رابط معاينة ورابط تنزيل مباشر.
+    function getLibraryBookLinks(sharedUrl) {
+      const raw = String(sharedUrl || "").trim();
+      if (!raw) return null;
+
+      let fileId = "";
+      const pathMatch = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      const docsMatch = raw.match(/\/document\/d\/([a-zA-Z0-9_-]+)/);
+      const queryMatch = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      const idOnlyMatch = raw.match(/^([a-zA-Z0-9_-]{20,})$/);
+      fileId = pathMatch?.[1] || docsMatch?.[1] || queryMatch?.[1] || idOnlyMatch?.[1] || "";
+
+      if (fileId) {
+        return {
+          open: `https://drive.google.com/file/d/${fileId}/view`,
+          download: `https://drive.google.com/uc?export=download&id=${fileId}`
+        };
+      }
+
+      // يقبل رابط HTTPS كما هو إذا لم يكن بصيغة مشاركة Drive المعتادة.
+      try {
+        const parsed = new URL(raw);
+        if (parsed.protocol === "https:") return { open: raw, download: raw };
+      } catch (error) {}
+      return null;
+    }
 
     function renderLibraryBooks(filterText = "") {
       const grid = document.getElementById("libraryBooksGrid");
@@ -2869,10 +2898,14 @@
                   <h4 class="library-book-title text-sm font-black leading-6">${book.title}</h4>
                   <p class="library-book-meta mt-1 text-xs font-semibold">${book.level}</p>
                   <div class="mt-auto pt-4 grid grid-cols-2 gap-2">
-                    <a class="library-open rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-110"
-                       href="${book.file}" target="_blank" rel="noopener noreferrer">فتح PDF</a>
-                    <a class="library-download rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-95"
-                       href="${book.file}" download>تحميل</a>
+                    ${getLibraryBookLinks(book.file) ? `
+                      <a class="library-open rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-110"
+                         href="${getLibraryBookLinks(book.file).open}" target="_blank" rel="noopener noreferrer">فتح PDF</a>
+                      <a class="library-download rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-95"
+                         href="${getLibraryBookLinks(book.file).download}" target="_blank" rel="noopener noreferrer">تحميل</a>
+                    ` : `
+                      <span class="col-span-2 rounded-xl border border-dashed px-2 py-2 text-center text-xs font-bold opacity-60">أضف رابط Google Drive</span>
+                    `}
                   </div>
                 </article>
               `).join("")}
