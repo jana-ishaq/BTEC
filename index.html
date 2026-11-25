@@ -1,3 +1,7 @@
+
+BTEC_site_hidden_secrets_polished.html
+
+100‎%‎
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1602,6 +1606,454 @@
     }
 
   </style>
+
+<style id="btec-showcase-upgrade">
+  :root { --showcase-ink:#0b1830; --showcase-teal:#68e0d1; --showcase-gold:#f5d58a; }
+  body { background: radial-gradient(ellipse at 50% 0%, #193b55 0%, #101d33 42%, #090f1e 100%) !important; }
+  body.bg-waves { background-image: radial-gradient(circle at 12% 20%,rgba(73,220,205,.13),transparent 26%),radial-gradient(circle at 88% 70%,rgba(128,104,255,.16),transparent 30%),linear-gradient(135deg,#0b1729,#102b3d 55%,#171a38) !important; }
+  header.sticky { background:rgba(8,18,34,.82) !important; border-bottom:1px solid rgba(130,218,220,.18) !important; box-shadow:0 12px 38px rgba(0,0,0,.18) !important; }
+  header h1, header p { color:#f2f8ff !important; }
+  .map-panel { background:transparent !important; }
+  #mapSection > div:first-child h2 { color:#f2f8ff !important; }
+  #mapSection > div:first-child p { background:rgba(255,255,255,.09) !important; color:#c5d7e8 !important; border:1px solid rgba(255,255,255,.12); }
+  #mapContainer { position:relative; isolation:isolate; overflow:hidden; border:1px solid rgba(128,224,220,.18); background:radial-gradient(ellipse at 50% 46%,rgba(65,158,159,.20),transparent 54%),radial-gradient(circle at 12% 18%,rgba(65,220,198,.15),transparent 25%),radial-gradient(circle at 85% 80%,rgba(130,106,255,.18),transparent 30%),linear-gradient(145deg,rgba(10,27,48,.96),rgba(16,39,61,.90) 52%,rgba(22,23,54,.94)) !important; box-shadow:inset 0 0 90px rgba(0,0,0,.28),0 28px 80px rgba(0,0,0,.24) !important; }
+  #mapContainer:before { content:""; position:absolute; inset:0; z-index:-1; opacity:.22; background-image:linear-gradient(rgba(135,225,220,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(135,225,220,.12) 1px,transparent 1px); background-size:42px 42px; mask-image:linear-gradient(to bottom,black,transparent 92%); }
+  #mapContainer:after { content:""; position:absolute; width:55vw; height:55vw; max-width:700px; max-height:700px; border:1px solid rgba(111,224,215,.13); border-radius:50%; left:50%; top:50%; transform:translate(-50%,-50%); box-shadow:0 0 0 35px rgba(111,224,215,.025),0 0 0 75px rgba(111,224,215,.02); pointer-events:none; z-index:-1; }
+  .island-wrapper { perspective:1500px; transform-style:preserve-3d; filter:drop-shadow(0 34px 28px rgba(0,0,0,.28)); transition:transform .35s ease,filter .35s ease; }
+  #campusSvg { filter:saturate(1.08) contrast(1.025); transform:rotateX(2deg); transform-origin:50% 55%; }
+  .spec-node { filter:drop-shadow(0 9px 8px rgba(0,0,0,.18)); }
+  .spec-node:hover { filter:brightness(1.08) drop-shadow(0 18px 24px rgba(76,220,211,.34)); }
+  #chatLauncher { box-shadow:0 0 0 8px rgba(98,222,211,.10),0 16px 45px rgba(0,0,0,.38) !important; border:1px solid rgba(255,255,255,.32) !important; }
+  #sidebarChatContainer { box-shadow:0 25px 90px rgba(0,0,0,.42) !important; border:1px solid rgba(118,221,214,.24) !important; }
+  .showcase-toolbar { position:absolute; z-index:12; top:72px; inset-inline-start:18px; display:flex; flex-wrap:wrap; gap:8px; max-width:calc(100% - 36px); }
+  .showcase-btn { display:inline-flex; align-items:center; gap:8px; min-height:42px; padding:9px 14px; border-radius:14px; border:1px solid rgba(177,232,229,.23); background:rgba(8,22,39,.68); color:#e9fbfa; font-size:12px; font-weight:900; backdrop-filter:blur(14px); box-shadow:0 8px 24px rgba(0,0,0,.16); transition:transform .2s ease,border-color .2s ease,background .2s ease; cursor:pointer; }
+  .showcase-btn:hover { transform:translateY(-2px); border-color:rgba(104,224,209,.72); background:rgba(23,63,77,.86); }
+  .showcase-btn .showcase-icon { color:var(--showcase-teal); font-size:16px; }
+  .showcase-brand { position:absolute; z-index:5; bottom:17px; inset-inline-start:20px; color:rgba(225,245,250,.72); font-size:10px; font-weight:900; letter-spacing:.22em; direction:ltr; text-shadow:0 2px 10px #061323; pointer-events:none; }
+  .showcase-hint { position:absolute; z-index:5; bottom:15px; inset-inline-end:20px; display:flex; align-items:center; gap:8px; color:#d7e9f0; font-size:11px; font-weight:800; background:rgba(5,18,34,.48); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:999px; backdrop-filter:blur(10px); pointer-events:none; }
+  .showcase-live-dot { width:7px; height:7px; border-radius:50%; background:#69e5b4; box-shadow:0 0 12px #69e5b4; }
+  .showcase-tour-card { position:absolute; z-index:20; left:50%; bottom:58px; transform:translateX(-50%) translateY(12px); width:min(420px,calc(100% - 30px)); padding:16px 18px; border-radius:20px; color:#edfafa; background:rgba(8,22,39,.92); border:1px solid rgba(104,224,209,.34); box-shadow:0 20px 65px rgba(0,0,0,.38); backdrop-filter:blur(18px); opacity:0; pointer-events:none; transition:opacity .25s ease,transform .25s ease; text-align:center; }
+  .showcase-tour-card.visible { opacity:1; transform:translateX(-50%) translateY(0); }
+  .showcase-tour-card strong { display:block; color:#8ce8dd; font-size:15px; margin-bottom:5px; }
+  .showcase-tour-card span { display:block; color:#d3e0eb; font-size:12px; line-height:1.8; }
+  body.showcase-calm *, body.showcase-calm *:before, body.showcase-calm *:after { animation-duration:.001ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
+  @media (max-width:760px) {
+    .showcase-toolbar { top:60px; inset-inline-start:10px; gap:6px; }
+    .showcase-btn { min-height:36px; padding:7px 10px; font-size:10px; }
+    .showcase-btn .showcase-icon { font-size:13px; }
+    .showcase-brand { bottom:10px; inset-inline-start:12px; font-size:8px; }
+    .showcase-hint { bottom:8px; inset-inline-end:10px; font-size:9px; padding:6px 9px; }
+    #campusSvg { transform:none; }
+  }
+  @media (prefers-reduced-motion:reduce) { .island-wrapper,#campusSvg,.showcase-btn,.showcase-tour-card { transition:none !important; } }
+</style>
+
+<style id="showcase-contrast-fix">
+  /* Keep the three map controls readable even when dark-theme global rules are active */
+  #mapSection .showcase-toolbar .showcase-btn,
+  #mapSection .showcase-toolbar .showcase-btn:visited {
+    color: #f8fbff !important;
+    -webkit-text-fill-color: #f8fbff !important;
+    background: linear-gradient(135deg, rgba(12,31,52,.96), rgba(24,52,76,.96)) !important;
+    border-color: rgba(139,218,225,.55) !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45) !important;
+    opacity: 1 !important;
+  }
+  #mapSection .showcase-toolbar .showcase-btn .showcase-icon {
+    color: #71eee0 !important;
+    -webkit-text-fill-color: #71eee0 !important;
+  }
+  #mapSection .showcase-toolbar .showcase-btn:hover,
+  #mapSection .showcase-toolbar .showcase-btn:focus-visible {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: linear-gradient(135deg, #12516a, #263f75) !important;
+    border-color: #8cf3e7 !important;
+    outline: 2px solid rgba(140,243,231,.28);
+    outline-offset: 2px;
+  }
+
+  /* Strong, coordinated PDF action button in the learning-materials library */
+  #librarySection a.library-open,
+  #librarySection a.library-open:visited {
+    background: linear-gradient(135deg, #075985, #0e7490) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #0e7490 !important;
+    font-weight: 900 !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,.22) !important;
+    box-shadow: 0 4px 12px rgba(7,89,133,.18) !important;
+    opacity: 1 !important;
+  }
+  #librarySection a.library-open:hover,
+  #librarySection a.library-open:focus-visible {
+    background: linear-gradient(135deg, #064968, #0c647d) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: #064968 !important;
+    outline: 2px solid rgba(14,116,144,.2);
+    outline-offset: 2px;
+  }
+</style>
+
+
+<style id="library-pdf-final-contrast">
+  html body #librarySection a.library-open,
+  html body #librarySection a.library-open:link,
+  html body #librarySection a.library-open:visited,
+  html body #librarySection a.library-open span {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 900 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.35) !important;
+  }
+</style>
+
+<style id="btec-game-contrast-fix">
+  /* Quiz answer buttons: strong contrast, including after an answer is selected */
+  html body #gameOptions button {
+    background: linear-gradient(135deg,#3446a8 0%,#4b3eaa 100%) !important;
+    background-color: #3446a8 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 2px solid #293b91 !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,.18) !important;
+    box-shadow: 0 5px 13px rgba(43,55,135,.16) !important;
+  }
+  html body #gameOptions button:hover:not(:disabled),
+  html body #gameOptions button:focus-visible {
+    background: linear-gradient(135deg,#253781 0%,#39308d 100%) !important;
+    background-color: #253781 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: #18286d !important;
+    outline: 3px solid rgba(99,102,241,.2);
+    outline-offset: 2px;
+  }
+  html body #gameOptions button.bg-emerald-50 {
+    background: linear-gradient(135deg,#087a55,#059669) !important;
+    background-color: #087a55 !important;
+    border-color: #047857 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html body #gameOptions button.bg-rose-50 {
+    background: linear-gradient(135deg,#b42345,#be123c) !important;
+    background-color: #b42345 !important;
+    border-color: #9f1239 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  html body #gameOptions button:disabled:not(.bg-emerald-50):not(.bg-rose-50) {
+    background: #e2e8f0 !important;
+    background-color: #e2e8f0 !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+    -webkit-text-fill-color: #334155 !important;
+    opacity: .82 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Next / restart actions */
+  html body #gameNextBtn {
+    background: linear-gradient(135deg,#4338ca,#4f46e5) !important;
+    background-color: #4338ca !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #3730a3 !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+  }
+  html body #gameNextBtn:disabled {
+    background: #a5b4fc !important;
+    background-color: #a5b4fc !important;
+    color: #25316f !important;
+    -webkit-text-fill-color: #25316f !important;
+    opacity: 1 !important;
+    cursor: not-allowed !important;
+  }
+  html body #activeGameViewport aside button[onclick="restartCurrentGame()"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #334155 !important;
+    -webkit-text-fill-color: #334155 !important;
+    border: 1px solid #cbd5e1 !important;
+    opacity: 1 !important;
+  }
+  html body #activeGameViewport aside button[onclick="restartCurrentGame()"]:hover {
+    background: #eef2ff !important;
+    color: #3730a3 !important;
+    -webkit-text-fill-color: #3730a3 !important;
+  }
+
+  /* Keep scenario, question and helper copy crisp on their pale surfaces */
+  html body #gameScenario,
+  html body #gameQuestion,
+  html body #gameHint,
+  html body #gameSkill {
+    color: #263449 !important;
+    -webkit-text-fill-color: #263449 !important;
+    opacity: 1 !important;
+  }
+</style>
+
+
+<style id="btec-all-games-dark-answer-buttons">
+  #activeGameViewport #gameOptions button,
+  #activeGameViewport #gameOptions button.btec-game-answer {
+    background: linear-gradient(135deg, #24364f 0%, #17263d 100%) !important;
+    background-color: #17263d !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 2px solid #526783 !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.35) !important;
+    box-shadow: 0 5px 14px rgba(15,23,42,.14) !important;
+  }
+  #activeGameViewport #gameOptions button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #164e63 0%, #12344d 100%) !important;
+    background-color: #12344d !important;
+    border-color: #67e8f9 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  #activeGameViewport #gameOptions button:disabled {
+    cursor: default !important;
+  }
+  #activeGameViewport #gameOptions button.border-emerald-300,
+  #activeGameViewport #gameOptions button[class*="bg-emerald-800"] {
+    background: linear-gradient(135deg, #087443 0%, #065f46 100%) !important;
+    background-color: #065f46 !important;
+    border-color: #34d399 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  #activeGameViewport #gameOptions button.border-rose-300,
+  #activeGameViewport #gameOptions button[class*="bg-rose-800"] {
+    background: linear-gradient(135deg, #a51d3d 0%, #881337 100%) !important;
+    background-color: #881337 !important;
+    border-color: #fda4af !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  #activeGameViewport #gameOptions button.opacity-60 {
+    background: #334155 !important;
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    border-color: #64748b !important;
+    opacity: .82 !important;
+  }
+  #activeGameViewport #gameNextBtn,
+  #activeGameViewport button[onclick="restartCurrentGame()"] {
+    background: linear-gradient(135deg, #253b59 0%, #17263d 100%) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: #526783 !important;
+    font-weight: 900 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.3) !important;
+  }
+  #activeGameViewport #gameNextBtn:disabled {
+    background: #64748b !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: .7 !important;
+  }
+</style>
+
+
+<style id="btec-catch-game-dark-controls">
+  /* Catch-items game: dark controls so their white labels remain readable */
+  #catchGamePanel #catchOverlay button[onclick="startCatchLoop()"],
+  #catchGamePanel button[onpointerdown="moveCatchBasket(-1)"],
+  #catchGamePanel button[onpointerdown="moveCatchBasket(1)"],
+  #catchGamePanel button[onclick="resetCatchGame()"] {
+    background: linear-gradient(135deg, #263c59 0%, #14263e 100%) !important;
+    background-color: #14263e !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #58718f !important;
+    font-weight: 900 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.4) !important;
+    box-shadow: 0 6px 16px rgba(15,23,42,.2) !important;
+    opacity: 1 !important;
+  }
+  #catchGamePanel #catchOverlay button[onclick="startCatchLoop()"]:hover,
+  #catchGamePanel button[onpointerdown="moveCatchBasket(-1)"]:hover,
+  #catchGamePanel button[onpointerdown="moveCatchBasket(1)"]:hover,
+  #catchGamePanel button[onclick="resetCatchGame()"]:hover {
+    background: linear-gradient(135deg, #0e596b 0%, #123b59 100%) !important;
+    background-color: #123b59 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: #67e8f9 !important;
+  }
+</style>
+
+
+<style id="btec-hidden-secrets-styles">
+  #mapSection { position:relative; }
+  .btec-secret-progress {
+    position:absolute; z-index:14; inset-inline-end:18px; bottom:18px;
+    display:flex; align-items:center; gap:8px; padding:9px 13px;
+    border-radius:999px; color:#f8fbff;
+    background:linear-gradient(135deg,rgba(20,38,61,.94),rgba(31,57,82,.94));
+    border:1px solid rgba(255,255,255,.22); box-shadow:0 8px 24px rgba(15,23,42,.2);
+    font:800 11px/1.2 system-ui,sans-serif; backdrop-filter:blur(10px);
+  }
+  .btec-secret-progress strong { color:#fde68a; font-size:12px; }
+  .secret-progress-icon { color:#fcd34d; font-size:16px; }
+  .btec-secret-marker { cursor:pointer; outline:none; transform-box:fill-box; transform-origin:center; }
+  .secret-halo { fill:#fbbf24; opacity:.17; stroke:#fef3c7; stroke-width:2; animation:secretPulse 2.2s ease-in-out infinite; }
+  .secret-core { fill:#a16207; stroke:#fde68a; stroke-width:2.5; filter:drop-shadow(0 3px 5px rgba(120,53,15,.35)); }
+  .secret-symbol { fill:#fff7d6; font:900 18px system-ui,sans-serif; pointer-events:none; }
+  .secret-spark { fill:none; stroke:#fff1a8; stroke-width:2.5; stroke-linecap:round; }
+  .btec-secret-marker:hover { transform:scale(1.18); }
+  .btec-secret-marker:focus-visible .secret-halo { stroke:#fff; stroke-width:4; opacity:.8; }
+  .btec-secret-marker.found .secret-halo { fill:#2dd4bf; opacity:.25; stroke:#99f6e4; }
+  .btec-secret-marker.found .secret-core { fill:#0f766e; stroke:#99f6e4; }
+  .btec-secret-marker.found .secret-symbol { font-size:15px; }
+  @keyframes secretPulse { 0%,100%{transform:scale(.92);opacity:.13} 50%{transform:scale(1.12);opacity:.34} }
+
+  .btec-secret-modal { position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; padding:18px; }
+  .btec-secret-modal.open { display:flex; }
+  .btec-secret-backdrop { position:absolute; inset:0; background:rgba(7,18,34,.72); backdrop-filter:blur(8px); }
+  .btec-secret-dialog {
+    position:relative; z-index:1; width:min(100%,520px); padding:28px;
+    border-radius:28px; border:1px solid rgba(255,255,255,.75);
+    background:linear-gradient(145deg,#ffffff 0%,#f0fdfa 52%,#f2efff 100%);
+    box-shadow:0 28px 90px rgba(2,15,35,.38); text-align:center; color:#17263d;
+    animation:secretPop .28s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes secretPop { from{opacity:0;transform:translateY(12px) scale(.96)} to{opacity:1;transform:none} }
+  .btec-secret-close { position:absolute; top:12px; inset-inline-end:14px; width:36px; height:36px; border:0; border-radius:50%; background:#e2e8f0; color:#17263d; font-size:25px; line-height:1; cursor:pointer; }
+  .btec-secret-kicker { display:inline-flex; gap:7px; align-items:center; border-radius:999px; padding:7px 12px; background:#e0f2fe; color:#075985; font-size:11px; font-weight:900; }
+  .btec-secret-kicker span { color:#d97706; font-size:15px; }
+  .btec-secret-emblem { margin:15px auto 8px; display:grid; place-items:center; width:62px; height:62px; border-radius:20px; background:linear-gradient(145deg,#fef3c7,#fde68a); font-size:30px; box-shadow:0 8px 20px rgba(180,83,9,.15); }
+  .btec-secret-dialog h3 { margin:8px 0; font-size:23px; font-weight:1000; }
+  .btec-secret-dialog p { color:#52657c; font-size:13px; line-height:1.9; margin:0 auto 16px; }
+  .btec-secret-question { padding:14px 16px; border:1px solid #cbdff0; background:#fff; border-radius:16px; font-size:15px; line-height:1.8; font-weight:900; text-align:right; }
+  .btec-secret-answers { display:grid; grid-template-columns:1fr; gap:9px; margin-top:13px; }
+  .btec-secret-answer { padding:12px 14px; border-radius:13px; border:1px solid #b8c9dc; background:#203650; color:#fff; font-weight:800; font-size:13px; text-align:right; cursor:pointer; transition:.18s ease; }
+  .btec-secret-answer:hover:not(:disabled) { background:#0f596b; border-color:#5eead4; transform:translateY(-1px); }
+  .btec-secret-answer:disabled { cursor:default; opacity:1; }
+  .btec-secret-answer.correct { background:#086747; border-color:#34d399; }
+  .btec-secret-answer.wrong { background:#8b1e3f; border-color:#fda4af; }
+  .btec-secret-feedback { min-height:26px; margin-top:12px; font-size:13px; font-weight:900; color:#0f766e; }
+  .btec-secret-continue { width:100%; margin-top:8px; padding:12px; border:0; border-radius:13px; background:linear-gradient(135deg,#123b59,#0f766e); color:#fff; font-weight:900; cursor:pointer; }
+  .btec-secret-continue[hidden] { display:none; }
+  @media(max-width:640px) {
+    .btec-secret-progress { bottom:10px; inset-inline-end:10px; font-size:10px; padding:8px 10px; }
+    .btec-secret-dialog { padding:23px 17px; border-radius:22px; }
+    .btec-secret-dialog h3 { font-size:20px; }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    .secret-halo,.btec-secret-dialog { animation:none !important; }
+    .btec-secret-marker,.btec-secret-answer { transition:none !important; }
+  }
+</style>
+
+
+<style id="btec-secret-html-hotspots-fix">
+  .island-wrapper { position:relative !important; }
+  #btecSecretHotspots {
+    position:absolute !important; inset:0 !important; z-index:20 !important;
+    width:100% !important; height:100% !important;
+    pointer-events:none !important;
+  }
+  #btecSecretHotspots .btec-secret-marker {
+    position:absolute !important;
+    width:36px !important; height:36px !important; min-width:36px !important;
+    padding:0 !important; margin:0 !important;
+    display:grid !important; place-items:center !important;
+    transform:translate(-50%,-50%) !important;
+    transform-origin:center !important;
+    border-radius:50% !important;
+    border:2px solid #fde68a !important;
+    background:linear-gradient(145deg,#c78308,#925309) !important;
+    color:#fff8d7 !important; -webkit-text-fill-color:#fff8d7 !important;
+    font:900 19px/1 system-ui,sans-serif !important;
+    box-shadow:0 3px 9px rgba(120,53,15,.3),0 0 0 5px rgba(251,191,36,.14) !important;
+    cursor:pointer !important; pointer-events:auto !important;
+    opacity:1 !important;
+    transition:box-shadow .22s ease,background .22s ease,border-color .22s ease !important;
+    animation:btecSecretButtonGlow 3.2s ease-in-out infinite !important;
+    z-index:1 !important;
+  }
+  #btecSecretHotspots .btec-secret-marker:hover,
+  #btecSecretHotspots .btec-secret-marker:focus-visible,
+  #btecSecretHotspots .btec-secret-marker:active {
+    transform:translate(-50%,-50%) !important;
+    background:linear-gradient(145deg,#d99510,#9a5b08) !important;
+    box-shadow:0 4px 13px rgba(120,53,15,.38),0 0 0 7px rgba(251,191,36,.2) !important;
+    outline:2px solid rgba(255,255,255,.85) !important;
+    outline-offset:2px !important;
+  }
+  #btecSecretHotspots .btec-secret-marker .secret-symbol {
+    display:block !important; color:#fff8d7 !important;
+    -webkit-text-fill-color:#fff8d7 !important;
+    fill:currentColor !important; font:900 19px/1 system-ui,sans-serif !important;
+    pointer-events:none !important;
+  }
+  #btecSecretHotspots .btec-secret-marker.found {
+    background:linear-gradient(145deg,#0f9b83,#086b66) !important;
+    border-color:#99f6e4 !important;
+    color:#fff !important; -webkit-text-fill-color:#fff !important;
+  }
+  #btecSecretHotspots .btec-secret-marker.found .secret-symbol {
+    color:#fff !important; -webkit-text-fill-color:#fff !important;
+  }
+  @keyframes btecSecretButtonGlow {
+    0%,100% { box-shadow:0 3px 9px rgba(120,53,15,.3),0 0 0 4px rgba(251,191,36,.10); }
+    50% { box-shadow:0 3px 10px rgba(120,53,15,.32),0 0 0 7px rgba(251,191,36,.20); }
+  }
+  @media(max-width:640px) {
+    #btecSecretHotspots .btec-secret-marker {
+      width:31px !important; height:31px !important; min-width:31px !important;
+      font-size:17px !important;
+    }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    #btecSecretHotspots .btec-secret-marker { animation:none !important; }
+  }
+</style>
+
+
+<style id="btec-secret-progress-readable">
+  /* Make the discovery counter light and readable on the map */
+  #mapSection #btecSecretProgress {
+    background: linear-gradient(135deg, #effcf9 0%, #e7f2ff 58%, #f0edff 100%) !important;
+    background-color: #edf8fb !important;
+    color: #17324d !important;
+    -webkit-text-fill-color: #17324d !important;
+    border: 1px solid #9bcbd8 !important;
+    box-shadow: 0 7px 20px rgba(9, 36, 57, .18) !important;
+    opacity: 1 !important;
+    backdrop-filter: blur(12px);
+  }
+  #mapSection #btecSecretProgress > span:not(.secret-progress-icon) {
+    color: #17324d !important;
+    -webkit-text-fill-color: #17324d !important;
+    font-weight: 900 !important;
+    opacity: 1 !important;
+  }
+  #mapSection #btecSecretProgress .secret-progress-icon {
+    color: #0f766e !important;
+    -webkit-text-fill-color: #0f766e !important;
+  }
+  #mapSection #btecSecretProgress strong,
+  #mapSection #btecSecretCount {
+    color: #075985 !important;
+    -webkit-text-fill-color: #075985 !important;
+    font-weight: 1000 !important;
+    opacity: 1 !important;
+  }
+</style>
+
 </head>
 <body class="bg-waves text-slate-800 antialiased selection:bg-teal-600 selection:text-white">
   <div id="btecSplash" class="btec-splash" role="status" aria-label="شاشة بدء برنامج BTEC">
@@ -1658,6 +2110,24 @@
     <div class="main-layout">
 
       <section id="mapSection" aria-label="خريطة التخصصات التفاعلية" class="map-panel relative bg-white/85 backdrop-blur-sm rounded-3xl border border-white shadow-xl shadow-teal-950/5 p-2.5 sm:p-4">
+
+        <div class="showcase-toolbar" aria-label="أدوات استكشاف المدينة">
+          <button class="showcase-btn" type="button" id="showcaseTour"><span class="showcase-icon">✦</span> جولة تعريفية</button>
+          <button class="showcase-btn" type="button" id="showcaseFullscreen"><span class="showcase-icon">⛶</span> ملء الشاشة</button>
+          <button class="showcase-btn" type="button" id="showcaseMotion"><span class="showcase-icon">◌</span> تقليل الحركة</button>
+        </div>
+        <div class="showcase-brand" aria-hidden="true">BTEC · LEARN / CREATE / ACHIEVE</div>
+        <div class="showcase-hint" aria-hidden="true"><span class="showcase-live-dot"></span> اختر جزيرة لاستكشاف التخصص</div>
+        <div class="btec-secret-progress" id="btecSecretProgress" aria-live="polite">
+          <span class="secret-progress-icon">✦</span>
+          <span>الأسرار المكتشفة</span>
+          <strong id="btecSecretCount">0 / 5</strong>
+        </div>
+        <div class="showcase-tour-card" id="showcaseTourCard" role="status" aria-live="polite">
+          <strong id="showcaseTourTitle">أهلا بك في مدينة BTEC</strong>
+          <span id="showcaseTourText">استكشف التخصصات والمرافق التعليمية من خلال الجزر التفاعلية</span>
+        </div>
+
         
         <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-2 max-w-[1500px] mx-auto">
           <div class="flex items-center gap-2">
@@ -2182,7 +2652,16 @@
                   <text x="0" y="2" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">عرض مرافق التجميل</text>
                 </g>
               </g>
-            </svg>
+</svg>
+
+            <div id="btecSecretHotspots" aria-label="الأسرار المخفية في المدينة">
+              <button type="button" class="btec-secret-marker" data-secret="0" style="left:34.27%;top:29.88%" aria-label="اكتشفي السر الأول" title="اكتشفي سرًا مخفيًا" onclick="window.btecOpenSecret(0)"><span class="secret-symbol">؟</span></button>
+              <button type="button" class="btec-secret-marker" data-secret="1" style="left:66.45%;top:29.88%" aria-label="اكتشفي السر الثاني" title="اكتشفي سرًا مخفيًا" onclick="window.btecOpenSecret(1)"><span class="secret-symbol">؟</span></button>
+              <button type="button" class="btec-secret-marker" data-secret="2" style="left:22.5%;top:77.5%" aria-label="اكتشفي السر الثالث" title="اكتشفي سرًا مخفيًا" onclick="window.btecOpenSecret(2)"><span class="secret-symbol">؟</span></button>
+              <button type="button" class="btec-secret-marker" data-secret="3" style="left:68.23%;top:62.20%" aria-label="اكتشفي السر الرابع" title="اكتشفي سرًا مخفيًا" onclick="window.btecOpenSecret(3)"><span class="secret-symbol">؟</span></button>
+              <button type="button" class="btec-secret-marker" data-secret="4" style="left:50%;top:89.63%" aria-label="اكتشفي السر الخامس" title="اكتشفي سرًا مخفيًا" onclick="window.btecOpenSecret(4)"><span class="secret-symbol">؟</span></button>
+            </div>
+
           </div>
         </div>
       </section>
@@ -2495,9 +2974,9 @@
             </div>
           </div>
           <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
-            <button type="button" onpointerdown="moveCatchBasket(-1)" class="rounded-xl border border-slate-200 bg-white px-7 py-3 text-xl font-black text-slate-700">←</button>
+            <button type="button" onpointerdown="moveCatchBasket(-1)" style="background:linear-gradient(135deg,#263c59,#14263e)!important;background-color:#14263e!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:1px solid #58718f!important;font-weight:900!important;box-shadow:0 6px 16px rgba(15,23,42,.2)!important;" class="rounded-xl px-7 py-3 text-xl font-black">←</button>
             <span class="text-xs font-bold text-slate-500">استخدم الأسهم ← → أو اسحب السلة داخل الساحة</span>
-            <button type="button" onpointerdown="moveCatchBasket(1)" class="rounded-xl border border-slate-200 bg-white px-7 py-3 text-xl font-black text-slate-700">→</button>
+            <button type="button" onpointerdown="moveCatchBasket(1)" style="background:linear-gradient(135deg,#263c59,#14263e)!important;background-color:#14263e!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:1px solid #58718f!important;font-weight:900!important;box-shadow:0 6px 16px rgba(15,23,42,.2)!important;" class="rounded-xl px-7 py-3 text-xl font-black">→</button>
           </div>
           <div class="mt-4 flex justify-end"><button type="button" onclick="resetCatchGame()" class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:bg-slate-50">إعادة اللعبة</button></div>
         </div>
@@ -2900,7 +3379,8 @@
                   <div class="mt-auto pt-4 grid grid-cols-2 gap-2">
                     ${getLibraryBookLinks(book.file) ? `
                       <a class="library-open rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-110"
-                         href="${getLibraryBookLinks(book.file).open}" target="_blank" rel="noopener noreferrer">فتح PDF</a>
+                         style="background:linear-gradient(135deg,#075985,#0e7490)!important;color:#ffffff!important;-webkit-text-fill-color:#ffffff!important;border:1px solid #0e7490!important;font-weight:900!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important;opacity:1!important;"
+                         href="${getLibraryBookLinks(book.file).open}" target="_blank" rel="noopener noreferrer"><span style="color:#ffffff!important;-webkit-text-fill-color:#ffffff!important;">فتح PDF</span></a>
                       <a class="library-download rounded-xl px-2 py-2 text-center text-xs font-extrabold transition hover:brightness-95"
                          href="${getLibraryBookLinks(book.file).download}" target="_blank" rel="noopener noreferrer">تحميل</a>
                     ` : `
@@ -3887,7 +4367,7 @@
       round.options.forEach((label, index) => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "rounded-2xl border-2 border-slate-200 bg-white p-4 text-right text-sm font-bold leading-6 text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50";
+        button.className = "btec-game-answer rounded-2xl border-2 border-slate-700 bg-slate-800 p-4 text-right text-sm font-bold leading-6 text-white transition hover:border-cyan-300 hover:bg-slate-900";
         button.textContent = label;
         button.addEventListener("click", () => choosePlayAnswer(index, button));
         options.appendChild(button);
@@ -3902,8 +4382,8 @@
       buttons.forEach((button, i) => {
         button.disabled = true;
         button.classList.remove("hover:border-indigo-300", "hover:bg-indigo-50");
-        if (i === round.answer) button.className = "rounded-2xl border-2 border-emerald-400 bg-emerald-50 p-4 text-right text-sm font-black leading-6 text-emerald-900";
-        else if (i === index) button.className = "rounded-2xl border-2 border-rose-300 bg-rose-50 p-4 text-right text-sm font-bold leading-6 text-rose-900";
+        if (i === round.answer) button.className = "btec-game-answer rounded-2xl border-2 border-emerald-300 bg-emerald-800 p-4 text-right text-sm font-black leading-6 text-white";
+        else if (i === index) button.className = "btec-game-answer rounded-2xl border-2 border-rose-300 bg-rose-800 p-4 text-right text-sm font-bold leading-6 text-white";
         else button.classList.add("opacity-60");
       });
       const correct = index === round.answer;
@@ -3942,5 +4422,305 @@
       renderPlayRound();
     }
   </script>
+
+<script id="btec-showcase-interactions">
+(() => {
+  const byId = id => document.getElementById(id);
+  const tourButton = byId('showcaseTour');
+  const fullButton = byId('showcaseFullscreen');
+  const motionButton = byId('showcaseMotion');
+  const tourCard = byId('showcaseTourCard');
+  const tourTitle = byId('showcaseTourTitle');
+  const tourText = byId('showcaseTourText');
+  const map = byId('mapContainer');
+  const wrapper = map?.querySelector('.island-wrapper');
+  if (!tourButton || !map || !wrapper) return;
+
+  const stops = [
+    {id:'node-it',title:'تكنولوجيا المعلومات',text:'استكشف عالم البرمجة والتقنية والمهارات الرقمية.'},
+    {id:'node-business',title:'الأعمال',text:'تعرّف إلى عالم الإدارة وريادة الأعمال والتخطيط.'},
+    {id:'node-art',title:'الفن والتصميم',text:'اكتشف الإبداع والتصميم وتحويل الأفكار إلى أعمال.'},
+    {id:'node-beauty',title:'التجميل',text:'استكشف المهارات العملية والخدمات المهنية.'},
+    {id:'node-library',title:'المكتبة التعليمية',text:'انتقل إلى الموارد والوحدات والمواد المتاحة.'},
+    {id:'node-game',title:'منطقة اللعب',text:'اختبر معلوماتك من خلال الألعاب والتحديات التعليمية.'}
+  ];
+  let tourTimer = null;
+  let tourIndex = -1;
+  let calm = false;
+  const clearHighlights = () => document.querySelectorAll('.spec-node').forEach(node => node.classList.remove('active-node'));
+  const stopTour = () => {
+    if (tourTimer) clearInterval(tourTimer);
+    tourTimer = null;
+    tourIndex = -1;
+    clearHighlights();
+    tourCard?.classList.remove('visible');
+    tourButton.innerHTML = '<span class="showcase-icon">✦</span> جولة تعريفية';
+  };
+  const showStop = index => {
+    const stop = stops[index];
+    if (!stop) return;
+    clearHighlights();
+    const node = byId(stop.id);
+    if (node) node.classList.add('active-node');
+    if (tourTitle) tourTitle.textContent = stop.title;
+    if (tourText) tourText.textContent = stop.text;
+    tourCard?.classList.add('visible');
+  };
+  tourButton.addEventListener('click', () => {
+    if (tourTimer) { stopTour(); return; }
+    tourIndex = 0;
+    showStop(tourIndex);
+    tourButton.innerHTML = '<span class="showcase-icon">Ⅱ</span> إيقاف الجولة';
+    tourTimer = setInterval(() => {
+      tourIndex += 1;
+      if (tourIndex >= stops.length) { stopTour(); return; }
+      showStop(tourIndex);
+    }, 2200);
+  });
+  fullButton?.addEventListener('click', async () => {
+    try {
+      if (!document.fullscreenElement) await map.requestFullscreen();
+      else await document.exitFullscreen();
+    } catch (error) {
+      if (tourTitle) tourTitle.textContent = 'تعذر تفعيل ملء الشاشة';
+      if (tourText) tourText.textContent = 'يمكنك استخدام تكبير المتصفح بدلا من ذلك.';
+      tourCard?.classList.add('visible');
+      setTimeout(() => tourCard?.classList.remove('visible'), 2600);
+    }
+  });
+  document.addEventListener('fullscreenchange', () => {
+    if (fullButton) fullButton.innerHTML = document.fullscreenElement
+      ? '<span class="showcase-icon">⛶</span> إنهاء ملء الشاشة'
+      : '<span class="showcase-icon">⛶</span> ملء الشاشة';
+  });
+  motionButton?.addEventListener('click', () => {
+    calm = !calm;
+    document.body.classList.toggle('showcase-calm', calm);
+    motionButton.innerHTML = calm
+      ? '<span class="showcase-icon">◌</span> تشغيل الحركة'
+      : '<span class="showcase-icon">◌</span> تقليل الحركة';
+  });
+  // Subtle pointer parallax gives the illustrated campus depth without changing its SVG geometry.
+  if (window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    map.addEventListener('pointermove', event => {
+      if (tourTimer || document.body.classList.contains('chat-opened')) return;
+      const rect = map.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - .5;
+      const y = (event.clientY - rect.top) / rect.height - .5;
+      wrapper.style.transform = `rotateY(${x * 1.7}deg) rotateX(${-y * 1.1}deg) translateZ(0)`;
+    });
+    map.addEventListener('pointerleave', () => { wrapper.style.transform = ''; });
+  }
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && tourTimer) stopTour(); });
+  window.addEventListener('pagehide', stopTour);
+})();
+</script>
+
+
+<div class="btec-secret-modal" id="btecSecretModal" aria-hidden="true">
+  <div class="btec-secret-backdrop" data-secret-close></div>
+  <section class="btec-secret-dialog" role="dialog" aria-modal="true" aria-labelledby="btecSecretTitle">
+    <button type="button" class="btec-secret-close" data-secret-close aria-label="إغلاق">×</button>
+    <div class="btec-secret-kicker"><span>✦</span> مهمة مخفية من مدينة BTEC</div>
+    <div class="btec-secret-emblem" id="btecSecretEmblem">🔎</div>
+    <h3 id="btecSecretTitle">اكتشفتِ سرًا جديدًا!</h3>
+    <p id="btecSecretDescription"></p>
+    <div class="btec-secret-question" id="btecSecretQuestion"></div>
+    <div class="btec-secret-answers" id="btecSecretAnswers"></div>
+    <div class="btec-secret-feedback" id="btecSecretFeedback" role="status" aria-live="polite"></div>
+    <button type="button" class="btec-secret-continue" id="btecSecretContinue" hidden>متابعة استكشاف المدينة</button>
+  </section>
+</div>
+
+
+<script id="btec-hidden-secrets-engine">
+(() => {
+  // Every map marker contains a small sequence of questions.
+  // A new question is shown each time the student answers correctly
+  // and opens the same marker again.
+  const missions = [
+    {
+      title:'سر الرسالة الغامضة', icon:'📩',
+      questions:[
+        {intro:'وصلتك رسالة تطلب تحديث كلمة المرور عبر رابط غير معروف.',question:'ما التصرف الأكثر أمانًا؟',answers:['فتح الرابط وإدخال كلمة المرور','التحقق من الجهة المرسلة والإبلاغ عن الرسالة','إعادة إرسال الرابط إلى الصديقات'],correct:1,success:'رائع! انتبهتِ لاحتمال وجود رسالة تصيد.'},
+        {intro:'تريدين إنشاء كلمة مرور لحسابك الدراسي.',question:'أي كلمة مرور تعتبر أقوى؟',answers:['12345678','اسمك وتاريخ ميلادك','عبارة طويلة وفريدة يصعب تخمينها'],correct:2,success:'صحيح! كلمة المرور الطويلة والفريدة أكثر أمانًا.'},
+        {intro:'أثناء استخدام شبكة Wi-Fi عامة، احتجتِ إلى فتح حساب مهم.',question:'ما الخيار الأكثر أمانًا؟',answers:['تجنب إدخال البيانات الحساسة على شبكة غير موثوقة','مشاركة كلمة المرور مع الآخرين','إيقاف تحديثات الحماية'],correct:0,success:'أحسنتِ! انتبهتِ لمخاطر الشبكات العامة.'},
+        {intro:'ظهر إشعار يطلب تثبيت تحديث أمني للنظام من إعداداته الرسمية.',question:'ماذا تفعلين؟',answers:['تجاهل كل التحديثات دائمًا','تثبيت التحديث من المصدر الرسمي','تحميل ملف مجهول بدلًا منه'],correct:1,success:'ممتاز! التحديثات الرسمية تساعد في سد الثغرات.'}
+      ]
+    },
+    {
+      title:'سر الألوان المتناغمة', icon:'🎨',
+      questions:[
+        {intro:'في ركن التصميم توجد لوحة ألوان تحتاج إلى ترتيب.',question:'ما الذي يساعد على جعل النص واضحًا فوق الخلفية؟',answers:['اختيار ألوان متقاربة جدًا','استخدام تباين واضح بين النص والخلفية','استخدام أكبر عدد ممكن من الألوان'],correct:1,success:'أحسنتِ! التباين يساعد على وضوح التصميم.'},
+        {intro:'تصممين بطاقة إعلانية وتريدين أن يلاحظ المشاهد العنوان أولًا.',question:'ما الذي يساعد على إبراز العنوان؟',answers:['جعله أصغر عنصر في التصميم','استخدام حجم ووزن خط مناسبين','وضعه بلون مطابق للخلفية'],correct:1,success:'رائع! التسلسل البصري يوجّه عين المشاهد.'},
+        {intro:'ترتبين عناصر صفحة فيها صور ونصوص وأزرار.',question:'ما الأفضل للحصول على تصميم منظم؟',answers:['توزيع العناصر بمسافات ومحاذاة متناسقة','وضع العناصر عشوائيًا','استخدام خطوط مختلفة في كل سطر'],correct:0,success:'صحيح! المحاذاة والمسافات تصنعان تصميمًا مريحًا.'},
+        {intro:'اخترتِ صورة لتظهر في ملصق رقمي كبير.',question:'ما الذي يجب الانتباه إليه قبل استخدامها؟',answers:['أن تكون منخفضة الدقة','أن تكون واضحة ومناسبة لحجم العرض','أن تكون مشوشة حتى لا تظهر التفاصيل'],correct:1,success:'ممتاز! جودة الصورة مهمة لنتيجة احترافية.'}
+      ]
+    },
+    {
+      title:'سر التحدي والتفكير', icon:'🧩',
+      questions:[
+        {intro:'أمامك تحدٍ يحتاج إلى ترتيب خطواته قبل البدء.',question:'ما أول خطوة تساعدك على حل المشكلة؟',answers:['البدء بالتخمين مباشرة','فهم المشكلة وتحديد المطلوب','تجاهل التفاصيل'],correct:1,success:'أحسنتِ! فهم المشكلة هو بداية الحل الصحيح.'},
+        {intro:'لديك ثلاث مهام، إحداها عاجلة ومرتبطة بموعد تسليم قريب.',question:'كيف ترتبين وقتك؟',answers:['تبدئين بالأكثر إلحاحًا وأهمية','تؤجلين جميع المهام','تختارين المهمة الأسهل دائمًا'],correct:0,success:'صحيح! تحديد الأولويات يساعد على إنجاز المهام.'},
+        {intro:'جربتِ حلًا ولم يعطِ النتيجة المطلوبة.',question:'ما التصرف الأفضل؟',answers:['التوقف وعدم المحاولة','مراجعة الخطوات وتجربة حل بديل','تكرار نفس الخطأ دون مراجعة'],correct:1,success:'رائع! التعلم من المحاولة يحسن طريقة الحل.'},
+        {intro:'تعملين ضمن فريق لإنجاز مشروع قصير.',question:'ما التصرف الذي يساعد الفريق؟',answers:['العمل دون توزيع أدوار','توزيع المهام والتواصل بوضوح','إخفاء المعلومات عن بقية الفريق'],correct:1,success:'ممتاز! التعاون وتوزيع الأدوار يدعمان نجاح الفريق.'}
+      ]
+    },
+    {
+      title:'سر النظافة المهنية', icon:'✨',
+      questions:[
+        {intro:'قبل بدء خدمة تجميل، يجب تجهيز مكان العمل والأدوات.',question:'ما الخطوة الأساسية قبل تقديم الخدمة؟',answers:['استخدام الأدوات مباشرة','تنظيف اليدين وتعقيم الأدوات','مشاركة الأدوات دون تنظيف'],correct:1,success:'ممتاز! النظافة والتعقيم أساس السلامة المهنية.'},
+        {intro:'تستقبلين عميلة جديدة قبل اختيار منتج مناسب لها.',question:'ما الذي يجب معرفته أولًا؟',answers:['نوع البشرة والحساسية المحتملة','لون العبوة فقط','رأي شخص آخر دون سؤالها'],correct:0,success:'أحسنتِ! معرفة احتياجات العميلة تساعد على اختيار الخدمة المناسبة.'},
+        {intro:'انتهيتِ من استخدام أداة قابلة لإعادة الاستخدام.',question:'كيف تجهزينها للعميلة التالية؟',answers:['مسحها بقطعة قماش فقط','تنظيفها وتعقيمها حسب تعليمات السلامة','وضعها مباشرة مع الأدوات النظيفة'],correct:1,success:'صحيح! اتباع إجراءات التنظيف والتعقيم يحمي الجميع.'},
+        {intro:'لاحظتِ احمرارًا أو تهيجًا أثناء تقديم الخدمة.',question:'ما التصرف الأنسب؟',answers:['الاستمرار دون سؤال','إيقاف الخدمة وتقييم الحالة واتباع إجراءات السلامة','تغطية الاحمرار ومتابعة العمل'],correct:1,success:'رائع! الانتباه لعلامات التهيج جزء من الممارسة المهنية.'}
+      ]
+    },
+    {
+      title:'سر المصدر الموثوق', icon:'📚',
+      questions:[
+        {intro:'تحتاجين إلى معلومة دقيقة لإكمال مهمة دراسية.',question:'أي مصدر يُفضّل الاعتماد عليه أولًا؟',answers:['منشور مجهول بلا مراجع','موقع رسمي أو مصدر تعليمي موثوق','رسالة متداولة دون مصدر'],correct:1,success:'رائع! اختيار المصادر الموثوقة يحسّن جودة العمل.'},
+        {intro:'وجدتِ مقالًا مفيدًا على الإنترنت.',question:'ما الذي تتحققين منه قبل استخدامه؟',answers:['اسم الكاتب وتاريخ النشر والمراجع','لون الموقع فقط','عدد الصور في الصفحة'],correct:0,success:'صحيح! فحص الكاتب والتاريخ والمراجع يساعد على تقييم المصدر.'},
+        {intro:'وجدتِ معلومتين متعارضتين في موقعين مختلفين.',question:'ما الخطوة الأفضل؟',answers:['اختيار أول معلومة تظهر','مقارنة المعلومات بمصادر موثوقة أخرى','نشر المعلومة دون تحقق'],correct:1,success:'أحسنتِ! المقارنة والتحقق يقللان الأخطاء.'},
+        {intro:'تريدين حفظ كتاب إلكتروني للعودة إليه لاحقًا.',question:'ما أفضل طريقة لتنظيمه؟',answers:['تركه دون اسم داخل مجلد التنزيلات','حفظه باسم واضح ضمن مجلد المادة','حذف بياناته الأساسية'],correct:1,success:'ممتاز! تنظيم الملفات يسهل الوصول إلى مصادر التعلم.'}
+      ]
+    }
+  ];
+
+  const foundKey = 'btec-hidden-secrets-found-v1';
+  const countsKey = 'btec-hidden-secrets-question-counts-v1';
+  let found = [];
+  let questionCounts = Array(missions.length).fill(0);
+  try {
+    found = JSON.parse(localStorage.getItem(foundKey) || '[]')
+      .filter(n => Number.isInteger(n) && n >= 0 && n < missions.length);
+  } catch (_) {}
+  try {
+    const savedCounts = JSON.parse(localStorage.getItem(countsKey) || '[]');
+    if (Array.isArray(savedCounts)) {
+      questionCounts = missions.map((_, i) => {
+        const n = Number(savedCounts[i] || 0);
+        return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+      });
+    }
+  } catch (_) {}
+
+  const modal = document.getElementById('btecSecretModal');
+  const title = document.getElementById('btecSecretTitle');
+  const desc = document.getElementById('btecSecretDescription');
+  const emblem = document.getElementById('btecSecretEmblem');
+  const question = document.getElementById('btecSecretQuestion');
+  const answers = document.getElementById('btecSecretAnswers');
+  const feedback = document.getElementById('btecSecretFeedback');
+  const continueBtn = document.getElementById('btecSecretContinue');
+  const count = document.getElementById('btecSecretCount');
+  if (!modal || !count) return;
+
+  let currentMissionIndex = -1;
+  let currentQuestionIndex = -1;
+
+  const saveProgress = () => {
+    try {
+      localStorage.setItem(foundKey, JSON.stringify(found));
+      localStorage.setItem(countsKey, JSON.stringify(questionCounts));
+    } catch (_) {}
+  };
+
+  const updateProgress = () => {
+    count.textContent = `${found.length} / ${missions.length}`;
+    document.querySelectorAll('#btecSecretHotspots .btec-secret-marker').forEach(marker => {
+      const done = found.includes(Number(marker.dataset.secret));
+      marker.classList.toggle('found', done);
+      marker.setAttribute('aria-label', done ? 'اكتشفي سؤالًا جديدًا' : 'اكتشفي سرًا مخفيًا');
+      const symbol = marker.querySelector('.secret-symbol');
+      if (symbol) symbol.textContent = done ? '✓' : '؟';
+    });
+    const pill = document.getElementById('btecSecretProgress');
+    if (pill && found.length === missions.length) {
+      const label = pill.querySelector('span:not(.secret-progress-icon)');
+      if (label) label.textContent = 'اكتملت أسرار المدينة — تابعي التحديات';
+    }
+  };
+
+  const close = () => {
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    currentMissionIndex = -1;
+    currentQuestionIndex = -1;
+  };
+
+  const open = index => {
+    const mission = missions[index];
+    if (!mission) return;
+    currentMissionIndex = index;
+    currentQuestionIndex = questionCounts[index] % mission.questions.length;
+    const challenge = mission.questions[currentQuestionIndex];
+
+    title.textContent = mission.title;
+    desc.textContent = `${challenge.intro} — التحدي ${currentQuestionIndex + 1}`;
+    emblem.textContent = mission.icon;
+    question.textContent = challenge.question;
+    answers.replaceChildren();
+    feedback.style.color = '#0f766e';
+    feedback.textContent = '';
+    continueBtn.hidden = true;
+    continueBtn.textContent = 'تم! عودة إلى المدينة';
+
+    challenge.answers.forEach((answer, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btec-secret-answer';
+      button.textContent = answer;
+      button.addEventListener('click', () => {
+        answers.querySelectorAll('.btec-secret-answer').forEach((b, j) => {
+          b.disabled = true;
+          if (j === challenge.correct) b.classList.add('correct');
+          else if (j === i) b.classList.add('wrong');
+        });
+
+        if (i === challenge.correct) {
+          if (!found.includes(index)) found.push(index);
+          questionCounts[index] += 1;
+          saveProgress();
+          feedback.style.color = '#0f766e';
+          feedback.textContent = `${challenge.success} اضغطي على العلامة مرة أخرى لسؤال جديد.`;
+          continueBtn.hidden = false;
+          updateProgress();
+        } else {
+          feedback.style.color = '#be123c';
+          feedback.textContent = 'الإجابة غير صحيحة. راجعي الاختيارات وحاولي مرة أخرى.';
+          const retry = document.createElement('button');
+          retry.type = 'button';
+          retry.className = 'btec-secret-continue';
+          retry.textContent = 'إعادة المحاولة';
+          retry.addEventListener('click', () => open(index));
+          answers.appendChild(retry);
+        }
+      });
+      answers.appendChild(button);
+    });
+
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    continueBtn.onclick = close;
+    const first = answers.querySelector('.btec-secret-answer');
+    if (first) first.focus();
+  };
+
+  // Expose once so each map button can open its matching challenge.
+  window.btecOpenSecret = open;
+
+  modal.querySelectorAll('[data-secret-close]').forEach(el => el.addEventListener('click', close));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) close();
+  });
+  updateProgress();
+})();
+</script>
+
 </body>
 </html>
+جارٍ عرض BTEC_site_hidden_secrets_polished.html.
